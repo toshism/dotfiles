@@ -99,6 +99,10 @@
 ;; add custom load path
 (add-to-list 'load-path "~/.emacs.d/vendor/")
 
+;; yaml
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
 ;; Magit git status
 (global-set-key "\C-xg" 'magit-status)
 
@@ -240,3 +244,8 @@
  ;; If there is more than one, they won't work right.
  )
 (put 'upcase-region 'disabled nil)
+
+;;;;;;;;;;;;;;;;;;;;
+;; multi-term
+;;;;;;;;;;;;;;;;;;;;
+(add-hook 'term-mode-hook (lambda () (define-key term-raw-map (kbd "C-y") 'term-paste)))
