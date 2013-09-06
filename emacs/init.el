@@ -100,8 +100,8 @@
 (add-to-list 'load-path "~/.emacs.d/vendor/")
 
 ;; yaml
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+;; (require 'yaml-mode)
+;; (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; Magit git status
 (global-set-key "\C-xg" 'magit-status)
@@ -109,16 +109,16 @@
 ;; package management
 (require 'package)
 (add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
+             ;;'("marmalade" . "http://marmalade-repo.org/packages/")
+             '("melpa" . "http://melpa.milkbox.net/packages/"))
 
 ;; ido mode all the things
 (require 'ido)
 (ido-mode t)
 (setq ido-enable-flex-matching t) ;; fuzzy matching
 
-;; anything
-(global-set-key (kbd "C-x b") 'anything)
-(global-set-key (kbd "C-x f") 'anything-recentf)
+;; helm
+(global-set-key (kbd "C-x b") 'helm-mini)
 
 ;; flymake
 (custom-set-variables
@@ -128,6 +128,7 @@
  ;; If there is more than one, they won't work right.
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
+ '(org-agenda-files (quote ("~/dev/notes/pbs.org")))
  '(safe-local-variable-values (quote ((python-shell-completion-string-code . "';'.join(get_ipython().Completer.all_completions('''%s'''))
 ") (python-shell-completion-module-string-code . "';'.join(module_completion('''%s'''))
 ") (python-shell-completion-setup-code . "from IPython.core.completerlib import module_completion") (python-shell-interpreter-args . "~/dev/projects/SwapServe/manage.py shell") (python-shell-interpreter . "python")))))
@@ -249,3 +250,64 @@
 ;; multi-term
 ;;;;;;;;;;;;;;;;;;;;
 (add-hook 'term-mode-hook (lambda () (define-key term-raw-map (kbd "C-y") 'term-paste)))
+
+;;;;;;;;;;;;;;;;;;;;
+;; spotify
+;;;;;;;;;;;;;;;;;;;;
+(global-set-key (kbd "C-c s p") #'spotify-playpause)
+(global-set-key (kbd "C-c s n") #'spotify-next)
+(global-set-key (kbd "C-c s l") #'spotify-previous)
+
+;;;;;;;;;;;;;;;;;;;;
+;; emacs ipython notebook
+;;;;;;;;;;;;;;;;;;;;
+(require 'ein)
+(global-set-key (kbd "C-c e b") 'start-open-notebooklist)
+(global-set-key (kbd "C-c e j") 'new-junk-notebook)
+
+(setq notebook-buffer-name "*inotebook*")
+(setq notebook-server-address "http://127.0.0.1:8888")
+
+(defun get-notebook-buffer ()
+  (get-buffer notebook-buffer-name))
+
+(defun start-notebook ()
+  "start ipython notebook server if not already started
+   default storage is in ~/dev/notebooks"
+  (interactive)
+  (unless (get-notebook-buffer)
+    (start-process "inotebook" notebook-buffer-name "ipython" "notebook" "--notebook-dir=~/dev/notebooks" "--no-browser")))
+(global-set-key (kbd "C-c e n") 'start-notebook)
+
+;; just kill buffers with running processes, no confirmation
+(setq kill-buffer-query-functions
+  (remq 'process-kill-buffer-query-function
+         kill-buffer-query-functions))
+
+(defun kill-notebook ()
+  "kill ipython notebook server and buffer if running"
+  (interactive)
+  (let ((nbuf (get-notebook-buffer)))
+    (if nbuf
+        (progn
+          (switch-to-buffer nbuf)
+          (kill-buffer nbuf)))))
+(global-set-key (kbd "C-c e k") 'kill-notebook)
+
+(defun start-open-notebooklist ()
+  "open notebooklist browser, start server first if it's not running"
+  (interactive)
+  (progn
+    (unless (get-notebook-buffer)
+      (start-notebook)
+      (sit-for 5))
+    (ein:notebooklist-open notebook-server-address)))
+
+(defun new-junk-notebook ()
+  "start a new junk notebook, start server first if it's not running"
+  (interactive)
+  (progn
+    (unless (get-notebook-buffer)
+      (start-notebook)
+      (sit-for 5))
+    (ein:junk-new (ein:junk-notebook-name) notebook-server-address)))
