@@ -34,7 +34,10 @@
 (show-paren-mode t)
 
 ;; color theme
-(load-theme 'misterioso)
+;; (load-theme 'misterioso)
+(load-theme 'ample t)
+;; (load-theme 'soft-charcoal)
+;; (load-theme 'obsidian)
 
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -126,6 +129,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes (quote ("b674ccba78eb688bea71ea8a1fd2782fcd69bd462e2504008903b5b6e018b480" "865d6cb994f89c13b2d7e5961df4eabeea12494583c240c8fe9a788d0f4ee12c" default)))
+ '(erc-nick "wilbur-d")
  '(help-at-pt-display-when-idle (quote (flymake-overlay)) nil (help-at-pt))
  '(help-at-pt-timer-delay 0.9)
  '(org-agenda-files (quote ("~/dev/notes/pbs.org")))
@@ -267,6 +272,9 @@
 
 (setq notebook-buffer-name "*inotebook*")
 (setq notebook-server-address "http://127.0.0.1:8888")
+(setq notebook-directory "~/dev/notebooks")
+
+(setq note-options (concat "--notebook-dir=" notebook-directory))
 
 (defun get-notebook-buffer ()
   (get-buffer notebook-buffer-name))
@@ -276,7 +284,7 @@
    default storage is in ~/dev/notebooks"
   (interactive)
   (unless (get-notebook-buffer)
-    (start-process "inotebook" notebook-buffer-name "ipython" "notebook" "--notebook-dir=~/dev/notebooks" "--no-browser")))
+    (start-process "inotebook" notebook-buffer-name "ipython" "notebook" note-options "--no-browser")))
 (global-set-key (kbd "C-c e n") 'start-notebook)
 
 ;; just kill buffers with running processes, no confirmation
