@@ -64,3 +64,11 @@ alias git-diff="git log --graph master..dev"
 #alias merge-deploy="git checkout master && git merge dev"
 #alias prepare-deploy="cddeploy && deploy-update && save-diff && merge-deploy"
 alias prepare-deploy=~/dev/projects/registry/rar-deploy/prepare-deploy.sh
+
+export HISTFILESIZE=
+export HISTSIZE=
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTFILE=~/.bash_eternal_history
+shopt -s histappend # append to history, don't overwrite it
+export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
