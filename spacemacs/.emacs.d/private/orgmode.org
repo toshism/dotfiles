@@ -1,0 +1,131 @@
+#+PROPERTY: tangle yes
+
+* Keybindings
+** Global capture
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-c c") 'org-capture)
+#+END_SRC
+* General settings
+** refile targets
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-targets (quote ((nil :maxlevel . 9)
+                                 (org-agenda-files :maxlevel . 9))))
+#+END_SRC
+** default notes file
+#+BEGIN_SRC emacs-lisp
+  (setq org-default-notes-file "~/dev/notes/refile.org")
+#+END_SRC
+** refile settings
+Use full outline paths for refile targets - we file directly with IDO
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-use-outline-path t)
+#+END_SRC
+
+Allow refile to create parent tasks with confirmation
+#+BEGIN_SRC emacs-lisp
+(setq org-refile-allow-creating-parent-nodes (quote confirm))
+#+END_SRC
+
+** No invisible edits
+try to keep myself from deleting hidden headings/blocks etc.
+#+BEGIN_SRC emacs-lisp
+  (setq org-catch-invisible-edits 'error)
+#+END_SRC
+* Extra includes/packages etc.
+** Org Drill
+org drill, think this comes from org-
+#+BEGIN_SRC emacs-lisp :tangle no
+(require 'org-drill)
+#+END_SRC
+** Markdown export
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-md)
+#+END_SRC
+* Capture templates
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        (quote (("w" "work todo" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
+                 "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:JIRA_TICKET: %^{TICKET|NONE}\n:END:\n" :clock-in t :clock-resume t)
+                ("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
+                 "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n " :clock-in t :clock-resume t)
+                ("r" "respond" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
+                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\nCREATED: %U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
+                ("n" "note" entry (file "~/dev/notes/refile.org")
+                 "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n%a\n" :clock-in t :clock-resume t)
+                ("s" "code snippet" entry (file+headline "~/dev/notes/stuff.org" "Refile")
+                 "* %? \n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n")
+                ("j" "Journal" entry (file+datetree "~/dev/notes/diary.org")
+                 "* %?\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n" :clock-in t :clock-resume t)
+                ;; ("w" "org-protocol" entry (file "~/dev/notes/refile.org")
+                ;;  "* TODO Review %c\nCREATED: %U\n" :immediate-finish t)
+                ("m" "Meeting" entry (file "~/dev/notes/refile.org")
+                 "* MEETING with %? :MEETING:\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n" :clock-in t :clock-resume t)
+                ;; ("d" "NowU Deploy" entry (file+olp "~/dev/notes/gannet.org" "Tasks" "Deploy")
+                ;;  "* CREATED: %U\nrelease %?\n%[~/dev/notes/gannet_deployment_task.org]" :clock-in t :clock-resume t)
+                ("h" "Habit" entry (file "~/dev/notes/refile.org")
+                 "* NEXT %?\nCREATED: %U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+#+END_SRC
+* Todo keyword colors
+#+BEGIN_SRC emacs-lisp
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("NEXT" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold)
+              ("MEETING" :foreground "forest green" :weight bold))))
+#+END_SRC
+* Clocking
+** Change tasks to NEXT when clocking in
+Function
+#+BEGIN_SRC emacs-lisp
+(defun bh/clock-in-to-next (kw)
+  "Switch a task from TODO to NEXT when clocking in.
+Skips capture tasks, projects, and subprojects.
+Switch projects and subprojects from NEXT back to TODO"
+  (when (not (and (boundp 'org-capture-mode) org-capture-mode))
+    "NEXT"))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(setq org-clock-in-switch-to-state 'bh/clock-in-to-next)
+#+END_SRC
+** Drawers
+Separate drawers for clocking and logs
+#+BEGIN_SRC emacs-lisp
+(setq org-drawers (quote ("PROPERTIES" "LOGBOOK")))
+#+END_SRC
+
+Save clock data and state changes and notes in the LOGBOOK drawer
+#+BEGIN_SRC emacs-lisp
+(setq org-clock-into-drawer t)
+#+END_SRC
+** log into drawer
+#+BEGIN_SRC emacs-lisp
+(setq org-log-into-drawer "LOGBOOK")
+#+END_SRC
+** Create unique IDs for tasks when linking
+The following setting creates a unique task ID for the heading in the
+=PROPERTY= drawer when I use =C-c l=.  This allows me to move the task
+around arbitrarily in my org files and the link to it still works.
+
+#+begin_src emacs-lisp
+(setq org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+#+end_src
+* Babel
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)
+     ;; (ditaa . t)
+     (python . t)
+     (ipython . t)
+     (dot . t)
+     (sql . t)))
+  (setq org-src-fontify-natively t)
+  (setq org-confirm-babel-evaluate nil)
+  (setq org-src-tab-acts-natively t)
+  (setq org-src-window-setup 'other-window)
+#+END_SRC

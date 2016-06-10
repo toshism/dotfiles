@@ -1,0 +1,57 @@
+# ~/.tmuxinator/registrar.yml
+
+name: registrar
+root: ~/dev/projects/registry/uniregistrar/uniregistrar
+
+# Optional tmux socket
+# socket_name: foo
+
+# Runs before everything. Use it to start daemons etc.
+# pre: sudo /etc/rc.d/mysqld start
+
+# Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
+pre_window: workon registrar
+
+# Pass command line options to tmux. Useful for specifying a different tmux.conf.
+# tmux_options: -f ~/.tmux.mac.conf
+
+# Change the command to call tmux.  This can be used by derivatives/wrappers like byobu.
+# tmux_command: byobu
+
+# Specifies (by name or index) which window will be selected on project startup. If not set, the first window is used.
+# startup_window: logs
+
+windows:
+  - emacs:
+      - ec
+  - bash:
+      - # bash
+  - guard:
+      layout: even-horizontal
+      panes:
+        - #guard
+        - #cd ../rar_admin/ && guard
+  - web:
+      layout: even-horizontal
+      panes:
+        - pserve development.ini --reload
+  - admin:
+      layout: even-horizontal
+      panes:
+        - cd ../rar_admin && pserve development.ini --reload
+  - backend:
+      layout: even-horizontal
+      panes:
+        - pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+        - # supervisord -n -c supervisord-dev.conf
+        - redis-server
+  - frontend:
+      layout: even-horizontal
+      panes:
+        - cd ./uniregistrar/js/rar && npm run watch
+        - cd ../rar_admin/rar_admin/js/rar_admin/ && npm run watch
+  - deploy:
+      layout: even-horizontal
+      panes:
+        - cd ~/dev/projects/registry/rar-deploy/uniregistrar
+        - cd ~/dev/projects/registry/rar-deploy/uniregistrar

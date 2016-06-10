@@ -1,0 +1,89 @@
+# using homebrew formula from https://github.com/emmanuelbernard/homebrew-mutt on the mac
+source "gpg2 -dq $HOME/.authinfo.gpg |"
+# Paths ----------------------------------------------
+set folder           = ~/Mail                # mailbox location
+set alias_file       = ~/.mutt/alias         # where to store aliases
+set header_cache     = ~/.mutt/cache/headers # where to store headers
+set message_cachedir = ~/.mutt/cache/bodies  # where to store bodies
+set certificate_file = ~/.mutt/certificates  # where to store certs
+set mailcap_path     = ~/.mailcap            # entries for filetypes
+set tmpdir           = ~/.mutt/temp          # where to keep temp files
+set signature        = ~/.mutt/sig           # my signature file
+
+# Basic Options --------------------------------------
+set wait_key = no        # shut up, mutt
+set mbox_type = Maildir  # mailbox type
+set timeout = 3          # idle time before scanning
+set mail_check = 0       # minimum time between scans
+unset move               # gmail does that
+set delete               # don't ask, just do
+unset confirmappend      # don't ask, just do!
+set quit                 # don't ask, just do!!
+unset mark_old           # read/new is good enough for me
+set beep_new             # bell on new mails
+set pipe_decode          # strip headers and eval mimes when piping
+set thorough_search      # strip headers and eval mimes before searching
+auto_view text/html
+alternative_order text/plain text/html
+
+# threading
+set sort=threads
+set sort_aux=last-date-received
+
+# Status Bar -----------------------------------------
+set status_chars  = " *%A"
+set status_format = "───[ Folder: %f ]───[%r%m messages%?n? (%n new)?%?d? (%d to delete)?%?t? (%t tagged)? ]───%>─%?p?( %p postponed )?───"
+
+# Header Options -------------------------------------
+ignore *                                # ignore all headers
+unignore from: to: cc: date: subject:   # show only these
+unhdr_order *                           # some distros order things by default
+hdr_order from: to: cc: date: subject:  # and in this order
+
+# Account Settings -----------------------------------
+
+# Default inbox.
+set spoolfile = "+INBOX"
+
+# Mailboxes to show in the sidebar.
+mailboxes +INBOX \
+          +Sent \
+          +Drafts \
+          +Trash \
+
+# Other special folders.
+set postponed = "+Drafts"
+
+# SMTP settings
+set ssl_force_tls = yes
+set smtp_authenticators = 'gssapi:login'
+
+# Keybindings ---------------------------------------
+bind pager j next-line
+bind pager k previous-line
+bind attach,index,pager \CD next-page
+bind attach,index,pager \CU previous-page
+bind pager g top
+bind pager G bottom
+bind attach,index g first-entry
+bind attach,index G last-entry
+
+# Sidebar ------------------------------------------
+#change width accordingly
+set sidebar_width=30
+
+# Visible at first, then change its value to yes
+set sidebar_visible=no
+
+set sidebar_delim='|'
+set sidebar_sort=yes
+mailboxes =inbox =ml
+bind index CP sidebar-prev
+bind index CN sidebar-next
+bind index CO sidebar-open
+bind pager CP sidebar-prev
+bind pager CN sidebar-next
+bind pager CO sidebar-open
+macro index b '<enter-command>toggle sidebar_visible<enter>'
+macro pager b '<enter-command>toggle sidebar_visible<enter>'
+bind index B bounce-message
