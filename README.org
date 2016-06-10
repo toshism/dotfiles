@@ -1,0 +1,16 @@
+* Dotfiles
+
+My personal configuration files. Some are probably generic enough to be reused,
+some are probably not (spacemacs) but may still be useful to glean some snippets
+or ideas from.
+
+I'm currently on a [[https://github.com/powerline/powerline][powerline ]]kick, so I've pretty much powerlined
+all_teh_things. You've been warned.
+
+* Install/Setup
+
+The directory structure is setup to make it easy to use [[https://www.gnu.org/software/stow/][GNU Stow]].
+
+Checkout the repo into your home directory. To install tmux configuration, for
+example, just run =stow tmux= from the dotfiles directory. Stow will symlink
+everything into the proper place.
