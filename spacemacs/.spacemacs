@@ -311,18 +311,6 @@ layers configuration."
             (set-visited-file-name new-name t t)))))))
 
 
-
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; Key bindings
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; (spacemacs/set-leader-keys-for-major-mode 'dired-mode "M-p" 'dired-up-directory)
-  ;; (spacemacs/set-leader-keys-for-major-mode 'dired-mode "M-n" 'dired-tree-down)
-  ;; (eval-after-load 'dired-mode
-  ;;   `(progn
-  ;;      (evil-define-key 'normal dired-mode-map (kbd "M-k") 'dired-up-directory)
-  ;;      (evil-define-key 'normal dired-mode-map (kbd "M-j") 'dired-tree-down)))
-
-
   ;;;;;;;;;;;;;;;;;;;;;
   ;; org stuff
   ;;;;;;;;;;;;;;;;;;;;;
@@ -358,88 +346,6 @@ layers configuration."
   (evilified-state-evilify dired-mode dired-mode-map
     (kbd "C-n") 'dired-next-subdir
     (kbd "C-p") 'dired-prev-subdir)
-
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; erc
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; (setq erc-join-buffer 'bury)
-  ;; (setq erc-hide-list '("JOIN" "PART" "QUIT"))
-  ;; (setq erc-autojoin-channels-alist
-  ;;       '(("freenode.net" "#amarillolinux")
-  ;;         ("gitter.im" "#spacemacs")))
-  ;; (erc :server "irc.freenode.net" :port 6667 :nick "wilbur-d")
-  ;; (setq erc-prompt-for-nickserv-password nil)
-  ;; (setq erc-nickserv-passwords
-  ;;       `((freenode     (("wilbur-d" . ,freenode-wilbur-d-pass)))))
-
-
-
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; sauron
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; (add-hook 'sauron-event-added-functions 'sauron-alert-el-adapter)
-  ;; (setq sauron-separate-frame nil)
-  ;; (setq sauron-modules '(sauron-org sauron-notifications sauron-jabber sauron-erc))
-  ;; (add-hook 'sauron-event-added-functions
-  ;;           (lambda (origin prio msg &optional props)
-  ;;             (cond
-  ;;              ((> prio 4) (sauron-fx-sox "/System/Library/Sounds/Submarine.aiff")))))
-
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; perspectives
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; (defun custom-persp/com ()
-  ;;   (interactive)
-  ;;   (custom-persp "com"
-  ;;                 (progn
-  ;;                   (jabber-connect-all)
-  ;;                   (erc)
-  ;;                   (split-window-right)
-  ;;                   (evil-window-right)
-  ;;                   (split-window-below)
-  ;;                   )))
-  ;; (evil-leader/set-key "Loc" 'custom-persp/com)
-  ;; (evil-leader/set-key "ps" 'persp-switch)
-
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; send stuff to shell
-  ;;;;;;;;;;;;;;;;;;;;;
-  ;; (defun sh-send-line-or-region (&optional step)
-  ;;   (interactive ())
-  ;;   (let ((proc (get-process "shell"))
-  ;;         pbuf min max command)
-  ;;     (unless proc
-  ;;       (let ((currbuff (current-buffer)))
-  ;;         (shell)
-  ;;         (switch-to-buffer currbuff)
-  ;;         (setq proc (get-process "shell"))
-  ;;         ))
-  ;;     (setq pbuff (process-buffer proc))
-  ;;     (if (use-region-p)
-  ;;         (setq min (region-beginning)
-  ;;               max (region-end))
-  ;;       (setq min (point-at-bol)
-  ;;             max (point-at-eol)))
-  ;;     (setq command (concat (buffer-substring min max) "\n"))
-  ;;     (with-current-buffer pbuff
-  ;;       (goto-char (process-mark proc))
-  ;;       (insert command)
-  ;;       (move-marker (process-mark proc) (point))
-  ;;       ) ;;pop-to-buffer does not work with save-current-buffer -- bug?
-  ;;     (process-send-string  proc command)
-  ;;     (display-buffer (process-buffer proc) t)
- ;;     (when step
-  ;;       (goto-char max)
-  ;;       (next-line))
-  ;;     ))
-
-  ;; (defun sh-send-line-or-region-and-step ()
-  ;;   (interactive)
-  ;;   (sh-send-line-or-region t))
-  ;; (defun sh-switch-to-process-buffer ()
-  ;;   (interactive)
-  ;;   (pop-to-buffer (process-buffer (get-process "shell")) t))
-  ;; )
 
 )
 
