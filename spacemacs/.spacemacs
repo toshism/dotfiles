@@ -320,7 +320,7 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;
   ;; private stuff
   ;;;;;;;;;;;;;;;;;;;;;
-  (load "~/.emacs.d/private/private.el.gpg")
+  (load-file "~/.emacs.d/private/private.el.gpg")
 
   ;; see here https://gist.github.com/the-kenny/267162
   ;; and here for tmux https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
