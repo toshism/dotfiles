@@ -64,6 +64,8 @@ values."
      react
      prodigy
      vinegar
+     dash
+     ansible
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -272,7 +274,7 @@ layers configuration."
         ;; mu4e-get-mail-command "true" ;; this updates index but doesn't retrieve mail
         ;; mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu4e/"
         mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e/"
-        mu4e-update-interval 300             ;; update every 5 minutes
+        mu4e-update-interval 180             ;; update every 3 minutes
         mu4e-maildir       "~/Mail"   ;; top-level Maildir
         mu4e-sent-folder   "/Sent"       ;; folder for sent messages
         mu4e-drafts-folder "/Drafts"     ;; unfinished messages
