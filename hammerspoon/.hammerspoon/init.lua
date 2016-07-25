@@ -1,5 +1,6 @@
 local cmd_alt = {"cmd", "alt"}
 local cmd_alt_ctrl = {"cmd", "alt", "ctrl"}
+local cmd_ctrl = {"cmd", "ctrl"}
 local main_monitor = "DELL U3415W"
 local second_monitor = "Color LCD"
 
@@ -7,8 +8,16 @@ local second_monitor = "Color LCD"
 local emacs = "emacs"
 local term = "iterm2"
 
-hs.window.animationDuration = 0
+hs.window.animationDuration = 0.2
 
+-- layouts
+
+-- > hs.window.get("Zulip"):frame()
+-- hs.geometry.rect(4.0,542.0,1352.0,898.0)
+chatStuff = {
+  {"Zulip", nil, main_monitor, nil, nil, hs.geometry.rect(4,542,1352,898)},
+  {"Slack", nil, main_monitor, nil, nil, hs.geometry.rect(1357,539,1352,898)}
+}
 
 function hs.screen.get(screen_name)
   local allScreens = hs.screen.allScreens()
@@ -288,7 +297,7 @@ function enableKeys()
   for keyCount = 1, #keys do
     keys[ keyCount ]:enable()
   end
-  hs.alert.show( "Window manager active", 999999 )
+  hs.alert.show( "DOIN WORK", 999999 )
 end
 
 hs.hotkey.bind( {"ctrl"}, "'", function()
@@ -369,6 +378,10 @@ bind( mNone, 'v', function()
         disableKeys()
 end)
 
+bind( mNone, 'c', function()
+        hs.layout.apply(chatStuff)
+        disableKeys()
+end)
 
 bind( mNone, 'ESCAPE', function()
         disableKeys()
@@ -377,3 +390,8 @@ end )
 bind( mNone, 'RETURN', function()
         disableKeys()
 end )
+
+bind( cmd_ctrl, 'r', function()
+        hs.reload()
+        disableKeys()
+end)
