@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     lua
      vimscript
      ruby
      graphviz
@@ -32,7 +33,8 @@ values."
      (auto-completion :variables
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t)
-     better-defaults
+     ;; better-defaults
+     osx
      emacs-lisp
      (git :variables
           git-gutter-use-fringe t
@@ -66,6 +68,7 @@ values."
      vinegar
      dash
      ansible
+     c-c++
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -73,7 +76,6 @@ values."
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
                                       ;; org-plus-contrib
-                                      mu4e-contrib
                                       ob-ipython
                                       wgrep
                                       sauron
@@ -111,7 +113,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed.
-   dotspacemacs-startup-banner 999
+   dotspacemacs-startup-banner 'random
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'."
    dotspacemacs-startup-lists '(recents projects bookmarks)
@@ -174,7 +176,7 @@ values."
    dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-micro-state t
+   dotspacemacs-enable-paste-micro-state nil
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -251,7 +253,7 @@ user code."
 layers configuration."
   (setq guide-key/popup-window-position 'bottom)
   (setq projectile-switch-project-action 'projectile-dired)
-  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
   (setq-default flycheck-flake8-maximum-line-length 100)
   (setq-default evil-escape-delay 0.3)
   (setq neo-vc-integration nil)
@@ -260,6 +262,12 @@ layers configuration."
   (setq git-magit-status-fullscreen t)
   (setq magit-commit-show-diff nil)
   ;; (setq alert-default-style 'notifier)
+  (spacemacs/toggle-indent-guide-globally-on)
+
+  ;; I don't like customize stuff in my config
+  ;; store it in a separate file
+  (setq custom-file "~/.emacs.d/private/custom.el")
+  (load custom-file :noerror :nomessage)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; mu4e
@@ -324,19 +332,19 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;
   (load-file "~/.emacs.d/private/private.el.gpg")
 
-  ;; see here https://gist.github.com/the-kenny/267162
-  ;; and here for tmux https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
-  (defun copy-from-osx ()
-    (shell-command-to-string "pbpaste"))
+  ;; ;; see here https://gist.github.com/the-kenny/267162
+  ;; ;; and here for tmux https://robots.thoughtbot.com/tmux-copy-paste-on-os-x-a-better-future
+  ;; (defun copy-from-osx ()
+  ;;   (shell-command-to-string "pbpaste"))
 
-  (defun paste-to-osx (text &optional push)
-    (let ((process-connection-type nil))
-      (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
-        (process-send-string proc text)
-        (process-send-eof proc))))
+  ;; (defun paste-to-osx (text &optional push)
+  ;;   (let ((process-connection-type nil))
+  ;;     (let ((proc (start-process "pbcopy" "*Messages*" "pbcopy")))
+  ;;       (process-send-string proc text)
+  ;;       (process-send-eof proc))))
 
-  (setq interprogram-cut-function 'paste-to-osx)
-  (setq interprogram-paste-function 'copy-from-osx)
+  ;; (setq interprogram-cut-function 'paste-to-osx)
+  ;; (setq interprogram-paste-function 'copy-from-osx)
 
   ;; Send email via Uniregistry:
   (setq message-send-mail-function 'smtpmail-send-it
@@ -349,37 +357,12 @@ layers configuration."
     (kbd "C-n") 'dired-next-subdir
     (kbd "C-p") 'dired-prev-subdir)
 
-)
+  ;; this is handy in certain circumstances
+  ;; ie. triggering guard to rerun tests for file
+  (defun touch ()
+    "updates mtime on the file for the current buffer"
+    (interactive)
+    (shell-command (concat "touch " (shell-quote-argument (buffer-file-name))))
+    (clear-visited-file-modtime))
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("4f5bb895d88b6fe6a983e63429f154b8d939b4a8c581956493783b2515e22d6d" "e97dbbb2b1c42b8588e16523824bc0cb3a21b91eefd6502879cf5baa1fa32e10" default)))
- '(evil-want-Y-yank-to-eol t)
- '(eww-search-prefix "https://www.google.com/search?q=")
- '(org-agenda-files
-   (quote
-    ("~/dev/notes/uniregistry.org" "~/Dropbox/org/mobile.org" "~/dev/notes/todo.org")))
- '(paradox-github-token t)
- '(safe-local-variable-values
-   (quote
-    ((projectile-globally-ignored-files quote
-                                        ("TAGS"))
-     (projectile-enable-caching . t))))
- '(send-mail-function (quote smtpmail-send-it))
- '(smtpmail-smtp-server "smtp.uniregistry.com")
- '(smtpmail-smtp-service 25))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((((class color) (min-colors 89)) (:foreground "#ffffff" :background "#263238"))))
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+)
