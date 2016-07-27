@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     shell-scripts
      lua
      vimscript
      ruby
@@ -69,6 +70,7 @@ values."
      dash
      ansible
      c-c++
+     ranger
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -356,6 +358,11 @@ layers configuration."
   (evilified-state-evilify dired-mode dired-mode-map
     (kbd "C-n") 'dired-next-subdir
     (kbd "C-p") 'dired-prev-subdir)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; ranger
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq ranger-override-dired t)
 
   ;; this is handy in certain circumstances
   ;; ie. triggering guard to rerun tests for file
