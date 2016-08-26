@@ -22,15 +22,15 @@ pre_window: workon registrar
 # startup_window: logs
 
 windows:
-  - emacs:
-      - ec
+  - bash:
+      - # emacs
   - bash:
       - # bash
   - guard:
       layout: even-horizontal
       panes:
-        - #guard
-        - #cd ../rar_admin/ && guard
+        - guard
+        - cd ../rar_admin/ && guard
   - web:
       layout: even-horizontal
       panes:
@@ -42,8 +42,7 @@ windows:
   - backend:
       layout: even-horizontal
       panes:
-        - pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
-        - # supervisord -n -c supervisord-dev.conf
+        - supervisord -n -c supervisord-dev.conf
         - redis-server
   - frontend:
       layout: even-horizontal
