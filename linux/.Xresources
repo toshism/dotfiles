@@ -1,0 +1,60 @@
+xterm*faceSize: 14
+xterm*loginShell: true
+xterm*saveLines: 4000
+xterm*termName: xterm-color
+xterm*boldMode: false
+xterm*colorBDMode: true
+xterm*colorBD: rgb:fc/fc/fc
+
+
+! URxvt config mostly taken from
+! https://unix4lyfe.org/xterm/
+URxvt.loginShell: true
+URxvt.saveLines: 10000
+URxvt.cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
+URxvt.font: xft:monospace:size=12
+URxvt.italicFont: xft:monospace:size=12
+URxvt.scrollBar: false
+URxvt.visualBell: true
+// this is SO AWESOME:
+URxvt.fading: 15
+// URxvt spells "eightBitInput" as "meta8" and defaults it to false
+
+
+! color scheme from https://terminal.sexy/#JjI47O_xJjI4_5gAi8NK_8EHA6n06R5jAJaIz9jcN0dP_6dNnMxl_6AAgdT6rRRXJqaa7O_x
+! special
+*.foreground:   #eceff1
+*.background:   #263238
+*.cursorColor:  #eceff1
+
+! black
+*.color0:       #263238
+*.color8:       #37474f
+
+! red
+*.color1:       #ff9800
+*.color9:       #ffa74d
+
+! green
+*.color2:       #8bc34a
+*.color10:      #9ccc65
+
+! yellow
+*.color3:       #ffc107
+*.color11:      #ffa000
+
+! blue
+*.color4:       #03a9f4
+*.color12:      #81d4fa
+
+! magenta
+*.color5:       #e91e63
+*.color13:      #ad1457
+
+! cyan
+*.color6:       #009688
+*.color14:      #26a69a
+
+! white
+*.color7:       #cfd8dc
+*.color15:      #eceff1

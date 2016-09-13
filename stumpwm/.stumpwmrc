@@ -1,0 +1,31 @@
+(in-package :stumpwm)
+
+(setf *message-window-gravity* :center)
+(setf *input-window-gravity* :center)
+
+(setf stumpwm::*frame-number-map* "asdfjkl;")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; applications
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; run an `urxvt' terminal (instead of `xterm')
+;; TODO Install `rxvt-unicode'
+;; FIXME If urxvt is not installed, let default keybinding
+(defcommand urxvt () ()
+  "Start an urxvt instance or switch to it, if it is already running."
+  (run-or-raise "urxvt" '(:instance "urxvt")))
+(define-key *root-map* (kbd "c") "urxvt")
+
+
+;; launch Web browser
+(defcommand firefox () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "firefox" '(:class "Firefox")))
+(define-key *root-map* (kbd "b") "firefox")
+
+;; Web browsing commands
+;; Get the X selection and order the GUI browser to open it. Presumably it
+;; is a HTTP address.
+(defcommand open-selection-browser () ()
+  "docstring"
+  (run-shell-command (cat "exec firefox " (get-x-selection))))

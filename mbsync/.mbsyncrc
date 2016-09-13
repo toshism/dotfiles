@@ -5,9 +5,9 @@ User tosh@uniregistry.com
 # To store the password in an encrypted file use PassCmd instead of Pass
 PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
 #
-AuthMechs LOGIN
-SSLType IMAPS
-SSLVersions SSLv3
+#AuthMechs LOGIN
+#SSLType IMAPS
+#SSLVersions SSLv3
 
 IMAPStore uniregistry-remote
 Account uniregistry
