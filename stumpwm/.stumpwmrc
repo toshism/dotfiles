@@ -21,11 +21,32 @@
 (defcommand firefox () ()
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "firefox" '(:class "Firefox")))
-(define-key *root-map* (kbd "b") "firefox")
+(defcommand chrome () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "chromium-browser" '(:class "Chromium")))
+(define-key *root-map* (kbd "b") "chrome")
 
 ;; Web browsing commands
 ;; Get the X selection and order the GUI browser to open it. Presumably it
 ;; is a HTTP address.
 (defcommand open-selection-browser () ()
   "docstring"
-  (run-shell-command (cat "exec firefox " (get-x-selection))))
+  (run-shell-command (cat "exec chromium-browser" (get-x-selection))))
+
+
+(defcommand tcomm () ()
+  "Start comm apps on comm group"
+  (gnew "comm")
+  (run-shell-command "exec firefox -url 'https://zulip.uniregistry.com'")
+  (vsplit)
+  (move-focus :down)
+  (run-shell-command "exec slack")
+  (hsplit))
+
+
+
+(require :swank)
+(swank-loader:init)
+(swank:create-server :port 4004
+                     :style swank:*communication-style*
+                     :dont-close t)
