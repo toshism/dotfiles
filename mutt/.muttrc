@@ -13,7 +13,7 @@ set signature        = ~/.mutt/sig           # my signature file
 # Basic Options --------------------------------------
 set wait_key = no        # shut up, mutt
 set mbox_type = Maildir  # mailbox type
-set timeout = 3          # idle time before scanning
+set timeout = 10          # idle time before scanning
 set mail_check = 0       # minimum time between scans
 unset move               # gmail does that
 set delete               # don't ask, just do
@@ -25,6 +25,7 @@ set pipe_decode          # strip headers and eval mimes when piping
 set thorough_search      # strip headers and eval mimes before searching
 auto_view text/html
 alternative_order text/plain text/html
+set text_flowed=yes
 
 # threading
 set sort=threads
@@ -57,6 +58,8 @@ set postponed = "+Drafts"
 # SMTP settings
 set ssl_force_tls = yes
 set smtp_authenticators = 'gssapi:login'
+set smtp_url="smtp://tosh@smtp.uniregistry.com:587"
+set realname="Tosh Lyons"
 
 # Keybindings ---------------------------------------
 bind pager j next-line
@@ -70,20 +73,27 @@ bind attach,index G last-entry
 
 # Sidebar ------------------------------------------
 #change width accordingly
-set sidebar_width=30
+# set sidebar_width=30
 
-# Visible at first, then change its value to yes
-set sidebar_visible=no
+# # Visible at first, then change its value to yes
+# set sidebar_visible=no
 
-set sidebar_delim='|'
-set sidebar_sort=yes
-mailboxes =inbox =ml
-bind index CP sidebar-prev
-bind index CN sidebar-next
-bind index CO sidebar-open
-bind pager CP sidebar-prev
-bind pager CN sidebar-next
-bind pager CO sidebar-open
-macro index b '<enter-command>toggle sidebar_visible<enter>'
-macro pager b '<enter-command>toggle sidebar_visible<enter>'
-bind index B bounce-message
+# set sidebar_delim='|'
+# set sidebar_sort=yes
+# mailboxes =inbox =ml
+# bind index CP sidebar-prev
+# bind index CN sidebar-next
+# bind index CO sidebar-open
+# bind pager CP sidebar-prev
+# bind pager CN sidebar-next
+# bind pager CO sidebar-open
+# macro index b '<enter-command>toggle sidebar_visible<enter>'
+# macro pager b '<enter-command>toggle sidebar_visible<enter>'
+# bind index B bounce-message
+
+
+# Colors
+# good color example
+# https://github.com/altercation/mutt-colors-solarized/blob/master/mutt-colors-solarized-dark-16.muttrc
+color status        black           blue
+color index         blue            default         "~U"                        # unread messages
