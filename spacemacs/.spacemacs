@@ -373,4 +373,13 @@ layers configuration."
     (shell-command (concat "touch " (shell-quote-argument (buffer-file-name))))
     (clear-visited-file-modtime))
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; common-lisp
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+  ;; http://www.kaashif.co.uk/2015/06/28/hacking-stumpwm-with-common-lisp/
+  (defun stump ()
+    (interactive)
+    (slime-connect "127.0.0.1" "4004"))
+
 )
