@@ -4,8 +4,21 @@ My personal configuration files. Some are probably generic enough to be reused,
 some are probably not (spacemacs) but may still be useful to glean some snippets
 or ideas from.
 
-I'm currently on a [[https://github.com/powerline/powerline][powerline ]]kick, so I've pretty much powerlined
-all_teh_things. You've been warned.
+I'm currently bouncing back and forth between osx and linux so there is a bit of
+both here.
+
+- bash - osx
+- fish - osx/linux
+- hammerspoon - osx
+- linux - linux, obviously
+- mbsync - osx/linux
+- mutt - osx/linux
+- powerline - osx - no longer used, but should still work
+- spacemacs - osx/linux
+- stumpwm - linux
+- tmux - osx/linux
+- vim - osx/linux
+
 
 * Install/Setup
 
