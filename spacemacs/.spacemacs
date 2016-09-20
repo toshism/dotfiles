@@ -102,6 +102,8 @@ values."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
+   dotspacemacs-elpa-https nil
+
    ;; One of `vim', `emacs' or `hybrid'. Evil is always enabled but if the
    ;; variable is `emacs' then the `holy-mode' is enabled at startup. `hybrid'
    ;; uses emacs key bindings for vim's insert mode, but otherwise leaves evil
@@ -266,6 +268,9 @@ layers configuration."
   (setq magit-commit-show-diff nil)
   ;; (setq alert-default-style 'notifier)
   (spacemacs/toggle-indent-guide-globally-on)
+  ;; i use fish in the terminal but it's easier to just tell emacs to use bash
+  ;; to avoid weird problems ie. with virtualenvs etc.
+  (setq shell-file-name "/bin/bash")
 
   ;; I don't like customize stuff in my config
   ;; store it in a separate file
