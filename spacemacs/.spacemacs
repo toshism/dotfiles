@@ -272,6 +272,10 @@ layers configuration."
   ;; to avoid weird problems ie. with virtualenvs etc.
   (setq shell-file-name "/bin/bash")
 
+  ;; copy to all the things
+  (setq x-select-enable-clipboard t)
+  (setq x-select-enable-primary t)
+
   ;; I don't like customize stuff in my config
   ;; store it in a separate file
   (setq custom-file "~/.emacs.d/private/custom.el")
