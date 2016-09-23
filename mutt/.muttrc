@@ -1,5 +1,6 @@
 # using homebrew formula from https://github.com/emmanuelbernard/homebrew-mutt on the mac
 source "gpg2 -dq $HOME/.authinfo.gpg |"
+
 # Paths ----------------------------------------------
 set folder           = ~/Mail                # mailbox location
 set alias_file       = ~/.mutt/alias         # where to store aliases
@@ -27,9 +28,16 @@ auto_view text/html
 alternative_order text/plain text/enriched text/html
 set text_flowed=yes
 
-# threading
+# Threading ------------------------------------------
 set sort=threads
+set strict_threads="yes"
+set sort_browser="reverse-date"
 set sort_aux=last-date-received
+bind index - collapse-thread
+bind index _ collapse-all
+
+# Index ----------------------------------------------
+set index_format = "%4C %Z %[%b %d @ %I:%M] | %-25.22n |%M  %s"
 
 # Status Bar -----------------------------------------
 set status_chars  = " *%A"
@@ -40,6 +48,9 @@ ignore *                                # ignore all headers
 unignore from: to: cc: date: subject:   # show only these
 unhdr_order *                           # some distros order things by default
 hdr_order from: to: cc: date: subject:  # and in this order
+
+# GPG ------------------------------------------------
+set pgp_use_gpg_agent = yes
 
 # Account Settings -----------------------------------
 
@@ -97,3 +108,4 @@ bind attach,index,pager \CU previous-page
 # https://github.com/altercation/mutt-colors-solarized/blob/master/mutt-colors-solarized-dark-16.muttrc
 color status        black           blue
 color index         blue            default         "~U"                        # unread messages
+color index         blue            default         "~v~(~N)"                   # collapsed thread with unread
