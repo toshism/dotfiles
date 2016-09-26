@@ -44,7 +44,7 @@ values."
      markdown
      org
      (shell :variables
-            shell-default-height 30
+            ;; shell-default-height 30
             shell-default-shell 'eshell)
      syntax-checking
      version-control
@@ -61,7 +61,7 @@ values."
      gnus
      spotify
      tosh-com
-     eww
+     ;; eww
      ivy
      php
      react
@@ -70,7 +70,7 @@ values."
      dash
      ansible
      c-c++
-     ranger
+     slack
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -85,6 +85,7 @@ values."
                                       ox-mediawiki
                                       evil-mu4e
                                       mediawiki
+                                      emofify
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -362,6 +363,7 @@ layers configuration."
   (setq message-send-mail-function 'smtpmail-send-it
         smtpmail-default-smtp-server "smtp.uniregistry.com")
 
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; vinegar keybindings
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -372,7 +374,7 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; ranger
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq ranger-override-dired t)
+  ;; (setq ranger-override-dired t)
 
   ;; this is handy in certain circumstances
   ;; ie. triggering guard to rerun tests for file
