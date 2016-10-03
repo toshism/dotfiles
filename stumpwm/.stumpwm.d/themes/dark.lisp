@@ -1,6 +1,9 @@
 (in-package :stumpwm)
 
 (setq *mode-line-border-color* "black")
+;; (set-font "-xos4-terminus-medium-r-normal--0-0-72-72-c-0-iso8859-2")
+;; (set-font "-xos4-terminus-*-*-*-*-")
+(set-font "-*-terminus-*-*-*-*-*-*-*-*-*-100-*-*")
 
 (setf *colors* '("black"
                  "red"

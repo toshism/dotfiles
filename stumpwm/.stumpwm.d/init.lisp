@@ -12,6 +12,8 @@
 (defun set-theme (file)
   (load (concatenate 'string *theme-dir* file ".lisp")))
 
+(run-shell-command "xmodmap ~/.Xmodmap")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "theme"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -43,9 +45,14 @@
   "Spotify previous song"
   (run-shell-command "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"))
 
+(defcommand spotify () ()
+  "Start or raise spotify"
+  (run-or-raise "spotify" '(:title "spotify")))
+
 ;; music keymap
 (defvar *tosh-music-bindings*
   (let ((m (make-sparse-keymap)))
+    (define-key m (kbd "s") "spotify")
     (define-key m (kbd "p") "play-pause")
     (define-key m (kbd "n") "spotify-next")
     (define-key m (kbd "l") "spotify-previous")
@@ -122,6 +129,16 @@
   (gnew "comm")
   (restore-from-file "~/group-dump.lisp"))
 
+
+(define-key *top-map* (kbd "M-1") "gselect 1")
+(define-key *top-map* (kbd "M-2") "gselect 2")
+(define-key *top-map* (kbd "M-3") "gselect 3")
+(define-key *top-map* (kbd "M-4") "gselect 4")
+
+(define-key *top-map* (kbd "M-h") "move-focus left")
+(define-key *top-map* (kbd "M-j") "move-focus down")
+(define-key *top-map* (kbd "M-k") "move-focus up")
+(define-key *top-map* (kbd "M-l") "move-focus right")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
