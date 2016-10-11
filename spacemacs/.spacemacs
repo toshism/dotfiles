@@ -71,6 +71,7 @@ values."
      ansible
      c-c++
      slack
+     django
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -85,7 +86,7 @@ values."
                                       ox-mediawiki
                                       evil-mu4e
                                       mediawiki
-                                      emofify
+                                      emojify
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -125,17 +126,17 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(
-                         material
-                         dakrone
-                         spacemacs-dark
-                         tangotango
-                         zenburn
-                         solarized-dark
-                         monokai
-                         ample-zen
-                         spacemacs-light
-                         solarized-light)
+   ;; dotspacemacs-themes '(
+   ;;                       material
+   ;;                       dakrone
+   ;;                       spacemacs-dark
+   ;;                       tangotango
+   ;;                       zenburn
+   ;;                       solarized-dark
+   ;;                       monokai
+   ;;                       ample-zen
+   ;;                       spacemacs-light
+   ;;                       solarized-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -257,6 +258,12 @@ user code."
   "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+
+  ;; I don't like customize stuff in my config
+  ;; store it in a separate file
+  (setq custom-file "~/.emacs.d/private/custom.el")
+  (load custom-file 'noerror)
+
   (setq guide-key/popup-window-position 'bottom)
   (setq projectile-switch-project-action 'projectile-dired)
   ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -277,10 +284,12 @@ layers configuration."
   (setq x-select-enable-clipboard t)
   (setq x-select-enable-primary t)
 
-  ;; I don't like customize stuff in my config
-  ;; store it in a separate file
-  (setq custom-file "~/.emacs.d/private/custom.el")
-  (load custom-file :noerror :nomessage)
+
+  (defadvice epg--start (around advice-epg-disable-agent activate)
+    (let ((agent (getenv "GPG_AGENT_INFO")))
+      (setenv "GPG_AGENT_INFO" nil)
+      ad-do-it
+      (setenv "GPG_AGENT_INFO" agent)))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; mu4e
