@@ -1,0 +1,15 @@
+name: releaser
+root: ~/dev/projects/registry/releaser/release_manager
+
+pre_window: workon releaser
+
+windows:
+  - shell:
+      -
+  - server:
+      - ./manage.py runserver
+  - celery:
+      layout: even-horizontal
+      panes:
+        - ./manage.py celery worker -B --concurrency=1
+        - ./manage.py celerycam
