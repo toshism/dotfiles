@@ -9,7 +9,7 @@
                  "red"
                  "forestgreen"
                  "yellow"
-                 "dodgerblue2"
+                 "#0000cd"
                  "magenta"
                  "cyan"
                  "white"

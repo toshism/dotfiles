@@ -402,4 +402,6 @@ layers configuration."
     (interactive)
     (slime-connect "127.0.0.1" "4004"))
 
+  ;; hopefully temp hack to fix problem with xterm-color package problem
+  (fset 'xterm-color-unfontify-region 'font-lock-default-unfontify-region)
 )
