@@ -59,3 +59,4 @@ function fish_right_prompt
   end
 end
 
+rvm default
