@@ -259,6 +259,9 @@ user code."
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
 
+  ;; hopefully temp hack to fix problem with xterm-color package problem
+  (fset 'xterm-color-unfontify-region 'font-lock-default-unfontify-region)
+
   ;; I don't like customize stuff in my config
   ;; store it in a separate file
   (setq custom-file "~/.emacs.d/private/custom.el")
@@ -402,6 +405,4 @@ layers configuration."
     (interactive)
     (slime-connect "127.0.0.1" "4004"))
 
-  ;; hopefully temp hack to fix problem with xterm-color package problem
-  (fset 'xterm-color-unfontify-region 'font-lock-default-unfontify-region)
 )
