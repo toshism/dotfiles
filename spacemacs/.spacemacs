@@ -286,6 +286,7 @@ layers configuration."
   (setq x-select-enable-clipboard t)
   (setq x-select-enable-primary t)
 
+  (setq browse-url-browser-function 'browse-url-chromium)
 
   (defadvice epg--start (around advice-epg-disable-agent activate)
     (let ((agent (getenv "GPG_AGENT_INFO")))
