@@ -39,4 +39,4 @@
     (add-hook 'sauron-event-added-functions
               (lambda (origin prio msg &optional props)
                 (cond
-                 ((> prio 4) (sauron-fx-sox "/System/Library/Sounds/Submarine.aiff")))))))
+                 ((> prio 4) (sauron-fx-sox "/usr/share/sounds/purple/receive.wav")))))))

@@ -15,6 +15,10 @@ set $mod Mod1
 # is used in the bar {} block below.
 font pango:monospace 8
 
+# use dunst for notifications
+exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
+
+exec feh --bg-scale /home/tosh/wallpaper/wallup-139632.jpg
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
@@ -34,7 +38,7 @@ floating_modifier $mod
 bindsym $mod+Return exec urxvt
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+Shift+d kill
 
 # start dmenu (a program launcher)
 #bindsym $mod+d exec dmenu_run
@@ -158,15 +162,29 @@ mode "spotify" {
         bindsym p exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause; mode "default"
         bindsym n exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next; mode "default"
         bindsym l exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous; mode "default"
+        bindsym c exec notify-send "$(/home/tosh/current_song.sh)"; mode "default"
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
 
+# would be kind of neat to show currently playing song. not sure best way though
+# dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata'
 bindsym $mod+m mode "spotify"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        position          top
-        status_command    i3status
+  status_command i3status
+  position top
+  colors {
+  background #000000
+    statusline #ffffff
+    separator  #666666
+
+    # Type             border  background font
+    focused_workspace  #008fff #007fff #ffffff
+    active_workspace   #333333 #5f676a #ffffff
+    inactive_workspace #333333 #222222 #888888
+    urgent_workspace   #aa0000 #990000 #ffffff
+    }
 }

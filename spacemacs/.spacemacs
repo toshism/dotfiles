@@ -276,7 +276,7 @@ layers configuration."
   (setq projectile-use-git-grep t)
   (setq git-magit-status-fullscreen t)
   (setq magit-commit-show-diff nil)
-  ;; (setq alert-default-style 'notifier)
+  (setq alert-default-style 'libnotify)
   (spacemacs/toggle-indent-guide-globally-on)
   ;; i use fish in the terminal but it's easier to just tell emacs to use bash
   ;; to avoid weird problems ie. with virtualenvs etc.
