@@ -177,9 +177,9 @@ bar {
   status_command i3status
   position top
   colors {
-  background #000000
+    background #060606
     statusline #ffffff
-    separator  #666666
+    separator  #ff0000
 
     # Type             border  background font
     focused_workspace  #008fff #007fff #ffffff
@@ -188,3 +188,10 @@ bar {
     urgent_workspace   #aa0000 #990000 #ffffff
     }
 }
+
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+client.unfocused        #333333 #454545 #ffffff #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
