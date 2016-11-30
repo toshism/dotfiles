@@ -11,3 +11,5 @@ text/html; chromium-browser %s; test=test -n "$DISPLAY"; needsterminal
 #text/html; html2text --pad-tables %s; copiousoutput; description=HTML Text
 text/html; html2text --unicode-snob --reference-links --protect-links --body-width=0 --ignore-images %s; copiousoutput; description=HTML Text
 #text/html; w3m -graph -dump %s; nametemplate=%s.html; copiousoutput
+image/gif; display %s
+image/jpeg; display %s

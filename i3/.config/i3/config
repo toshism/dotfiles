@@ -158,6 +158,8 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # spotify
+assign [class="Spotify"] 4
+
 mode "spotify" {
         bindsym p exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause; mode "default"
         bindsym n exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next; mode "default"

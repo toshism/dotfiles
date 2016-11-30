@@ -1,11 +1,19 @@
-xterm*faceSize: 14
+! xterm*faceSize: 14
 xterm*loginShell: true
 xterm*saveLines: 4000
-xterm*termName: xterm-color
+xterm*termName: xterm-256color
+XTerm*locale: true
 xterm*boldMode: false
 xterm*colorBDMode: true
 xterm*colorBD: rgb:fc/fc/fc
-
+! xterm*cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
+! xterm*font: xft:monospace:size=12
+! xterm*italicFont: xft:monospace:size=12
+! xterm*faceName: DejaVu Sans Mono:style=Book:antialias=false
+! xterm*faceNameDoublesize: WenQuanYi Bitmap Song
+! xterm*faceSize: 12
+! XTerm*faceName: Source Code Pro
+Xterm*.font: xft:Source\ Code\ Pro:Regular:size=12
 
 ! URxvt config mostly taken from
 ! https://unix4lyfe.org/xterm/

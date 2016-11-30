@@ -49,6 +49,7 @@ values."
      version-control
      themes-megapack
      python
+     ipython-notebook
      html
      javascript
      erc
@@ -140,11 +141,21 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Monaco"
+   ;; dotspacemacs-default-font '("terminus"
+   ;;                             :size 16
+   ;;                             :weight normal
+   ;;                             :width normal
+   ;;                             :powerline-scale 1.1)
+   ;; dotspacemacs-default-font '("Source Code Pro"
+   ;;                             :size 16
+   ;;                             :weight normal
+   ;;                             :width normal
+   ;;                             :powerline-scale 1.1)
+   dotspacemacs-default-font '("DejaVu Sans Mono" ;;"Ubuntu Mono"
                                :size 16
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -303,10 +314,10 @@ layers configuration."
           ("/Drafts"      . ?d)
           ("/Sent"        . ?s)))
 
-  (setq mu4e-get-mail-command "/usr/local/bin/mbsync uniregistry"
+  (setq mu4e-get-mail-command "/usr/bin/mbsync uniregistry"
         ;; mu4e-get-mail-command "true" ;; this updates index but doesn't retrieve mail
         ;; mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu4e/"
-        mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu/mu4e/"
+        mu4e-path "/usr/share/emacs24/site-lisp/mu4e/"
         mu4e-update-interval 180             ;; update every 3 minutes
         mu4e-maildir       "~/Mail"   ;; top-level Maildir
         mu4e-sent-folder   "/Sent"       ;; folder for sent messages
@@ -319,9 +330,9 @@ layers configuration."
         ;; mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout" ;;"html2text -utf8 -width 120"
         ;; mu4e-html2text-command "html2text -ascii -width 120"
         ;; mu4e-html2text-command "/Users/tosh/htmlmailtotxt.sh"
-        ;; mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
+        mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
         ;; mu4e-html2text-command 'mu4e-shr2text
-        mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
+        ;; mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
         mu4e-view-show-images t)
 
   ;; messages are hard to read sometimes with dark background

@@ -33,7 +33,7 @@ windows:
   - admin:
       layout: even-horizontal
       panes:
-        - cd ../rar_admin && pserve development.ini --reload
+        - cd ../rar_admin; and pserve development.ini --reload
   - backend:
       layout: even-horizontal
       panes:
@@ -42,7 +42,7 @@ windows:
   - frontend:
       layout: even-horizontal
       panes:
-        - cd ./uniregistrar/js/rar && npm run watch
+        - cd ./uniregistrar/js/rar; npm run watch
         - cd ../rar_admin/rar_admin/js/rar_admin/ && npm run watch
   - deploy:
       layout: even-horizontal
