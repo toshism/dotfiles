@@ -16,7 +16,7 @@ both here.
 - powerline - osx - no longer used, but should still work
 - spacemacs - osx/linux
 - stumpwm - linux
-- tmux - osx/linux
+- tmux - linux
 - vim - osx/linux
 
 

@@ -63,7 +63,7 @@ values."
      tosh-com
      eww
      ;; ivy
-     php
+     ;; php
      react
      prodigy
      vinegar
@@ -86,7 +86,8 @@ values."
                                       ox-mediawiki
                                       evil-mu4e
                                       mediawiki
-                                      emojify
+                                      ;; emojify
+                                      ;; notmuch
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()

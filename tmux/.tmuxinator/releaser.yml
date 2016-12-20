@@ -11,5 +11,4 @@ windows:
   - celery:
       layout: even-horizontal
       panes:
-        - ./manage.py celery worker -B --concurrency=1
-        - ./manage.py celerycam
+        - supervisord -c supervisord-dev.conf

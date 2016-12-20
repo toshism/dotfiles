@@ -43,7 +43,7 @@ windows:
       layout: even-horizontal
       panes:
         - cd ./uniregistrar/js/rar; npm run watch
-        - cd ../rar_admin/rar_admin/js/rar_admin/ && npm run watch
+        - cd ../rar_admin/rar_admin/js/rar_admin/; and npm run watch
   - deploy:
       layout: even-horizontal
       panes:
