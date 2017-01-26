@@ -18,6 +18,7 @@ both here.
 - stumpwm - linux
 - tmux - linux
 - vim - osx/linux
+- qutebrowser - linux
 
 
 * Install/Setup
