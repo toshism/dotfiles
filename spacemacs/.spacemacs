@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     go
      shell-scripts
      lua
      vimscript
@@ -417,4 +418,15 @@ layers configuration."
     (interactive)
     (slime-connect "127.0.0.1" "4004"))
 
+  (setq jiralib-url "https://jira.uniregistry.com")
+
+  (setq org-jira-done-states
+        '("Done" "Ready to be merged" "Ready for depoyment" "In Review"))
+
+  (use-package org-jira
+    :load-path "~/dev/projects/org-jira/")
+
+  (use-package gojira
+    :load-path "~/dev/projects/gojira/"
+    :bind (("C-c j" . gojira-insert-issue-as-org)))
 )
