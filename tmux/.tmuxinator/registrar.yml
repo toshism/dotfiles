@@ -29,7 +29,7 @@ windows:
   - web:
       layout: even-horizontal
       panes:
-        - pserve development.ini --reload
+        - pserve ini/dev/dev.ini --reload
   - admin:
       layout: even-horizontal
       panes:
