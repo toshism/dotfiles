@@ -2,6 +2,9 @@ rvm default
 set PATH /usr/local/bin $PATH
 eval (python -m virtualfish compat_aliases)
 
+set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
+set PATH $PATH $GOPATH/bin
+
 function fish_prompt
   test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color yellow)(hostname)' '
 
