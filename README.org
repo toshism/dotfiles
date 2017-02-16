@@ -11,6 +11,7 @@ both here.
 - fish - osx/linux
 - hammerspoon - osx
 - linux - linux, obviously
+- i3 - linux
 - mbsync - osx/linux
 - mutt - osx/linux
 - powerline - osx - no longer used, but should still work
