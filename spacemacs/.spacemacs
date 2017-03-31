@@ -18,6 +18,7 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     ranger
      rcirc
      elixir
      go
@@ -55,7 +56,7 @@ values."
      ipython-notebook
      html
      javascript
-     erc
+     ;; erc
      jabber
      clojure
      common-lisp
@@ -64,7 +65,7 @@ values."
      gnus
      spotify
      tosh-com
-     eww
+     ;; eww
      ;; ivy
      ;; php
      react
@@ -131,17 +132,17 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   ;; dotspacemacs-themes '(
-   ;;                       material
-   ;;                       dakrone
-   ;;                       spacemacs-dark
-   ;;                       tangotango
-   ;;                       zenburn
-   ;;                       solarized-dark
-   ;;                       monokai
-   ;;                       ample-zen
-   ;;                       spacemacs-light
-   ;;                       solarized-light)
+   dotspacemacs-themes '(
+                         spacemacs-dark
+                         material
+                         dakrone
+                         tangotango
+                         zenburn
+                         solarized-dark
+                         monokai
+                         ample-zen
+                         spacemacs-light
+                         solarized-light)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -402,7 +403,7 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; ranger
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;; (setq ranger-override-dired t)
+  (setq ranger-override-dired t)
 
   ;; this is handy in certain circumstances
   ;; ie. triggering guard to rerun tests for file
