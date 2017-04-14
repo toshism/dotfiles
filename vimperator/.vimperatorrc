@@ -1,0 +1,30 @@
+set gui=none
+set! javascript.options.jit.chrome=true
+" Press 'p' to go to previous tab
+noremap p :tabprevious<CR>
+" Press 'n' to go to next tab
+noremap n :tabnext<CR>
+" Press 'q' to delete current tab
+" noremap q :bdelete<CR>
+set editor=emacsclient
+
+set hintchars="asdfghjkl;"
+
+" Make hints look a lil nicer.
+hi Hint font-family: Menlo;
+hi -a Hint border: 1px solid black;
+" hi -a Hint padding: 1px 2px 2px 1px;
+hi -a Hint color: black;
+hi -a Hint background-color: #fffcc8;
+" hi -a Hint font-size: 12px;
+hi HintActive background-color: rgba(0,0,0,0) !important;
+hi HintElem background-color: rgba(0,0,0,0) !important;
+
+set! ui.key.menuAccessKey=0
+set! ui.key.menuAccessKeyFocuses=false
+
+
+" developer tools"
+nnoremap gc :emenu Tools.Web Developer.Web Console<CR>
+nnoremap gt :emenu Tools.Web Developer.Developer Toolbar<CR>
+nnoremap gn :emenu Tools.Web Developer.Network<CR>
