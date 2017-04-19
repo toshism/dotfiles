@@ -9,6 +9,23 @@
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
 
+#################
+# i3 gaps specific stuff
+
+# disable title bars for i3 gaps
+for_window [class="^.*"] border pixel 0
+
+gaps inner 10
+#gaps outer 10
+
+#smart_gaps on
+# border on, see where focus is
+bindsym $mod+c exec i3-msg border pixel 3
+bindsym --release $mod+c exec i3-msg border pixel 0
+
+# /i3 gaps
+################
+
 set $mod Mod1
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -18,7 +35,9 @@ font pango:monospace 8
 # use dunst for notifications
 exec --no-startup-id dunst -config ~/.config/dunst/dunstrc
 
-exec feh --bg-scale /home/tosh/wallpaper/wallup-139632.jpg
+#exec feh --bg-scale /home/tosh/wallpaper/wallup-139632.jpg
+exec xsetroot -solid "#333F45"
+
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
 #font pango:DejaVu Sans Mono 8
@@ -51,10 +70,14 @@ bindsym $mod+Shift+d kill
 bindsym $mod+d exec rofi -show run
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
+bindsym $mod+j exec i3-msg border pixel 2; focus left
+bindsym $mod+k exec i3-msg border pixel 2; focus down
+bindsym $mod+l exec i3-msg border pixel 2; focus up
+bindsym $mod+semicolon exec i3-msg border pixel 2; focus right
+bindsym --release $mod+j exec i3-msg border pixel 0
+bindsym --release $mod+k exec i3-msg border pixel 0
+bindsym --release $mod+l exec i3-msg border pixel 0
+bindsym --release $mod+semicolon exec i3-msg border pixel 0
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -191,9 +214,9 @@ bar {
   status_command i3status
   position top
   colors {
-    background #060606
+    background #263238
     statusline #ffffff
-    separator  #ff0000
+    separator  #5a6d76
 
     # Type             border  background font
     focused_workspace  #008fff #007fff #ffffff

@@ -371,6 +371,11 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (custom-set-variables '(spacemacs-theme-custom-colors
+                          '((bg1 . "#263238")
+                            (bg2 . "#0d2029")
+                            (bg3 . "#00131C")
+                            (bg4 . "#000003"))))
   )
 
 (defun dotspacemacs/user-config ()
@@ -446,6 +451,10 @@ layers configuration."
         ;; mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
         mu4e-view-show-images t)
+
+  ;; anaconda fails sometimes. live with it, don't bug me
+  (remove-hook 'anaconda-mode-response-read-fail-hook
+               'anaconda-mode-show-unreadable-response)
 
   ;; messages are hard to read sometimes with dark background
   (setq shr-color-visible-distance-min 10
