@@ -1,4 +1,4 @@
-#+PROPERTY: tangle yes
+#+PROPERTY: header-args :tangle yes
 
 * Keybindings
 ** Global capture

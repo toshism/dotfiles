@@ -1,7 +1,7 @@
 # ~/.tmuxinator/registrar.yml
 
 name: registrar
-root: ~/dev/projects/registry/uniregistrar/uniregistrar
+root: ~/dev/projects/uniregistrar/uniregistrar
 
 # Optional tmux socket
 # socket_name: foo
@@ -29,7 +29,7 @@ windows:
   - web:
       layout: even-horizontal
       panes:
-        - pserve ini/dev/dev.ini --reload
+        - pserve ../rar_app/rar_app/ini/dev/dev.ini --reload
   - admin:
       layout: even-horizontal
       panes:
@@ -37,15 +37,9 @@ windows:
   - backend:
       layout: even-horizontal
       panes:
-        - supervisord -n -c supervisord-dev.conf
-        - redis-server
+        - supervisord -n -c ../rar_app/rar_app/ini/dev/dev.ini
   - frontend:
       layout: even-horizontal
       panes:
         - cd ./uniregistrar/js/rar; npm run watch
         - cd ../rar_admin/rar_admin/js/rar_admin/; and npm run watch
-  - deploy:
-      layout: even-horizontal
-      panes:
-        - cd ~/dev/projects/registry/rar-deploy/uniregistrar
-        - cd ~/dev/projects/registry/rar-deploy/uniregistrar

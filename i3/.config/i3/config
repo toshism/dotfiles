@@ -25,8 +25,16 @@ bindsym --release $mod+c exec i3-msg border pixel 0
 
 # /i3 gaps
 ################
+# this doesn't work :(
+# exec ~/.screenlayout/work2.sh
+# exec xrdb -merge ~/.Xresources
 
 set $mod Mod1
+
+# start with workspace 0 on internal screen
+workspace 10 output eDP-1
+# and 1 etc. on hdmi external
+workspace 1 output HDMI-2
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -133,8 +141,8 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-#bindsym $mod+0 workspace 10
-bindsym $mod+0 workspace back_and_forth
+bindsym $mod+0 workspace 10
+bindsym $mod+` workspace back_and_forth
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1
@@ -146,7 +154,7 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-#bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+0 move container to workspace 10
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -193,6 +201,10 @@ mode "spotify" {
         bindsym Escape mode "default"
 }
 
+# volume
+bindsym F12 exec --no-startup-id pactl set-sink-volume 0 +5%
+bindsym F11 exec --no-startup-id pactl set-sink-volume 0 -5%
+
 # spotify
 assign [class="Clementine"] 4
 mode "clementine" {
@@ -219,16 +231,16 @@ bar {
     separator  #5a6d76
 
     # Type             border  background font
-    focused_workspace  #008fff #007fff #ffffff
-    active_workspace   #333333 #5f676a #ffffff
-    inactive_workspace #333333 #222222 #888888
+    focused_workspace  #5b7786 #5b7786 #ffffff
+    active_workspace   #333333 #5b7786 #ffffff
+    inactive_workspace #263238 #263238 #888888
     urgent_workspace   #aa0000 #990000 #ffffff
     }
 }
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
+client.unfocused        #263238 #4a626d #ffffff #2e9ef4   #285577
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
-client.unfocused        #333333 #454545 #ffffff #292d2e   #222222
+client.focused          #263238 #263238 #ffffff #292d2e   #222222
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c

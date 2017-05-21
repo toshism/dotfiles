@@ -1,4 +1,6 @@
 set PATH /usr/local/bin $PATH
+set PATH /usr/lib/postgresql/9.4/bin $PATH
+
 eval (python -m virtualfish compat_aliases)
 
 set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
@@ -13,7 +15,7 @@ function fish_prompt
   test $USER = 'root'; and echo (set_color red)"#"
 
   # Main
-  echo -n (set_color cyan)(prompt_pwd) (virtual_env_prompt) (set_color red)'❯'(set_color yellow)'❯'(set_color green)'❯ '
+  echo -n (set_color cyan)(prompt_pwd) (virtual_env_prompt) (set_color 3a4c55)'❯'(set_color 4a626d)'❯'(set_color 5b7786)'❯ '
 end
 
 function virtual_env_prompt

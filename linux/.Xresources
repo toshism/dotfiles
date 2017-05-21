@@ -1,3 +1,12 @@
+Xft.dpi: 280
+Xft.autohint: 0
+Xft.lcdfilter:  lcddefault
+Xft.hintstyle:  hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
+
+
 ! xterm*faceSize: 14
 xterm*loginShell: true
 xterm*saveLines: 4000
@@ -13,7 +22,7 @@ xterm*colorBD: rgb:fc/fc/fc
 ! xterm*faceNameDoublesize: WenQuanYi Bitmap Song
 ! xterm*faceSize: 12
 ! XTerm*faceName: Source Code Pro
-Xterm*.font: xft:Source\ Code\ Pro:Regular:size=12
+! Xterm*.font: xft:Source\ Code\ Pro:Regular:size=12
 
 ! URxvt config mostly taken from
 ! https://unix4lyfe.org/xterm/
@@ -52,8 +61,10 @@ URxvt.fading: 15
 *.color11:      #ffa000
 
 ! blue
-*.color4:       #03a9f4
-*.color12:      #81d4fa
+! *.color4:       #03a9f4
+! *.color12:      #81d4fa
+*.color4:       #003d5c
+*.color12:      #869fac
 
 ! magenta
 *.color5:       #e91e63
