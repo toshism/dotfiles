@@ -385,7 +385,7 @@ layers configuration."
 
   ;; hopefully temp hack to fix problem with xterm-color package problem
   (fset 'xterm-color-unfontify-region 'font-lock-default-unfontify-region)
-
+  (setq powerline-default-separator 'bar)
   ;; I don't like customize stuff in my config
   ;; store it in a separate file
   (setq custom-file "~/.emacs.d/private/custom.el")

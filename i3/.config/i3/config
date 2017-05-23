@@ -28,13 +28,14 @@ bindsym --release $mod+c exec i3-msg border pixel 0
 # this doesn't work :(
 # exec ~/.screenlayout/work2.sh
 # exec xrdb -merge ~/.Xresources
+# exec /home/tosh/.screenlayout/work3.sh
 
 set $mod Mod1
 
 # start with workspace 0 on internal screen
 workspace 10 output eDP-1
 # and 1 etc. on hdmi external
-workspace 1 output HDMI-2
+workspace 1 output DP-1-8
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
@@ -239,7 +240,7 @@ bar {
 }
 
 # class                 border  backgr. text    indicator child_border
-client.unfocused        #263238 #4a626d #ffffff #2e9ef4   #285577
+client.unfocused        #3a4c55 #4a626d #ffffff #2e9ef4   #285577
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
 client.focused          #263238 #263238 #ffffff #292d2e   #222222
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
