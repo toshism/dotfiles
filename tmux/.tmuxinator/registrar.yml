@@ -22,10 +22,10 @@ pre_window: workon unireg
 # startup_window: logs
 
 windows:
-  - bash:
-      - # emacs
-  - bash:
-      - # bash
+  - emacs:
+      - emacsclient -t
+  - shell:
+      - # fish
   - web:
       layout: even-horizontal
       panes:
