@@ -33,7 +33,7 @@ values."
    dotspacemacs-configuration-layers
    '(
      restclient
-     ranger
+     ;; ranger
      rcirc
      elixir
      go
@@ -518,7 +518,7 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; ranger
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq ranger-override-dired t)
+  (setq ranger-override-dired nil)
 
   ;; this is handy in certain circumstances
   ;; ie. triggering guard to rerun tests for file

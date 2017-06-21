@@ -1,5 +1,6 @@
 set PATH /usr/local/bin $PATH
 set PATH /usr/lib/postgresql/9.4/bin $PATH
+set PATH ~/.local/bin $PATH
 
 eval (python -m virtualfish compat_aliases)
 
@@ -8,6 +9,8 @@ set PATH $PATH $GOPATH/bin
 
 set -Ux EDITOR "emacsclient -t"
 set -Ux ALTERNATE_EDITOR ""
+
+alias mux="tmuxinator"
 
 function fish_prompt
   test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color yellow)(hostname)' '

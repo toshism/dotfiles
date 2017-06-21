@@ -1,0 +1,46 @@
+[colors]
+foreground = #eceff1
+background = #263238
+
+# cursorColor:  #eceff1
+
+# black
+color0 = #263238
+color8 = #37474f
+
+# red
+color1 = #ff9800
+color9 = #ffa74d
+
+# green
+color2 = #8bc34a
+color10 = #9ccc65
+
+# yellow
+color3 = #ffc107
+color11 = #ffa000
+
+# blue
+# color4 = #003d5c
+color4 = #33708F
+color12 = #869fac
+
+# magenta
+color5 = #e91e63
+color13 = #ad1457
+
+# cyan
+color6 = #009688
+color14 = #26a69a
+
+# white
+color7 = #cfd8dc
+#color15 = #eceff1
+color15 = #D3D6D8
+
+
+[options]
+font = Ubuntu Mono Regular 12
+# font = Monospace 12
+# font = xos4 Terminus 12px
+# font = Droid Sans Mono 8
