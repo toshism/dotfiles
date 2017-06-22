@@ -416,6 +416,9 @@ layers configuration."
   ;; don't set python virtualenv from .venv file
   (setq python-auto-set-local-pyvenv-virtualenv nil)
 
+  ;; split windows vertically
+  (setq split-height-threshold nil)
+
   (defadvice epg--start (around advice-epg-disable-agent activate)
     (let ((agent (getenv "GPG_AGENT_INFO")))
       (setenv "GPG_AGENT_INFO" nil)
