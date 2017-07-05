@@ -29,6 +29,7 @@ bindsym --release $mod+c exec i3-msg border pixel 0
 # exec ~/.screenlayout/work2.sh
 # exec xrdb -merge ~/.Xresources
 # exec /home/tosh/.screenlayout/work3.sh
+exec /usr/lib/system76-driver/system76-hidpi-daemon
 
 set $mod Mod1
 
