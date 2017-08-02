@@ -1,5 +1,5 @@
 name: releaser
-root: ~/dev/projects/registry/releaser/release_manager
+root: ~/dev/projects/releaser/release_manager
 
 pre_window: workon releaser
 
