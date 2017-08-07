@@ -204,8 +204,8 @@ mode "spotify" {
 }
 
 # volume
-bindsym F12 exec --no-startup-id pactl set-sink-volume 0 +5%
-bindsym F11 exec --no-startup-id pactl set-sink-volume 0 -5%
+bindsym F12 exec --no-startup-id pactl set-sink-volume 1 +5%
+bindsym F11 exec --no-startup-id pactl set-sink-volume 1 -5%
 
 # spotify
 assign [class="Clementine"] 4
