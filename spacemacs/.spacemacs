@@ -412,7 +412,8 @@ layers configuration."
   (setq x-select-enable-clipboard t)
   (setq x-select-enable-primary t)
 
-  (setq browse-url-browser-function 'browse-url-default-browser)
+  (setq browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "x-www-browser")
 
   ;; don't set python virtualenv from .venv file
   (setq python-auto-set-local-pyvenv-virtualenv nil)
