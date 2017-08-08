@@ -435,6 +435,9 @@ layers configuration."
           ("/Drafts"      . ?d)
           ("/Sent"        . ?s)))
 
+  ;; don't colorize html to text
+  (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
+
   (setq mu4e-get-mail-command "/usr/bin/mbsync uniregistry"
         ;; mu4e-get-mail-command "true" ;; this updates index but doesn't retrieve mail
         ;; mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu4e/"
@@ -451,8 +454,8 @@ layers configuration."
         ;; mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout" ;;"html2text -utf8 -width 120"
         ;; mu4e-html2text-command "html2text -ascii -width 120"
         ;; mu4e-html2text-command "/Users/tosh/htmlmailtotxt.sh"
-        mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
-        ;; mu4e-html2text-command 'mu4e-shr2text
+        ;; mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
+        mu4e-html2text-command 'mu4e-shr2text
         ;; mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
         mu4e-view-show-images t)
 
