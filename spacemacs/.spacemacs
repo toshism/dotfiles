@@ -559,7 +559,7 @@ layers configuration."
 
   (defun on-after-init ()
     (unless (display-graphic-p (selected-frame))
-      (set-face-background 'default "unspecified-bg" (selected-frame))))
+      (set-face-background 'default "unspecified-bg")))
 
   (add-hook 'window-setup-hook 'on-after-init)
 
