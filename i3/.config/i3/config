@@ -29,7 +29,8 @@ bindsym --release $mod+c exec i3-msg border pixel 0
 # exec ~/.screenlayout/work2.sh
 # exec xrdb -merge ~/.Xresources
 # exec /home/tosh/.screenlayout/work3.sh
-exec /usr/lib/system76-driver/system76-hidpi-daemon
+exec_always /usr/lib/system76-driver/system76-hidpi-daemon
+exec_always /usr/bin/blueman-applet
 
 set $mod Mod1
 
@@ -64,7 +65,7 @@ floating_modifier $mod
 
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return exec st
+bindsym $mod+Return exec termite
 
 # kill focused window
 bindsym $mod+Shift+d kill
@@ -77,7 +78,7 @@ bindsym $mod+Shift+d kill
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # try out rofi instead of dmenu
-bindsym $mod+d exec rofi -show run
+bindsym $mod+space exec rofi -show run
 
 # change focus
 bindsym $mod+j exec i3-msg border pixel 2; focus left
@@ -125,13 +126,13 @@ bindsym $mod+e layout toggle split
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+#bindsym $mod+space focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+d focus child
 
 # switch to workspace
 bindsym $mod+1 workspace 1
@@ -204,8 +205,8 @@ mode "spotify" {
 }
 
 # volume
-bindsym F12 exec --no-startup-id pactl set-sink-volume 1 +5%
-bindsym F11 exec --no-startup-id pactl set-sink-volume 1 -5%
+bindsym F12 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym F11 exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5%
 
 # spotify
 assign [class="Clementine"] 4
