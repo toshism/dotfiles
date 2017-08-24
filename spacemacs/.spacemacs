@@ -81,6 +81,7 @@ values."
      gnus
      spotify
      tosh-com
+     notmuch
      ;; eww
      ;; ivy
      ;; php
@@ -452,6 +453,7 @@ layers configuration."
         mu4e-enable-mode-line t
         mu4e-enable-notifications t
         mu4e-use-fancy-chars nil
+        mu4e-change-filenames-when-moving t
         ;; mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout" ;;"html2text -utf8 -width 120"
         ;; mu4e-html2text-command "html2text -ascii -width 120"
         ;; mu4e-html2text-command "/Users/tosh/htmlmailtotxt.sh"

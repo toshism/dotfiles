@@ -192,6 +192,9 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# mail
+bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
+
 # spotify
 assign [class="Spotify"] 4
 

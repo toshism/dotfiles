@@ -1,0 +1,121 @@
+#+TITLE: Notmuch layer
+
+[[file:notmuch-logo.png]]
+
+* Table of Contents                                         :TOC_4_gh:noexport:
+- [[#install][Install]]
+  - [[#sending-emails][Sending emails]]
+    - [[#receiving-emails][Receiving emails]]
+    - [[#sending-emails-with-thunderbird][Sending emails with Thunderbird]]
+    - [[#sending-emails-with-msmtp][Sending emails with msmtp]]
+- [[#commands][Commands]]
+  - [[#global-bindings][Global bindings]]
+  - [[#hello-mode][Hello mode]]
+      - [[#evilified-state][Evilified state]]
+  - [[#search-mode][Search mode]]
+      - [[#evilified-state-1][Evilified state]]
+  - [[#tree-mode][Tree mode]]
+      - [[#evilified-state-2][Evilified state]]
+  - [[#show-mode][Show mode]]
+      - [[#evilified-state-3][Evilified state]]
+      - [[#visual-state][Visual state]]
+- [[#see-also][See also]]
+
+* Install
+In order to use this layer you must install notmuch separately.
+
+To install not much follow the instructions in [[https://notmuchmail.org/notmuch-emacs/#index2h2][installation instructions]].
+
+
+Then add this layer to your =~/.spacemacs=. You will need to add =notmuch= to
+the existing =dotspacemacs-configuration-layers= list in this file.
+
+** Sending emails
+For this you will need an external programm.
+
+
+*** Receiving emails
+=TODO=
+how to configure for example mbsync
+
+*** Sending emails with Thunderbird
+You could use thunderbird
+http://pragmaticemacs.com/emacs/use-emacs-for-thunderbird-emails/
+
+*** Sending emails with msmtp
+
+Download and Install [[http://msmtp.sourceforge.net/download.html][msmtp]]
+
+Configure =~/.mailrc= with the path where =msmtp= is found.
+
+For example:
+#+srcname: contents of ~/.mailrc
+#+BEGIN_SRC
+set sendmail="/usr/local/bin/msmtp"
+#+END_SRC
+
+Configure =~/.msmtprc= [[http://msmtp.sourceforge.net/doc/msmtprc.txt][example]]
+
+* Commands
+
+** Global bindings
+
+| Keybinding | Command       |
+|------------+---------------|
+| ~SPC a N~  | Start notmuch |
+
+** Hello mode
+
+**** Evilified state
+| Keybinding | Command             |
+|------------+---------------------|
+| ~J~        | notmuch-jump-search |
+
+** Search mode
+
+**** Evilified state
+| Keybinding | Command                        |
+|------------+--------------------------------|
+| ~J~        | notmuch-jump-search            |
+| ~N~        | notmuch-show-next-message      |
+| ~n~        | notmuch-show-next-open-message |
+| ~T~        | spacemacs/notmuch-trash-show   |
+
+** Tree mode
+**** Evilified state
+| Keybinding | Command |
+|------------+---------|
+|            |         |
+
+** Show mode
+
+**** Evilified state
+
+| Keybinding | Command                               |
+|------------+---------------------------------------|
+| ~a~        | spacemacs/notmuch-message-archive     |
+| ~d~        | spacemacs/notmuch-message-delete-down |
+| ~D~        | spacemacs/notmuch-message-delete-up   |
+| ~J~        | notmuch-jump-search                   |
+| ~L~        | notmuch-search-filter                 |
+| ~gg~       | notmuch-search-first-thread           |
+| ~gr~       | notmuch-refresh-this-buffer           |
+| ~gR~       | notmuch-refresh-all-buffers           |
+| ~G~        | notmuch-search-last-thread            |
+| ~T~        | spacemacs/notmuch-trash               |
+| ~M~        | compose-mail-other-frame              |
+
+**** Visual state
+
+| Keybinding | Command                                 |
+|------------+-----------------------------------------|
+| ~*~        | notmuch-search-tag-all                  |
+| ~a~        | notmuch-search-archive-thread           |
+| ~-~        | notmuch-search-remove-tag               |
+| ~+~        | notmuch-search-add-tag                  |
+| ~F~        | spacemacs/archive-by-removing-inbox-tag |
+
+* See also
+Refer to the official notmuch website for more information.
+
+- https://notmuchmail.org/
