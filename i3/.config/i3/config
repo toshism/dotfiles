@@ -125,8 +125,12 @@ bindsym $mod+e layout toggle split
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
+# sticky window to all workspaces
+bindsym $mod+Shift+s sticky toggle
+
 # change focus between tiling / floating windows
 #bindsym $mod+space focus mode_toggle
+bindsym $mod+i focus mode_toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
