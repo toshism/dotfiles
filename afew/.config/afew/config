@@ -13,8 +13,10 @@ message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
 tags = +sentry;+unread;-new
 
+[NotifyFilter]
+
 [Filter.2]
-message = "No inbox needed"
+message = "Mark unread, remove new"
 tags = +unread;-new
 
 #
