@@ -4,24 +4,28 @@ My personal configuration files. Some are probably generic enough to be reused,
 some are probably not (spacemacs) but may still be useful to glean some snippets
 or ideas from.
 
-I'm currently bouncing back and forth between osx and linux so there is a bit of
-both here.
+I'm no longer using osx so no guarantee on the current working status of any of
+the osx configs.
 
+- afew - linux
 - bash - osx
 - dunst - linux
 - fish - osx/linux
 - hammerspoon - osx
-- linux - linux, obviously
 - i3 - linux
+- linux - linux, obviously
 - mbsync - osx/linux
 - mutt - osx/linux
-- powerline - osx - no longer used, but should still work
+- notmuch - linux
+- powerline - osx
+- qutebrowser - linux
+- rofi - linux
 - spacemacs - osx/linux
 - stumpwm - linux
+- termite - linux
 - tmux - linux
 - vim - osx/linux
-- qutebrowser - linux
-
+- vimperator - osx/linux
 
 * Install/Setup
 
