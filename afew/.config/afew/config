@@ -6,8 +6,6 @@
 sent_tag = sent
 [ArchiveSentMailsFilter]
 
-
-
 [Filter.1]
 message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
@@ -19,23 +17,4 @@ tags = +sentry;+unread;-new
 message = "Mark unread, remove new"
 tags = +unread;-new
 
-#
-#[Filter.2]
-#message = "Spam"
-#query = 'from:"Global Who\'sWho" OR from:Touchfire OR from:Walk-inTub OR from:"Replacement Window"'
-#tags = +spam;-new
-#
-#[Filter.3]
-#message = "Get mailing lists out"
-#query = 'tag:lists'
-#tags =  +unread;-new;
-#
-#[Filter.4]
-#message = "Get mailing lists out"
-#query = 'to:geda-user@delorie.com'
-#tags =  +lists/geda-user;-new;-inbox;
-
-
 # [InboxFilter]
-# [InboxFilter.0]
-# tags = +unread;-inbox;-new
