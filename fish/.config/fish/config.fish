@@ -1,6 +1,7 @@
 set PATH /usr/local/bin $PATH
 set PATH /usr/lib/postgresql/9.4/bin $PATH
 set PATH ~/.local/bin $PATH
+set PATH ~/bin $PATH
 
 eval (python -m virtualfish compat_aliases)
 
