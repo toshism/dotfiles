@@ -1,0 +1,4 @@
+* afew
+
+an initial tagging script for notmuch mail
+https://github.com/afewmail/afew
