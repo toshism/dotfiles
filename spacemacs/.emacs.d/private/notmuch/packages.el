@@ -18,7 +18,7 @@
     :init
     (progn
       (spacemacs/set-leader-keys "aN" 'notmuch)
-      (spacemacs/set-leader-keys "an" 'helm-notmuch)
+      (spacemacs/set-leader-keys "an" 'notmuch-jump-search)
       (load-library "org-notmuch"))
     :config
     (progn

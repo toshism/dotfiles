@@ -11,7 +11,14 @@ message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
 tags = +sentry;+unread;-new
 
+# Filters above this NotifyFilter that remove the 'new' tag will not trigger
+# notification.
 [NotifyFilter]
+
+[Filter.3]
+message = "Jira"
+query = from:"jira@uniregistry.com"
+tags = +jira;+unread;-new
 
 [Filter.2]
 message = "Mark unread, remove new"

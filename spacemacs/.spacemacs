@@ -594,6 +594,13 @@ layers configuration."
     )
   (evil-leader/set-key "o y" 'copy-to-clipboard)
   (evil-leader/set-key "o p" 'paste-from-clipboard)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; not much
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq notmuch-saved-searches '((:name "unread" :query "tag:unread AND tag:-sentry" :key "u")
+                                 (:name "stash" :query "tag:unread AND from:'no-reply@stash.sna1.uniregistry.net'" :key "s")
+                                 (:name "sentry" :query "tag:unread AND tag:sentry" :key "e")))
 )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
