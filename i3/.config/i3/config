@@ -20,8 +20,8 @@ gaps inner 10
 
 #smart_gaps on
 # border on, see where focus is
-bindsym $mod+c exec i3-msg border pixel 3
-bindsym --release $mod+c exec i3-msg border pixel 0
+#bindsym $mod+c exec i3-msg border pixel 3
+#bindsym --release $mod+c exec i3-msg border pixel 0
 
 # /i3 gaps
 ################
@@ -196,11 +196,27 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# scratchpad
+# Make the currently focused window a scratchpad
+bindsym $mod+Shift+minus move scratchpad
+
+# Show the first scratchpad window
+bindsym $mod+minus scratchpad show
+
+bindsym $mod+shift+m [title="^Spotify"] scratchpad Show
+
+# show the sup-mail scratchpad window, if any.
+#bindsym mod4+s [title="^Sup ::"] scratchpad show
+
+# MPLAYER
+for_window [class="MPlayer"] floating enable
+
 # mail
 bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 
 # spotify
 assign [class="Spotify"] 4
+for_window [title="^Spotify"] move scratchpad
 
 mode "spotify" {
         bindsym p exec dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause; mode "default"

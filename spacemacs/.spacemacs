@@ -598,7 +598,8 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; not much
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq notmuch-saved-searches '((:name "unread" :query "tag:unread AND tag:-sentry" :key "u")
+  (setq notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u")
+                                 (:name "all unread" :query "tag:unread" :key "a")
                                  (:name "stash" :query "tag:unread AND from:'no-reply@stash.sna1.uniregistry.net'" :key "s")
                                  (:name "sentry" :query "tag:unread AND tag:sentry" :key "e")))
 )
