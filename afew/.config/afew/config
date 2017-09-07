@@ -15,13 +15,18 @@ tags = +sentry;+unread;-new
 # notification.
 [NotifyFilter]
 
-[Filter.3]
+[Filter.2]
 message = "Jira"
 query = from:"jira@uniregistry.com"
 tags = +jira;+unread;-new
 
-[Filter.2]
+[Filter.3]
 message = "Mark unread, remove new"
 tags = +unread;-new
+
+[Filter.4]
+message = "Don't show sentry unable to find price emails"
+query = subject:"[Sentry] [Registrar uniregistrar] WARNING: Unable to find price for "
+tags = -unread;-new
 
 # [InboxFilter]
