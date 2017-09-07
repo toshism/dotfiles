@@ -12,6 +12,7 @@ set -Ux EDITOR "emacsclient -t"
 set -Ux ALTERNATE_EDITOR ""
 
 alias mux="tmuxinator"
+alias cdrar="cd ~/dev/projects/uniregistrar"
 
 function fish_prompt
   test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color yellow)(hostname)' '
