@@ -47,6 +47,11 @@
   (interactive (notmuch-search-interactive-region))
   (notmuch-search-tag (list "+archive" "-inbox") beg end))
 
+(defun spacemacs/notmuch-remove-unread-tag ()
+  (interactive)
+  (notmuch-search-tag (list "-unread"))
+  (notmuch-search-next-thread))
+
 (defun spacemacs/notmuch-show-prefer-html-over-text ()
   (interactive)
   (let* ((text-button (save-excursion

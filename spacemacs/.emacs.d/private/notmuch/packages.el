@@ -82,6 +82,7 @@
       (evilified-state-evilify-map notmuch-search-mode-map
         :mode notmuch-search-mode
         :bindings
+        (kbd "u") 'spacemacs/notmuch-remove-unread-tag
         (kbd "a") 'spacemacs/notmuch-message-archive
         (kbd "d") 'spacemacs/notmuch-message-delete-down
         (kbd "D") 'spacemacs/notmuch-message-delete-up
@@ -98,6 +99,7 @@
         "F" 'spacemacs/notmuch-remove-inbox-tag)
 
       (evil-define-key 'visual notmuch-search-mode-map
+        "u" 'spacemacs/notmuch-remove-unread-tag
         "*" 'notmuch-search-tag-all
         "a" 'notmuch-search-archive-thread
         "-" 'notmuch-search-remove-tag
