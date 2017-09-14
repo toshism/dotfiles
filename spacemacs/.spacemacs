@@ -431,36 +431,37 @@ layers configuration."
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; mu4e
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  (setq mu4e-maildir-shortcuts
-        '(("/Archive"     . ?a)
-          ("/INBOX"       . ?j)
-          ("/Drafts"      . ?d)
-          ("/Sent"        . ?s)))
+  ;; trying out notmuch for now
+  ;; (setq mu4e-maildir-shortcuts
+  ;;       '(("/Archive"     . ?a)
+  ;;         ("/INBOX"       . ?j)
+  ;;         ("/Drafts"      . ?d)
+  ;;         ("/Sent"        . ?s)))
 
-  ;; don't colorize html to text
-  (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
+  ;; ;; don't colorize html to text
+  ;; (advice-add #'shr-colorize-region :around (defun shr-no-colourise-region (&rest ignore)))
 
-  (setq mu4e-get-mail-command "/usr/bin/mbsync uniregistry"
-        ;; mu4e-get-mail-command "true" ;; this updates index but doesn't retrieve mail
-        ;; mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu4e/"
-        mu4e-path "/usr/share/emacs25/site-lisp/mu4e/"
-        mu4e-update-interval 180             ;; update every 3 minutes
-        mu4e-maildir       "~/mail"   ;; top-level Maildir
-        mu4e-sent-folder   "/Sent"       ;; folder for sent messages
-        mu4e-drafts-folder "/Drafts"     ;; unfinished messages
-        mu4e-trash-folder  "/Trash"      ;; trashed messages
-        mu4e-refile-folder "/Archive"
-        mu4e-enable-mode-line t
-        mu4e-enable-notifications t
-        mu4e-use-fancy-chars nil
-        mu4e-change-filenames-when-moving t
-        ;; mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout" ;;"html2text -utf8 -width 120"
-        ;; mu4e-html2text-command "html2text -ascii -width 120"
-        ;; mu4e-html2text-command "/Users/tosh/htmlmailtotxt.sh"
-        ;; mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
-        mu4e-html2text-command 'mu4e-shr2text
-        ;; mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
-        mu4e-view-show-images t)
+  ;; (setq mu4e-get-mail-command "/usr/bin/mbsync uniregistry"
+  ;;       ;; mu4e-get-mail-command "true" ;; this updates index but doesn't retrieve mail
+  ;;       ;; mu4e-path "/usr/local/Cellar/mu/HEAD/share/emacs/site-lisp/mu4e/"
+  ;;       mu4e-path "/usr/share/emacs25/site-lisp/mu4e/"
+  ;;       mu4e-update-interval 180             ;; update every 3 minutes
+  ;;       mu4e-maildir       "~/mail"   ;; top-level Maildir
+  ;;       mu4e-sent-folder   "/Sent"       ;; folder for sent messages
+  ;;       mu4e-drafts-folder "/Drafts"     ;; unfinished messages
+  ;;       mu4e-trash-folder  "/Trash"      ;; trashed messages
+  ;;       mu4e-refile-folder "/Archive"
+  ;;       mu4e-enable-mode-line t
+  ;;       mu4e-enable-notifications t
+  ;;       mu4e-use-fancy-chars nil
+  ;;       mu4e-change-filenames-when-moving t
+  ;;       ;; mu4e-html2text-command "textutil -stdin -format html -convert txt -stdout" ;;"html2text -utf8 -width 120"
+  ;;       ;; mu4e-html2text-command "html2text -ascii -width 120"
+  ;;       ;; mu4e-html2text-command "/Users/tosh/htmlmailtotxt.sh"
+  ;;       ;; mu4e-html2text-command "w3m -dump -cols 120 -T text/html"
+  ;;       mu4e-html2text-command 'mu4e-shr2text
+  ;;       ;; mu4e-html2text-command "html2text --ignore-images --simple-tables --links-after-para --unicode-snob --reference-links"
+  ;;       mu4e-view-show-images t)
 
   ;; anaconda fails sometimes. live with it, don't bug me
   (remove-hook 'anaconda-mode-response-read-fail-hook
