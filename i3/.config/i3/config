@@ -217,6 +217,10 @@ for_window [class="MPlayer"] floating enable
 # mail
 bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 
+# org capture
+# open emacsclient in org capture "mode"
+bindsym $mod+o exec termite -e "emacsclient -t -e '(org-capture)'"
+
 # spotify
 assign [class="Spotify"] 4
 for_window [title="^Spotify"] move scratchpad
