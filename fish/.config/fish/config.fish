@@ -8,8 +8,8 @@ eval (python -m virtualfish compat_aliases)
 set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
 set PATH $PATH $GOPATH/bin
 
-set -Ux EDITOR "emacsclient -t"
-set -Ux ALTERNATE_EDITOR ""
+set -x EDITOR "emacsclient -t"
+set -x ALTERNATE_EDITOR ""
 
 alias mux="tmuxinator"
 alias cdrar="cd ~/dev/projects/uniregistrar"
