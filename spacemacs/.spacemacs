@@ -181,12 +181,12 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         solarized-dark
                          spacemacs-dark
                          material
                          dakrone
                          tangotango
                          zenburn
-                         solarized-dark
                          monokai
                          ample-zen
                          spacemacs-light
@@ -493,7 +493,7 @@ layers configuration."
   ;; org stuff
   ;;;;;;;;;;;;;;;;;;;;;
   (load "~/.emacs.d/private/orgmode.el")
-
+  (add-hook 'org-capture-mode-hook 'delete-other-windows)
 
   ;;;;;;;;;;;;;;;;;;;;;
   ;; private stuff
@@ -603,6 +603,17 @@ layers configuration."
                                  (:name "all unread" :query "tag:unread" :key "a")
                                  (:name "stash" :query "tag:unread AND from:'no-reply@stash.sna1.uniregistry.net'" :key "s")
                                  (:name "sentry" :query "tag:unread AND tag:sentry" :key "e")))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; chicken scheme
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (setq scheme-program-name "csi -:c")
+
+  ;; temporary hack to fix bug in spacemacs
+  (require 'helm-bookmark)
+
+  ;; gpg
+  (setq epa-pinentry-mode 'loopback)
 )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
