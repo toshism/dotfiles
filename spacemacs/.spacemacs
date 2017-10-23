@@ -413,8 +413,10 @@ layers configuration."
   (setq x-select-enable-clipboard t)
   (setq x-select-enable-primary t)
 
+  ;; (setq browse-url-browser-function 'browse-url-generic
+  ;;       browse-url-generic-program "x-www-browser")
   (setq browse-url-browser-function 'browse-url-generic
-        browse-url-generic-program "x-www-browser")
+        browse-url-generic-program "qutebrowser")
 
   ;; don't set python virtualenv from .venv file
   (setq python-auto-set-local-pyvenv-virtualenv nil)
@@ -602,7 +604,8 @@ layers configuration."
   (setq notmuch-saved-searches '((:name "unread" :query "tag:unread" :key "u")
                                  (:name "all unread" :query "tag:unread" :key "a")
                                  (:name "stash" :query "tag:unread AND from:'no-reply@stash.sna1.uniregistry.net'" :key "s")
-                                 (:name "sentry" :query "tag:unread AND tag:sentry" :key "e")))
+                                 (:name "sentry" :query "tag:unread AND tag:sentry" :key "e")
+                                 (:name "new" :query "tag:new" :key "n")))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; chicken scheme
@@ -613,7 +616,7 @@ layers configuration."
   (require 'helm-bookmark)
 
   ;; gpg
-  (setq epa-pinentry-mode 'loopback)
+  ;; (setq epa-pinentry-mode 'loopback)
 )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
