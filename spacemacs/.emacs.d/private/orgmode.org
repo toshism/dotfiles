@@ -26,10 +26,21 @@ Allow refile to create parent tasks with confirmation
 (setq org-refile-allow-creating-parent-nodes (quote confirm))
 #+END_SRC
 
+Refile in single step
+#+BEGIN_SRC emacs-lisp
+(setq org-outline-path-complete-in-steps nil)
+#+END_SRC
+
 ** No invisible edits
 try to keep myself from deleting hidden headings/blocks etc.
 #+BEGIN_SRC emacs-lisp
   (setq org-catch-invisible-edits 'error)
+#+END_SRC
+
+** Agenda
+just add the entire directory
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-files '("~/dev/notes"))
 #+END_SRC
 * Extra includes/packages etc.
 ** Org Drill
@@ -121,6 +132,7 @@ around arbitrarily in my org files and the link to it still works.
      (shell . t)
      ;; (ditaa . t)
      (python . t)
+     (http . t)
      (ipython . t)
      (dot . t)
      (sql . t)))

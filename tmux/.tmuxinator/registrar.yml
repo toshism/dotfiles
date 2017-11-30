@@ -22,14 +22,15 @@ pre_window: workon unireg
 # startup_window: logs
 
 windows:
-  - emacs:
-      - emacsclient -t
+  - shell:
+      - emacs --daemon
   - shell:
       - # fish
   - web:
       layout: even-horizontal
       panes:
-        - pserve ../rar_app/rar_app/ini/dev/dev.ini --reload
+        - pserve ../brandsight_app/brandsight_app/ini/dev/dev.ini --reload
+        #- pserve ../rar_app/rar_app/ini/dev/dev.ini --reload
   - admin:
       layout: even-horizontal
       panes:
@@ -41,5 +42,6 @@ windows:
   - frontend:
       layout: even-horizontal
       panes:
-        - cd ./uniregistrar/js/rar; npm run watch
-        - cd ../rar_admin/rar_admin/js/rar_admin/; and npm run watch
+        - cd ../brandsight_app/brandsight_app/js/brandsight; npm run watch
+        #- cd ./uniregistrar/js/rar; npm run watch
+        #- cd ../rar_admin/rar_admin/js/rar_admin/; and npm run watch

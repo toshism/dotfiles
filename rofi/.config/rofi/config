@@ -29,3 +29,10 @@ rofi.color-window: #263238, #33708f, argb:8933708f
 rofi.color-normal: #263238, #eceff1, argb:5c263238, argb:cc33708f, #eceff1
 rofi.color-active: #263238, #eceff1, #263238, #33708f, #fdf6e3
 rofi.color-urgent: #263238, #dc322f, #263238, #dc322f, #fdf6e3rofi.color-urgent: #fdf6e3, #dc322f, #eee8d5, #dc322f, #fdf6e3
+
+
+! ------------------------------------------------------------------------------
+! ROFI keybindings
+! ------------------------------------------------------------------------------
+rofi.kb-mode-next: Alt+semicolon
+rofi.kb-mode-previous: Alt+j

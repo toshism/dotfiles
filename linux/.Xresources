@@ -1,4 +1,4 @@
-Xft.dpi: 96
+!Xft.dpi: 96
 !Xft.dpi: 192
 
 Xft.autohint: 0
@@ -35,9 +35,8 @@ URxvt.font: xft:monospace:size=12
 URxvt.italicFont: xft:monospace:size=12
 URxvt.scrollBar: false
 URxvt.visualBell: true
-// this is SO AWESOME:
-URxvt.fading: 15
-// URxvt spells "eightBitInput" as "meta8" and defaults it to false
+! URxvt.fading: 15
+! URxvt spells "eightBitInput" as "meta8" and defaults it to false
 
 
 ! color scheme from https://terminal.sexy/#JjI47O_xJjI4_5gAi8NK_8EHA6n06R5jAJaIz9jcN0dP_6dNnMxl_6AAgdT6rRRXJqaa7O_x
