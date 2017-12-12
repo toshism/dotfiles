@@ -34,5 +34,5 @@ rofi.color-urgent: #263238, #dc322f, #263238, #dc322f, #fdf6e3rofi.color-urgent:
 ! ------------------------------------------------------------------------------
 ! ROFI keybindings
 ! ------------------------------------------------------------------------------
-rofi.kb-mode-next: Alt+semicolon
+rofi.kb-mode-next: Alt+space
 rofi.kb-mode-previous: Alt+j
