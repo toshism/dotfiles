@@ -9,12 +9,12 @@ sent_tag = sent
 [Filter.1]
 message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
-tags = +sentry;+unread;-new
+tags = +sentry
 
 [Filter.4]
 message = "Don't show sentry unable to find price emails"
 query = subject:"[Sentry] [Registrar uniregistrar] WARNING: Unable to find price for "
-tags = -unread;-new
+tags = -new
 
 # Filters above this NotifyFilter that remove the 'new' tag will not trigger
 # notification.
@@ -23,11 +23,10 @@ tags = -unread;-new
 [Filter.2]
 message = "Jira"
 query = from:"jira@uniregistry.com"
-tags = +jira;+unread;-new
+tags = +jira
 
-[Filter.3]
-message = "Mark unread, remove new"
-tags = +unread;-new
+# [Filter.3]
+# message = "Mark unread, remove new"
+# tags = +unread;-new
 
-
-# [InboxFilter]
+[InboxFilter]

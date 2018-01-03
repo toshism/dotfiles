@@ -68,7 +68,7 @@ This function should only modify configuration layer settings."
      syntax-checking
      version-control
      themes-megapack
-     python
+     (python :variables python-test-runner 'pytest)
      ipython-notebook
      html
      javascript
