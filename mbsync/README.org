@@ -1,0 +1,36 @@
+Config for fetching imap mail and storing it locally in Maildir format.
+
+* Install [[http://isync.sourceforge.net/][isync]].
+The app is called =isync= but the command you will run is =mbsync=.
+
+#+BEGIN_SRC shell
+sudo apt install isync
+#+END_SRC
+
+* Configuration
+=.mbsyncrc=
+Update =.mbsyncrc= and change the settings there to match your account/setup. 
+
+=Path= is where mbsync will store your mail. I use =.mbsync= and symlink that to =~/.Mail=
+
+I store my password in a gpg encrypted file =~/.mailpass.gpg=. It's just a file
+that contains only a password. =PassCmd= decrypts it and uses the password.
+
+
+* Fetch
+=.mbsync.sh=
+This is the file I use to check and process my mail. I set a cron script to call
+this every few minutes. It's pretty self explanatory with the possible exception
+of the line:
+#+BEGIN_SRC shell
+eval "export $(egrep -z DBUS_SESSION_BUS_ADDRESS /proc/$(pgrep -o -u $LOGNAME i3)/environ)";
+#+END_SRC
+This is so that the cron scipt can show me desktop notifications in i3 when I get new mail.
+
+The only line that is actually needed is the call to =mbsync=. The argument is
+whatever you set for your =Account= name in =.mbsyncrc=.
+
+the other stuff is just to process my mail for notmuch.
+
+* put everything in place
+Just run =stow mbsync= and it'll put everything in the correct place.
