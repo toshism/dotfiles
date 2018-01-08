@@ -29,7 +29,7 @@ gaps inner 10
 # exec ~/.screenlayout/work2.sh
 # exec xrdb -merge ~/.Xresources
 # exec /home/tosh/.screenlayout/work3.sh
-exec_always /usr/lib/system76-driver/system76-hidpi-daemon
+exec /usr/lib/system76-driver/system76-hidpi-daemon
 exec /usr/bin/blueman-applet
 
 exec /usr/bin/nm-applet
@@ -85,7 +85,7 @@ bindsym $mod+Shift+d kill
 # try out rofi instead of dmenu
 # bindsym $mod+space exec rofi -show run
 # bindsym $mod+shift+space exec rofi -show window 
-bindsym $mod+space exec "rofi -show window -combi-modi window,run"
+bindsym $mod+space exec "rofi -show run -combi-modi run,window"
 
 # change focus
 bindsym $mod+j exec i3-msg border pixel 0; focus left
