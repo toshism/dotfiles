@@ -8,6 +8,7 @@ I'm no longer using osx so no guarantee on the current working status of any of
 the osx configs.
 
 - afew - linux
+- astroid - linux
 - bash - osx
 - dunst - linux
 - fish - osx/linux
