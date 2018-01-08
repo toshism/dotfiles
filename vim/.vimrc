@@ -73,3 +73,6 @@ set ignorecase
 
 " Override ignorecase when the pattern contains uppercase characters.
 set smartcase
+
+" Esc is so far, fd to leave insert mode.
+imap fd <Esc>
