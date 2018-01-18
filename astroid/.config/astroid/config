@@ -103,7 +103,7 @@
             "email": "tosh@uniregistry.com",
             "gpgkey": "",
             "always_gpg_sign": "false",
-            "sendmail": "msmtp -i -t",
+            "sendmail": "sendmail -i -t",
             "default": "true",
             "save_sent": "false",
             "save_sent_to": "\/home\/tosh\/mail\/Sent\/cur\/",
@@ -119,7 +119,8 @@
     },
     "startup": {
         "queries": {
-            "inbox": "tag:inbox"
+            "inbox": "tag:inbox or tag:unread",
+            "flagged": "tag:flagged"
         }
     }
 }

@@ -1,0 +1,7 @@
+#! /bin/bash
+#
+# remove unread and inbox tags for thread
+#
+
+echo "notmuch tag -inbox -unread thread:$1"
+notmuch tag -inbox -unread thread:$1
