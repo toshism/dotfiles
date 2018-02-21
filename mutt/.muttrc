@@ -2,7 +2,7 @@
 source "gpg2 -dq $HOME/.authinfo.gpg |"
 
 # Paths ----------------------------------------------
-set folder           = ~/mail                # mailbox location
+set folder           = ~/.toshism_mail                # mailbox location
 set alias_file       = ~/.mutt/alias         # where to store aliases
 set header_cache     = ~/.mutt/cache/headers # where to store headers
 set message_cachedir = ~/.mutt/cache/bodies  # where to store bodies
@@ -55,10 +55,10 @@ set pgp_use_gpg_agent = yes
 # Account Settings -----------------------------------
 
 # Default inbox.
-set spoolfile = "+INBOX"
+set spoolfile = "+Inbox"
 
 # Mailboxes to show in the sidebar.
-mailboxes +INBOX \
+mailboxes +Inbox \
           +Sent \
           +Drafts \
           +Trash \
@@ -84,23 +84,25 @@ bind attach,index,pager \CU previous-page
 
 # Sidebar ------------------------------------------
 #change width accordingly
-# set sidebar_width=30
+set sidebar_width=30
 
 # # Visible at first, then change its value to yes
-# set sidebar_visible=no
+set sidebar_visible=yes
+set sidebar_format = "%B%?F? [%F]?%* %?N?%N/?%S"
+set mail_check_stats
 
 # set sidebar_delim='|'
 # set sidebar_sort=yes
-# mailboxes =inbox =ml
-# bind index CP sidebar-prev
-# bind index CN sidebar-next
-# bind index CO sidebar-open
+mailboxes =inbox =ml
+bind index CP sidebar-prev
+bind index CN sidebar-next
+bind index CO sidebar-open
 # bind pager CP sidebar-prev
 # bind pager CN sidebar-next
 # bind pager CO sidebar-open
-# macro index b '<enter-command>toggle sidebar_visible<enter>'
-# macro pager b '<enter-command>toggle sidebar_visible<enter>'
-# bind index B bounce-message
+macro index b '<enter-command>toggle sidebar_visible<enter>'
+macro pager b '<enter-command>toggle sidebar_visible<enter>'
+bind index B bounce-message
 
 
 # Colors

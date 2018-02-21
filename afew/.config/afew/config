@@ -6,27 +6,34 @@
 sent_tag = sent
 [ArchiveSentMailsFilter]
 
+# [Filter.4]
+# message = "Don't show sentry unable to find price emails"
+# query = subject:"[Sentry] [Registrar uniregistrar] WARNING: Unable to find price for "
+# tags = -new
+
+[InboxFilter]
+
 [Filter.1]
 message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
-tags = +sentry
+tags = +sentry;-new;-unread
 
-[Filter.4]
-message = "Don't show sentry unable to find price emails"
-query = subject:"[Sentry] [Registrar uniregistrar] WARNING: Unable to find price for "
-tags = -new
+[Filter.2]
+message = "Jira"
+query = from:"jira@uniregistry.com"
+tags = +jira;
+
+[Filter.3]
+message = "Confluence"
+query = from:"confluence@uniregistry.com"
+tags = +confluence;-new;-unread
 
 # Filters above this NotifyFilter that remove the 'new' tag will not trigger
 # notification.
 [NotifyFilter]
 
-[Filter.2]
-message = "Jira"
-query = from:"jira@uniregistry.com"
-tags = +jira
 
 # [Filter.3]
 # message = "Mark unread, remove new"
 # tags = +unread;-new
 
-[InboxFilter]

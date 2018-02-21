@@ -4,12 +4,16 @@ main_window.search=/
 main_window.show_help=H
 
 # switching between buffers
-main_window.next_page=K
-main_window.previous_page=J
-thread_index.next_page=K
-thread_index.previous_page=J
-help.next_page=K
-help.previous_page=J
+main_window.next_page=J
+main_window.previous_page=K
+thread_index.next_page=J
+thread_index.previous_page=K
+searches.next_page=J
+searches.previous_page=K
+searches.page_down=C-J
+searches.page_up=C-K
+help.next_page=J
+help.previous_page=K
 thread_view.scroll_up=u
 thread_view.scroll_down=d
 help.scroll_up=u

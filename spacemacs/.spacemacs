@@ -44,7 +44,10 @@ This function should only modify configuration layer settings."
      ruby
      graphviz
      csv
-     sql
+     (sql :variables
+          sql-capitalize-keywords t
+          ;; sql-capitalize-keywords-blacklist '("name" "varchar")
+          )
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -71,7 +74,7 @@ This function should only modify configuration layer settings."
      (python :variables python-test-runner 'pytest)
      ipython-notebook
      html
-     javascript
+     ;; javascript
      ;; erc
      jabber
      clojure
@@ -85,7 +88,8 @@ This function should only modify configuration layer settings."
      ;; eww
      ;; ivy
      ;; php
-     react
+     ;; react
+     itome-react
      prodigy
      vinegar
      dash

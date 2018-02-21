@@ -28,3 +28,32 @@ Patterns *
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+
+
+# pesonal gmail stuff
+IMAPAccount toshism
+Host imap.gmail.com
+User toshism@gmail.com
+PassCmd "gpg2 -q --batch --for-your-eyes-only --no-tty -d ~/.toshism.gpg"
+SSLType IMAPS
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+
+IMAPStore toshism-remote
+Account toshism
+
+MaildirStore toshism-local
+# The trailing "/" is important
+Path ~/.toshism_mail/
+Inbox ~/.toshism_mail/Inbox
+
+Channel toshism
+Master :toshism-remote:
+Slave :toshism-local:
+# Exclude everything under the internal [Gmail] folder, except the interesting folders
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+# Or include everything
+#Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *

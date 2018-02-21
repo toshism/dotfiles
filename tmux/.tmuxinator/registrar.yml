@@ -10,7 +10,7 @@ root: ~/dev/projects/uniregistrar/uniregistrar
 # pre: sudo /etc/rc.d/mysqld start
 
 # Runs in each window and pane before window/pane specific commands. Useful for setting up interpreter versions.
-pre_window: workon unireg
+pre_window: workon brandsight
 
 # Pass command line options to tmux. Useful for specifying a different tmux.conf.
 # tmux_options: -f ~/.tmux.mac.conf

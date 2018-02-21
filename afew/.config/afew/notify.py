@@ -21,5 +21,5 @@ class NotifyFilter(Filter):
     def handle_message(self, message):
         subject = message.get_header('Subject')
         from_header = message.get_header('From')
-        notify_message = "<b>{}</b>\nfrom: {}".format(subject, from_header)
+        notify_message = u"<b>{}</b>\nfrom: {}".format(subject, from_header)
         self.notify(notify_message, length="10000")

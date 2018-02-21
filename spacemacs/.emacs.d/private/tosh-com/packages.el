@@ -26,7 +26,7 @@
   "alert configuration"
   (use-package alert
     :config
-    (setq alert-default-style 'notifier)))
+    (setq alert-default-style 'libnotify)))
 
 (defun tosh-com/init-sauron ()
   "sauron configuration"
@@ -40,3 +40,5 @@
               (lambda (origin prio msg &optional props)
                 (cond
                  ((> prio 4) (sauron-fx-sox "/usr/share/sounds/purple/receive.wav")))))))
+
+

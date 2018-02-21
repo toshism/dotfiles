@@ -8,6 +8,7 @@
 # i3 config file (v4)
 #
 # Please see http://i3wm.org/docs/userguide.html for a complete reference!
+set $mod Mod1
 
 #################
 # i3 gaps specific stuff
@@ -29,14 +30,15 @@ gaps inner 10
 # exec ~/.screenlayout/work2.sh
 # exec xrdb -merge ~/.Xresources
 # exec /home/tosh/.screenlayout/work3.sh
-exec /usr/lib/system76-driver/system76-hidpi-daemon
+
+# running this no longer works under i3
+# exec /usr/lib/system76-driver/system76-hidpi-daemon
 exec /usr/bin/blueman-applet
 
 exec /usr/bin/nm-applet
 for_window [instance="^scratch"] move scratchpad
 bindsym $mod+t [instance="scratch"] scratchpad show
 
-set $mod Mod1
 
 # start with workspace 0 on internal screen
 workspace 10 output eDP-1
