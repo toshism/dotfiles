@@ -34,6 +34,7 @@ gaps inner 10
 # running this no longer works under i3
 # exec /usr/lib/system76-driver/system76-hidpi-daemon
 exec /usr/bin/blueman-applet
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec /usr/bin/nm-applet
 for_window [instance="^scratch"] move scratchpad
@@ -226,6 +227,9 @@ bindsym $mod+shift+m [title="^Spotify"] scratchpad Show
 # MPLAYER
 for_window [class="MPlayer"] floating enable
 
+# Zeal
+for_window [class="Zeal"] floating enable
+
 # mail
 bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 
@@ -265,24 +269,25 @@ mode "clementine" {
 # bindsym $mod+m mode "spotify"
 bindsym $mod+m mode "spotify"
 
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
-bar {
-  #status_command i3status
-  status_command /home/tosh/.local/bin/py3status --include=/home/tosh/.config/py3status
-  position top
-  colors {
-    background #263238
-    statusline #ffffff
-    separator  #5a6d76
+# bar {
+#   #status_command i3status
+#   status_command /home/tosh/.local/bin/py3status --include=/home/tosh/.config/py3status
+#   position top
+#   colors {
+#     background #263238
+#     statusline #ffffff
+#     separator  #5a6d76
 
-    # Type             border  background font
-    focused_workspace  #5b7786 #5b7786 #ffffff
-    active_workspace   #333333 #5b7786 #ffffff
-    inactive_workspace #263238 #263238 #888888
-    urgent_workspace   #aa0000 #990000 #ffffff
-    }
-}
+#     # Type             border  background font
+#     focused_workspace  #5b7786 #5b7786 #ffffff
+#     active_workspace   #333333 #5b7786 #ffffff
+#     inactive_workspace #263238 #263238 #888888
+#     urgent_workspace   #aa0000 #990000 #ffffff
+#     }
+# }
 
 # class                 border  backgr. text    indicator child_border
 # client.unfocused        #3a4c55 #4a626d #ffffff #2e9ef4   #285577
