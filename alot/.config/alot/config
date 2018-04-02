@@ -1,0 +1,2 @@
+initial_command="search tag:inbox AND tag:unread"
+prefer_plaintext = True
