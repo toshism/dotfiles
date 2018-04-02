@@ -30,7 +30,8 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
-   '(
+   '(rust
+     perl5
      pandoc
      (restclient :variables
                  restclient-use-org t)
