@@ -11,8 +11,6 @@ sent_tag = sent
 # query = subject:"[Sentry] [Registrar uniregistrar] WARNING: Unable to find price for "
 # tags = -new
 
-[InboxFilter]
-
 [Filter.1]
 message = "Sentry"
 query = from:"sentry@sentry02.ams1.uniregistrar.net"
@@ -28,10 +26,16 @@ message = "Confluence"
 query = from:"confluence@uniregistry.com"
 tags = +confluence;-new;-unread
 
+[Filter.4]
+message = "Stash"
+query = from:"no-reply@stash.sna1.uniregistry.net"
+tags = +stash;
+
 # Filters above this NotifyFilter that remove the 'new' tag will not trigger
 # notification.
 [NotifyFilter]
 
+[InboxFilter]
 
 # [Filter.3]
 # message = "Mark unread, remove new"
