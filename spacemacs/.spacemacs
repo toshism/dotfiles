@@ -446,6 +446,8 @@ layers configuration."
   ;; store it in a separate file
   (setq custom-file "~/.emacs.d/private/custom.el")
   (load custom-file 'noerror)
+  ;; set frame title
+  (setq frame-title-format '("" "[%b] - Emacs " emacs-version))
 
   (setq guide-key/popup-window-position 'bottom)
   (setq projectile-switch-project-action 'projectile-dired)
