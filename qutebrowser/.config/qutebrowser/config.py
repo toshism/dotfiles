@@ -17,18 +17,3 @@ c.fonts.prompts = c.fonts.monospace
 
 # hacky mess to handle switching from hidpi laptop only to mixed with external monitor
 import subprocess
-
-try:
-    screens = int(subprocess.check_output(["xrandr | grep ' connected' | wc -l"], shell=True))
-    if screens > 1:
-        c.zoom.default = 100
-        c.qt.highdpi = False
-    else:
-        c.zoom.default = 67
-        c.qt.highdpi = True
-except:
-    pass
-
-print("###########")
-print (c.zoom.default)
-print("###########")
