@@ -62,7 +62,7 @@ org drill, think this comes from org-
                 ("r" "respond" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
                  "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\nCREATED: %U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
                 ("n" "note" entry (file "~/dev/notes/refile.org")
-                 "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n%a\n" :clock-in t :clock-resume t)
+                 "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :clock-in t :clock-resume t)
                 ("s" "code snippet" entry (file+headline "~/dev/notes/stuff.org" "Refile")
                  "* %? \n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n")
                 ("j" "Journal" entry (file+datetree "~/dev/notes/diary.org")
@@ -76,16 +76,52 @@ org drill, think this comes from org-
                 ("h" "Habit" entry (file "~/dev/notes/refile.org")
                  "* NEXT %?\nCREATED: %U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
 #+END_SRC
+* Capture settings
+  test 1
+  from here https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
+  #+BEGIN_SRC emacs-lisp
+    (defvar my-org-capture-before-config nil
+      "Window configuration before `org-capture'.")
+
+    (defadvice org-capture (before save-config activate)
+      "Save the window configuration before `org-capture'."
+      (setq my-org-capture-before-config (current-window-configuration)))
+
+    ;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+    (defun my-org-capture-cleanup ()
+      "Clean up the frame created while capturing via org-protocol."
+      ;; In case we run capture from emacs itself and not an external app,
+      ;; we want to restore the old window config
+      (when my-org-capture-before-config
+        (set-window-configuration my-org-capture-before-config))
+      (-when-let ((&alist 'name name) (frame-parameters))
+        (when (equal name "org-protocol-capture")
+          (delete-frame))))
+
+    (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
+  #+END_SRC
+  
+  simpler test 2
+  #+BEGIN_SRC emacs-lisp
+    (defadvice org-switch-to-buffer-other-window
+        (after supress-window-splitting activate)
+      "Delete the extra window if we're in a capture frame"
+      (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+          (delete-other-windows)))
+  #+END_SRC
+
 * Todo keyword colors
 #+BEGIN_SRC emacs-lisp
-(setq org-todo-keyword-faces
-      (quote (("TODO" :foreground "red" :weight bold)
-              ("NEXT" :foreground "blue" :weight bold)
-              ("DONE" :foreground "forest green" :weight bold)
-              ("WAITING" :foreground "orange" :weight bold)
-              ("HOLD" :foreground "magenta" :weight bold)
-              ("CANCELLED" :foreground "forest green" :weight bold)
-              ("MEETING" :foreground "forest green" :weight bold))))
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("NEXT" :foreground "blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("IN_REVIEW" :foreground "white" :background "red" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold)
+                ("MEETING" :foreground "forest green" :weight bold))))
 #+END_SRC
 * Clocking
 ** Change tasks to NEXT when clocking in

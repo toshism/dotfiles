@@ -107,6 +107,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(
                                       ;; org-plus-contrib
                                       ob-ipython
+                                      ob-restclient
                                       wgrep
                                       sauron
                                       alert
@@ -114,7 +115,6 @@ This function should only modify configuration layer settings."
                                       evil-mu4e
                                       mediawiki
                                       ;; emojify
-                                      notmuch
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -548,12 +548,6 @@ layers configuration."
 
 
   ;;;;;;;;;;;;;;;;;;;;;
-  ;; org stuff
-  ;;;;;;;;;;;;;;;;;;;;;
-  (load "~/.emacs.d/private/orgmode.el")
-  (add-hook 'org-capture-mode-hook 'delete-other-windows)
-
-  ;;;;;;;;;;;;;;;;;;;;;
   ;; private stuff
   ;;;;;;;;;;;;;;;;;;;;;
   (load-file "~/.emacs.d/private/private.el.gpg")
@@ -673,6 +667,18 @@ layers configuration."
 
   ;; gpg
   ;; (setq epa-pinentry-mode 'loopback)
+
+  ;;;;;;;;;;;;;;;;;;;;;
+  ;; org stuff
+  ;;;;;;;;;;;;;;;;;;;;;
+  (load "~/.emacs.d/private/orgmode.el")
+  ;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
+
+  (defadvice org-switch-to-buffer-other-window
+      (after supress-window-splitting activate)
+    "Delete the extra window if we're in a capture frame"
+    (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+        (delete-other-windows)))
 )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
