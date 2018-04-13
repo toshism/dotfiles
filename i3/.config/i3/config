@@ -235,7 +235,8 @@ bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 
 # org capture
 # open emacsclient in org capture "mode"
-bindsym $mod+o exec termite -e "emacsclient -t -e '(org-capture)'"
+# bindsym $mod+o exec termite -e "emacsclient -t -e '(org-capture)'"
+bindsym $mod+o exec emacsclient -c -F '(quote (name . "org-protocol-capture"))' -e '(org-capture)'
 
 # spotify
 assign [class="Spotify"] 4
