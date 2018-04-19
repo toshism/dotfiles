@@ -38,7 +38,7 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 
 exec /usr/bin/nm-applet
 for_window [instance="^scratch"] move scratchpad
-bindsym $mod+t [instance="scratch"] scratchpad show
+bindsym $mod+- [instance="scratch"] scratchpad show
 
 
 # start with workspace 0 on internal screen
@@ -135,7 +135,7 @@ bindsym $mod+f fullscreen toggle
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+t layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+w floating toggle
@@ -237,6 +237,7 @@ bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 # open emacsclient in org capture "mode"
 # bindsym $mod+o exec termite -e "emacsclient -t -e '(org-capture)'"
 bindsym $mod+o exec emacsclient -c -F '(quote (name . "org-protocol-capture"))' -e '(org-capture)'
+bindsym $mod+e exec emacsclient -c -e '(switch-to-buffer nil)'
 
 # spotify
 assign [class="Spotify"] 4
