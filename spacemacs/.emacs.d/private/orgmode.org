@@ -42,6 +42,15 @@ just add the entire directory
 #+BEGIN_SRC emacs-lisp
   (setq org-agenda-files '("~/dev/notes"))
 #+END_SRC
+** org link open
+#+BEGIN_SRC emacs-lisp
+  (setq org-link-frame-setup
+        (quote ((vm . vm-visit-folder-other-frame)
+                (vm-imap . vm-visit-imap-folder-other-frame)
+                (gnus . org-gnus-no-new-news)
+                (file . find-file-other-frame)
+                (wl . wl-other-frame))))
+#+END_SRC
 * Extra includes/packages etc.
 ** Org Drill
 org drill, think this comes from org-
@@ -54,32 +63,83 @@ org drill, think this comes from org-
 #+END_SRC
 * Capture templates
 #+BEGIN_SRC emacs-lisp
+  ;; this formatting is kind of weird but it makes it easier
   (setq org-capture-templates
-        (quote (("w" "work todo" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
-                 "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:JIRA_TICKET: %^{TICKET|NONE}\n:END:\n" :clock-in t :clock-resume t)
-                ("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
-                 "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n " :clock-in t :clock-resume t)
-                ("r" "respond" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
-                 "* NEXT Respond to %:from on %:subject\nSCHEDULED: %t\nCREATED: %U\n%a\n" :clock-in t :clock-resume t :immediate-finish t)
-                ("n" "note" entry (file "~/dev/notes/refile.org")
-                 "* %? :NOTE:\n:PROPERTIES:\n:CREATED: %U\n:END:\n%a\n" :clock-in t :clock-resume t)
-                ("s" "code snippet" entry (file+headline "~/dev/notes/stuff.org" "Refile")
-                 "* %? \n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n")
-                ("j" "Journal" entry (file+datetree "~/dev/notes/diary.org")
-                 "* %?\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n" :clock-in t :clock-resume t)
-                ;; ("w" "org-protocol" entry (file "~/dev/notes/refile.org")
-                ;;  "* TODO Review %c\nCREATED: %U\n" :immediate-finish t)
-                ("m" "Meeting" entry (file "~/dev/notes/refile.org")
-                 "* MEETING with %? :MEETING:\n:PROPERTIES:\n:CREATED: %U\n:\n:END:\n" :clock-in t :clock-resume t)
-                ;; ("d" "NowU Deploy" entry (file+olp "~/dev/notes/gannet.org" "Tasks" "Deploy")
-                ;;  "* CREATED: %U\nrelease %?\n%[~/dev/notes/gannet_deployment_task.org]" :clock-in t :clock-resume t)
-                ("h" "Habit" entry (file "~/dev/notes/refile.org")
-                 "* NEXT %?\nCREATED: %U\n%a\nSCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n"))))
+        (quote (
+  ("w" "work todo" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
+  "* TODO %?
+  :PROPERTIES:
+  :CREATED: %U
+  :JIRA_TICKET: %^{TICKET|NONE}
+  :END:
+  " :clock-in t :clock-resume t)
+
+  ("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
+  "* TODO %?
+  :PROPERTIES:
+  :CREATED: %U
+  :END:
+  " :clock-in t :clock-resume t)
+
+  ;; ("r" "respond" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
+  ;; "* NEXT Respond to %:from on %:subject
+  ;; SCHEDULED: %t
+  ;; CREATED: %U
+  ;; %a
+  ;; " :clock-in t :clock-resume t :immediate-finish t)
+
+  ("n" "note" entry (file "~/dev/notes/refile.org")
+  "* %? :NOTE:
+  :PROPERTIES:
+  :CREATED: %U
+  :END:
+  %a
+  " :clock-in t :clock-resume t)
+
+  ("s" "code snippet" entry (file+headline "~/dev/notes/stuff.org" "Refile")
+  "* %?
+  :PROPERTIES:
+  :CREATED: %U
+  :END:")
+
+  ("j" "Journal" entry (file+olp+datetree "~/dev/notes/diary.org")
+  "* %?
+  :PROPERTIES:
+  :CREATED: %U
+  :END:" :clock-in t :clock-resume t)
+
+  ;; ("w" "org-protocol" entry (file "~/dev/notes/refile.org")
+  ;;  "* TODO Review %c\nCREATED: %U\n" :immediate-finish t)
+
+  ("m" "Meeting" entry (file "~/dev/notes/refile.org")
+  "* MEETING with %? :MEETING:
+  :PROPERTIES:
+  :CREATED: %U
+  :END:" :clock-in t :clock-resume t)
+
+  ;; ("d" "NowU Deploy" entry (file+olp "~/dev/notes/gannet.org" "Tasks" "Deploy")
+  ;;  "* CREATED: %U\nrelease %?\n%[~/dev/notes/gannet_deployment_task.org]" :clock-in t :clock-resume t)
+
+  ("h" "Habit" entry (file "~/dev/notes/refile.org")
+  "* NEXT %?
+  :CREATED: %U
+  %a
+  SCHEDULED: %(format-time-string \"<%Y-%m-%d %a .+1d/3d>\")
+  :PROPERTIES:
+  :STYLE: habit
+  :REPEAT_TO_STATE: NEXT
+  :END:")
+
+  )))
 #+END_SRC
+
+#+RESULTS:
+| w | work todo | entry | (file+headline ~/dev/notes/uniregistry.org Tasks) | * TODO %? |
+
 * Capture settings
   test 1
   from here https://fuco1.github.io/2017-09-02-Maximize-the-org-capture-buffer.html
-  #+BEGIN_SRC emacs-lisp
+  #+BEGIN_SRC emacs-lisp :tangle no
     (defvar my-org-capture-before-config nil
       "Window configuration before `org-capture'.")
 
@@ -87,7 +147,7 @@ org drill, think this comes from org-
       "Save the window configuration before `org-capture'."
       (setq my-org-capture-before-config (current-window-configuration)))
 
-    ;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
+    (add-hook 'org-capture-mode-hook 'delete-other-windows)
 
     (defun my-org-capture-cleanup ()
       "Clean up the frame created while capturing via org-protocol."
@@ -101,9 +161,8 @@ org drill, think this comes from org-
 
     (add-hook 'org-capture-after-finalize-hook 'my-org-capture-cleanup)
   #+END_SRC
-  
-  simpler test 2
-  #+BEGIN_SRC emacs-lisp
+
+  #+BEGIN_SRC emacs-lisp :tangle no
     (defadvice org-switch-to-buffer-other-window
         (after supress-window-splitting activate)
       "Delete the extra window if we're in a capture frame"
@@ -111,6 +170,20 @@ org drill, think this comes from org-
           (delete-other-windows)))
   #+END_SRC
 
+  my simpler version that seems to actually work
+  #+BEGIN_SRC emacs-lisp
+    (defadvice org-switch-to-buffer-other-window
+        (after supress-window-splitting activate)
+      "Delete the extra window if we're in a capture frame"
+      (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+          (delete-other-windows)))
+
+    (defun tosh/post-capture ()
+      (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+          (delete-frame)))
+
+    (add-hook 'org-capture-after-finalize-hook 'tosh/post-capture)
+  #+END_SRC
 * Todo keyword colors
 #+BEGIN_SRC emacs-lisp
   (setq org-todo-keyword-faces
@@ -173,7 +246,7 @@ around arbitrarily in my org files and the link to it still works.
      (dot . t)
      (sql . t)))
   (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively nil)
   (setq org-confirm-babel-evaluate nil)
-  (setq org-src-tab-acts-natively t)
-  (setq org-src-window-setup 'other-window)
+  (setq org-src-window-setup 'other-frame)
 #+END_SRC

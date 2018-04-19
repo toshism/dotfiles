@@ -65,7 +65,8 @@ This function should only modify configuration layer settings."
           git-enable-github-support t)
      github
      markdown
-     org
+     (org :variables
+          org-enable-hugo-support t)
      (shell :variables
             ;; shell-default-height 30
             shell-default-shell 'eshell)
@@ -108,12 +109,14 @@ This function should only modify configuration layer settings."
                                       ;; org-plus-contrib
                                       ob-ipython
                                       ob-restclient
+                                      ox-hugo
                                       wgrep
                                       sauron
                                       alert
                                       ox-mediawiki
                                       evil-mu4e
                                       mediawiki
+                                      frames-only-mode
                                       ;; emojify
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
@@ -672,13 +675,6 @@ layers configuration."
   ;; org stuff
   ;;;;;;;;;;;;;;;;;;;;;
   (load "~/.emacs.d/private/orgmode.el")
-  ;; (add-hook 'org-capture-mode-hook 'delete-other-windows)
-
-  (defadvice org-switch-to-buffer-other-window
-      (after supress-window-splitting activate)
-    "Delete the extra window if we're in a capture frame"
-    (if (equal "org-protocol-capture" (frame-parameter nil 'name))
-        (delete-other-windows)))
 )
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
