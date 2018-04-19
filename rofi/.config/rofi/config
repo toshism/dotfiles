@@ -11,13 +11,13 @@
 
 rofi.lines: 10
 rofi.line-margin: 10
-rofi.width: 25
+rofi.width: 50
 rofi.height: 100
 rofi.modi: window,run
 rofi.terminal: /usr/local/bin/termite
 rofi.case-sensitive: false
 rofi.eh: 2
-# rofi.padding: 500
+# rofi.padding: 90
 # rofi.fullscreen: true
 rofi.hide-scrollbar: true
 
