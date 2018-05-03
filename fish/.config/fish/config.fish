@@ -3,6 +3,7 @@ set PATH /usr/lib/postgresql/9.4/bin $PATH
 set PATH ~/.local/bin $PATH
 set PATH ~/bin $PATH
 set PATH /usr/local/go/bin $PATH
+set PATH /snap/bin/ $PATH
 
 eval (python -m virtualfish compat_aliases)
 
