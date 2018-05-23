@@ -50,7 +50,8 @@ hide-scrollbar: true;
 /*	window-format: "{w}    {i}{c}   {t}";*/
 /*	click-to-exit: true;*/
 /*	show-match: true;*/
-theme: "base16-materia";
+/* theme: "base16-material";*/
+theme: "gray";
 /*	color-normal: ;*/
 /*	color-urgent: ;*/
 /*	color-active: ;*/
