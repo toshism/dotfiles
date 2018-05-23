@@ -100,6 +100,10 @@ This function should only modify configuration layer settings."
      django
      scheme
      erlang
+     calendar
+     c-c++
+     pass
+     racket
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -110,6 +114,8 @@ This function should only modify configuration layer settings."
                                       ob-ipython
                                       ob-restclient
                                       ox-hugo
+                                      ox-jira
+                                      org-alert
                                       wgrep
                                       sauron
                                       alert
@@ -117,10 +123,13 @@ This function should only modify configuration layer settings."
                                       evil-mu4e
                                       mediawiki
                                       frames-only-mode
+                                      package-lint
+                                      doom-themes
+                                      rainbow-mode
                                       ;; emojify
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages '(exec-path-from-shell)
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
    ;; `used-only' installs only explicitly used packages and deletes any unused
@@ -230,7 +239,8 @@ It should only modify the values of Spacemacs settings."
    ;;                             :powerline-scale 1.0)
 
    dotspacemacs-default-font '("Inconsolata"
-                               :powerline-scale 1.0)
+                               :powerline-scale 1.0
+                               :size 16)
 
    ;; The leader key
    dotspacemacs-leader-key "SPC"
@@ -381,7 +391,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-highlight-delimiters 'all
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
@@ -470,6 +480,9 @@ layers configuration."
   ;; i use fish in the terminal but it's easier to just tell emacs to use bash
   ;; to avoid weird problems ie. with virtualenvs etc.
   (setq shell-file-name "/bin/bash")
+
+  ;; don't kill the server
+  (spacemacs/set-leader-keys "qq" 'spacemacs/frame-killer)
 
   ;; copy to all the things
   (setq x-select-enable-clipboard t)
@@ -616,7 +629,9 @@ layers configuration."
 
   (use-package gojira
     :load-path "~/dev/projects/gojira/"
-    :bind (("C-c j" . gojira-insert-issue-as-org)))
+    :bind (("C-c j" . gojira-insert-issue-as-org)
+           ("C-c u" . gojira-refresh-issue)
+           ("C-c U" . gojira-refresh-issue-for-id)))
 
   ;; (defun on-after-init ()
   ;;   (unless (display-graphic-p (selected-frame))
