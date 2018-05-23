@@ -2,3 +2,4 @@
 /fish/.config/fish/fishd.*
 *.pyc
 /astroid/.config/astroid/searches
+/spacemacs/.emacs.d/private/orgmode.el
