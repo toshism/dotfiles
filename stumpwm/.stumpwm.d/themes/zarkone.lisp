@@ -80,5 +80,5 @@
 ;; (setf *mode-line-background-color* "#000809")
 ;; (setf *mode-line-foreground-color* "DeepSkyBlue")
 
-(if (not (head-mode-line (current-head)))
-    (toggle-mode-line (current-screen) (current-head)))
+;; (if (not (head-mode-line (current-head)))
+;;     (toggle-mode-line (current-screen) (current-head)))

@@ -4,31 +4,16 @@
 (setf *input-window-gravity* :center)
 (setf *frame-hint-border-width* 30)
 (setf *frame-number-map* "asdfjkl;")
-(setf *theme-dir* "~/.stumpwm.d/themes/")
+(setf *startup-message* "Hello")
 
-(defun tl/load (file)
-  (load (concatenate 'string file ".lisp")))
-
-(defun set-theme (file)
-  (load (concatenate 'string *theme-dir* file ".lisp")))
-
-(run-shell-command "xmodmap ~/.Xmodmap")
-
+(grename "1")
+(run-commands "gnewbg 2" "gnewbg 3" "gnewbg 4" "gnewbg 5" "gnewbg 6" "gnewbg 7" "gnewbg 8" "gnewbg 9")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "theme"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(set-theme "zarkone")
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; applications
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; run an `urxvt' terminal (instead of `xterm')
-;; TODO Install `rxvt-unicode'
-;; FIXME If urxvt is not installed, let default keybinding
-(defcommand urxvt () ()
-  "Start an urxvt instance."
-  (run-shell-command "urxvt"))
-(define-key *root-map* (kbd "c") "urxvt")
+(load-module :stumpwm-base16)
+(stumpwm-base16:load-theme "material" "materialtheme")
+(run-shell-command "xsetroot -solid rgb:2F/38/41")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -58,8 +43,44 @@
     (define-key m (kbd "l") "spotify-previous")
     m ; NOTE: this is important
   ))
-
 (define-key *root-map* (kbd "\C-m") '*tosh-music-bindings*)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; applications
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; run an `urxvt' terminal (instead of `xterm')
+;; TODO Install `rxvt-unicode'
+;; FIXME If urxvt is not installed, let default keybinding
+(defcommand urxvt () ()
+  "Start an urxvt instance."
+  (run-shell-command "urxvt"))
+
+(defcommand gt () ()
+  "Start gnome-terminal"
+  (run-shell-command "gnome-terminal"))
+(define-key *root-map* (kbd "c") "gt")
+(define-key *top-map* (kbd "M-RET") "gt")
+
+(defcommand rofi () ()
+  "Start rofi"
+  (run-shell-command "rofi -show run -combi-modi run,window"))
+(define-key *top-map* (kbd "M-SPC") "rofi")
+
+;; emacs stuff
+(defcommand ec () ()
+  "New emacsclient"
+  (run-shell-command "emacsclient -c -e '(switch-to-buffer nil)'"))
+(define-key *top-map* (kbd "M-e") "ec")
+
+(defcommand emacs-capture () ()
+  "Open emacs client in capture templates"
+  (run-shell-command "emacsclient -c -F '(quote (name . \"org-protocol-capture\"))' -e '(org-capture)'"))
+(define-key *top-map* (kbd "M-o") "emacs-capture")
+
+(defcommand emacs-work-agenda () ()
+  "Show work agenda"
+  (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"w\")'"))
+(define-key *top-map* (kbd "M-O") "emacs-work-agenda")
 
 ;; launch Web browser
 (defcommand firefox () ()
@@ -130,15 +151,33 @@
   (restore-from-file "~/group-dump.lisp"))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; "windows and groups"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-key *top-map* (kbd "M-1") "gselect 1")
 (define-key *top-map* (kbd "M-2") "gselect 2")
 (define-key *top-map* (kbd "M-3") "gselect 3")
 (define-key *top-map* (kbd "M-4") "gselect 4")
+(define-key *top-map* (kbd "M-5") "gselect 5")
+(define-key *top-map* (kbd "M-6") "gselect 6")
+(define-key *top-map* (kbd "M-7") "gselect 7")
+(define-key *top-map* (kbd "M-8") "gselect 8")
+(define-key *top-map* (kbd "M-9") "gselect 9")
 
 (define-key *top-map* (kbd "M-h") "move-focus left")
 (define-key *top-map* (kbd "M-j") "move-focus down")
 (define-key *top-map* (kbd "M-k") "move-focus up")
 (define-key *top-map* (kbd "M-l") "move-focus right")
+
+(define-key *top-map* (kbd "M-H") "move-window left")
+(define-key *top-map* (kbd "M-J") "move-window down")
+(define-key *top-map* (kbd "M-K") "move-window up")
+(define-key *top-map* (kbd "M-L") "move-window right")
+
+(define-key *top-map* (kbd "M-f") "fullscreen")
+
+(define-key *top-map* (kbd "M-v") "hsplit")
+(define-key *top-map* (kbd "M-V") "vsplit")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
@@ -167,3 +206,30 @@ windows used to draw the numbers in. The caller must destroy them."
                 (dformat 3 "mapped ~S~%" (frame-number f))
                 w))
             (group-frames group))))
+
+;; groups for polybar
+(defun polybar-groups ()
+  "Return string representation for polybar stumpgroups module"
+  (apply #'concatenate 'string
+         (mapcar
+          (lambda (g)
+            (let* ((name (string-upcase (group-name g)))
+                   (n-win (write-to-string (length (group-windows g))))
+                   (display-text (cond ((string-equal name "MAIN" ) "MAIN ")
+                                       ((string-equal name "CANVAS") "CANVAS ")
+                                       ((string-equal name "FLOAT") "FLOAT ")
+                                       (t (concat "  " name " ")))))
+              (if (eq g (current-group))
+                  (concat "%{F#ECEFF4 B#882E3440 u#8A9899 +u}" display-text "[" n-win "] " "%{F- B- u- -u}  ")
+                  (concat "%{F#8A9899}" display-text "[" n-win "]" "%{F-}  "))))
+          (sort (screen-groups (current-screen)) #'< :key #'group-number))))
+;; 
+;; Update polybar group indicator
+(add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
+(add-hook *destroy-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
+(add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpgroups 1")))
+(add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpgroups 1")))
+
+(run-shell-command "~/.config/polybar/launch.sh")
+(run-shell-command "/usr/bin/blueman-applet")
+(run-shell-command "/usr/bin/dropbox start -i")
