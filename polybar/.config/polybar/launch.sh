@@ -14,15 +14,16 @@ killall -q polybar
 #     MONITOR=$(echo $monitor|sed -e 's/:.*$//g') polybar top &
 # done
 
+polybar -r top &
 
-EXTERNAL=$(echo $(polybar -m) | grep -ic "DP-1-8")
-echo $EXTERNAL
-
-if [ $EXTERNAL -eq 1 ]
-then
-    MONITOR="DP-1-8" polybar top &
-else
-    MONITOR="eDP-1" polybar top &
-fi
-
-echo $MONITOR
+# EXTERNAL=$(echo $(polybar -m) | grep -ic "DP-1-8")
+# echo $EXTERNAL
+# 
+# if [ $EXTERNAL -eq 1 ]
+# then
+#     MONITOR="DP-1-8" polybar top &
+# else
+#     MONITOR="eDP-1" polybar top &
+# fi
+# 
+# echo $MONITOR

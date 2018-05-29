@@ -13,7 +13,9 @@ margin-top = 2
 margin-bottom = 2
 
 [bar/top]
-monitor = ${env:MONITOR:DP-1-8}
+; monitor = ${env:MONITOR:DP-1-8}
+monitor = DP-1-8
+monitor-fallback = eDP-1
 width = 100%
 height = 28
 offset-x = 0
@@ -29,8 +31,8 @@ underline-color = ${colors.background}
 
 border-top-size = 0
 border-top-color = ${colors.background}
-border-bottom-size = 0
-border-bottom-color = ${colors.background}
+border-bottom-size = 1
+border-bottom-color = ${colors.foreground}
 
 padding-left = 3
 padding-right = 3
@@ -44,7 +46,7 @@ modules-left = powermenu ewmh
 modules-center = xwindow
 modules-right = cpu memory wlan battery date
 
-tray-position = right
+tray-position = left
 tray-padding = 1
 tray-background = ${colors.background-tray}
 
