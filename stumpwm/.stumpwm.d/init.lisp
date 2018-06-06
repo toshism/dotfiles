@@ -5,15 +5,27 @@
 (setf *frame-hint-border-width* 30)
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
+(defvar *permanent-groups* '("Default" ".scratch"))
+(defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
+(set-module-dir "~/.stumpwm.d/modules")
+(add-to-load-path "~/quicklisp")
+(ql:quickload :cl-fad)
+(ql:quickload :cl-json)
+(ql:quickload :dexador)
 
-(grename "1")
-(run-commands "gnewbg 2" "gnewbg 3" "gnewbg 4" "gnewbg 5" "gnewbg 6" "gnewbg 7" "gnewbg 8" "gnewbg 9")
+(defcommand three () ()
+  "Split group into 3 vertical frames"
+  (restore-from-file (concat *group-dump-dir* "/three")))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "theme"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (load-module :stumpwm-base16)
 (stumpwm-base16:load-theme "material" "materialtheme")
 (run-shell-command "xsetroot -solid rgb:2F/38/41")
+
+(load-module :pass)
+(load-module :swm-emacs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -45,6 +57,17 @@
   ))
 (define-key *root-map* (kbd "\C-m") '*tosh-music-bindings*)
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; volume
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcommand volume-up () ()
+  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ +5%"))
+(define-key *top-map* (kbd "F12") "volume-up")
+(defcommand volume-down () ()
+  (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ -5%"))
+(define-key *top-map* (kbd "F11") "volume-down")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; applications
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -58,7 +81,7 @@
 (defcommand gt () ()
   "Start gnome-terminal"
   (run-shell-command "gnome-terminal"))
-(define-key *root-map* (kbd "c") "gt")
+;; (define-key *root-map* (kbd "c") "gt")
 (define-key *top-map* (kbd "M-RET") "gt")
 
 (defcommand rofi () ()
@@ -94,7 +117,7 @@
 (defcommand mutt () ()
   "Start or switch to mutt"
   (run-or-raise "urxvt -title mutt -e mutt" '(:title "mutt") :all-groups t))
-(define-key *root-map* (kbd "m") "mutt")
+;; (define-key *root-map* (kbd "m") "mutt")
 
 (defcommand zulip () ()
   "Start or switch to zulip"
@@ -128,7 +151,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require :swank)
 (swank-loader:init)
-(swank:create-server :port 4004
+(swank:create-server :port 4005
                      :style swank:*communication-style*
                      :dont-close t)
 
@@ -150,19 +173,21 @@
   (gnew "comm")
   (restore-from-file "~/group-dump.lisp"))
 
+(define-key *root-map* (kbd "m") "gmove") ;
+
+(define-key *top-map* (kbd "M-n") "pull-hidden-next")
+(define-key *top-map* (kbd "M-p") "pull-hidden-previous")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "windows and groups"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define-key *top-map* (kbd "M-1") "gselect 1")
-(define-key *top-map* (kbd "M-2") "gselect 2")
-(define-key *top-map* (kbd "M-3") "gselect 3")
-(define-key *top-map* (kbd "M-4") "gselect 4")
-(define-key *top-map* (kbd "M-5") "gselect 5")
-(define-key *top-map* (kbd "M-6") "gselect 6")
-(define-key *top-map* (kbd "M-7") "gselect 7")
-(define-key *top-map* (kbd "M-8") "gselect 8")
-(define-key *top-map* (kbd "M-9") "gselect 9")
+;; short cuts for group switching
+(loop for i from 1 to 9 do
+  (define-key *top-map* (kbd (format nil "M-~d" i)) (format nil "i3-switch ~d" i)))
+
+;; short cuts for moving window to group
+(loop for i from 1 to 9 do
+  (define-key *groups-map* (kbd (format nil "~d" i)) (format nil "window-to-group ~d" i)))
 
 (define-key *top-map* (kbd "M-h") "move-focus left")
 (define-key *top-map* (kbd "M-j") "move-focus down")
@@ -225,11 +250,107 @@ windows used to draw the numbers in. The caller must destroy them."
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 ;; 
 ;; Update polybar group indicator
-(add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
-(add-hook *destroy-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
-(add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpgroups 1")))
-(add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpgroups 1")))
+;; (add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
+;; (add-hook *destroy-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
+;; (add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpgroups 1")))
+;; (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpgroups 1")))
+
+(defun find-group-number (number)
+  (find number (screen-groups (current-screen)) :key 'group-number :test '=))
+
+;; I like i3 style group management
+;; when switching to a group create it if it doesn't exist
+;; if it's empty when switching away, remove it.
+(defcommand i3-switch-old (to-group) ((:number "Select Group: "))
+  "i3wm style group switching/creation"
+  (let* ((cgroup (current-group)))
+    (if (find-group-number to-group)
+        (run-commands (format nil "gselect ~a" to-group))
+        (setf (group-number (gnew (write-to-string to-group))) to-group))
+    (if (and (not (group-windows cgroup)) ;
+             (not (member (group-name cgroup) *permanent-groups* :test 'string=)))
+        (kill-group cgroup (find-group-number to-group)))))
+
+;; (defcommand i3-switch (to-group) ((:number "Select Group: "))
+;;   (i3-switch-fun to-group))
+
+;; (defun create-or-get-group (to-group)
+;;   "Return group, creating it if it doesn't exist"
+;;   (let ((ngroup (find-group-number to-group)))
+;;     (if (not ngroup)
+;;         (let ((new-group (add-group (current-screen) (write-to-string to-group))))
+;;           (setf ngroup new-group)
+;;           (setf (group-number ngroup) to-group)))
+;;     ngroup))
+
+;; (defun delete-group-if-empty (cgroup)
+;;   "Delete to-group if it's empty"
+;;   (if (and (not (group-windows cgroup))
+;;            (not (member (group-name cgroup) *permanent-groups* :test 'string=)))
+;;       (kill-group cgroup (find-group-number 1))))
+
+;; ;; meh, this isn't quite right, but close
+;; (defun i3-switch-fun (to-group)
+;;   "i3wm style group switching/creation"
+;;   (let* ((cgroup (current-group))
+;;          (ngroup (create-or-get-group to-group)))
+;;     (switch-to-group ngroup)
+;;     (if (not (eq ngroup cgroup))
+;;         (delete-group-if-empty cgroup))
+;;     ngroup))
+
+(defun create-or-get-group (to-group)
+  "Return group, creating it if it doesn't exist"
+  (let ((ngroup (find-group-number to-group)))
+    (if (not ngroup)
+        (let ((new-group (add-group (current-screen) (write-to-string to-group))))
+          (setf ngroup new-group)
+          (setf (group-number ngroup) to-group)))
+    ngroup))
+
+(defun delete-group-if-empty (cgroup)
+  "Delete to-group if it's empty"
+  (if (and (not (group-windows cgroup))
+           (not (member (group-name cgroup) *permanent-groups* :test 'string=)))
+      (kill-group cgroup (find-group-number 1))))
+
+(defun create-or-switch-group (to-group)
+  "i3wm style group switching/creation"
+  (let* ((cgroup (current-group))
+         (ngroup (create-or-get-group to-group)))
+    (switch-to-group ngroup)
+    ngroup))
+
+(defun handle-group-change (cgroup pgroup)
+  (delete-group-if-empty pgroup))
+
+(add-hook *focus-group-hook* 'handle-group-change)
+
+(defcommand i3-switch (to-group) ((:number "Select Group: "))
+"Switch to numbered group. If it doesn't exist create it and then switch to
+it."
+  (create-or-switch-group to-group))
+
+
+(defcommand window-to-group (to-group) ((:number "Select Group: "))
+  "Move the current window to group number"
+  (let ((cwindow (current-window))
+        (cgroup (current-group)))
+    (move-window-to-group cwindow (i3-switch to-group))))
 
 (run-shell-command "~/.config/polybar/launch.sh")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/dropbox start -i")
+(run-shell-command "/usr/bin/nm-applet")
+
+
+(defun post-event (event)
+  (dex:post "http://127.0.0.1:1323/api/v1/event/add"
+            :headers '(("content-type" . "application/json"))
+            :content (cl-json:encode-json-plist-to-string event)))
+
+;; (post-event `(:stream "test_event" :category "lisp test" :date_time ,(format nil "~a" (local-time:now)) :name "stuff?"))
+(defcommand drinks (&optional drink) ()
+  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda") "Type: ")))
+    (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
+(define-key *root-map* (kbd "c") "drinks")
