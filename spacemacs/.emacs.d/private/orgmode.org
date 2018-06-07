@@ -104,6 +104,10 @@ then close the frame when we are done
                 (file . find-file-other-frame)
                 (wl . wl-other-frame))))
 #+END_SRC
+** startup indented
+#+BEGIN_SRC emacs-lisp
+  (setq org-startup-indented t)
+#+END_SRC
 * Extra includes/packages etc.
 ** Org Drill
 org drill, think this comes from org-
@@ -123,7 +127,6 @@ org drill, think this comes from org-
     "* TODO %?
     :PROPERTIES:
     :CREATED: %U
-    :JIRA_TICKET: %^{TICKET|NONE}
     :END:
     " :clock-in t :clock-resume t)
 
