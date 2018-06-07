@@ -1,5 +1,5 @@
 # using homebrew formula from https://github.com/emmanuelbernard/homebrew-mutt on the mac
-source "gpg2 -dq $HOME/.authinfo.gpg |"
+#source "gpg2 -dq $HOME/.authinfo.gpg |"
 
 # Paths ----------------------------------------------
 set folder           = ~/.toshism_mail                # mailbox location
@@ -67,9 +67,12 @@ mailboxes +Inbox \
 set postponed = "+Drafts"
 
 # SMTP settings
-set ssl_force_tls = yes
+set ssl_starttls=yes
+set ssl_force_tls=yes
+set from = "toshism@gmail.com"
 set smtp_authenticators = 'gssapi:login'
-set smtp_url="smtp://tosh@smtp.uniregistry.com:587"
+set smtp_url="smtps://toshism@gmail.com@smtp.gmail.com:465/"
+set smtp_pass="`pass mail/gmail/mutt`"
 set realname="Tosh Lyons"
 
 # Keybindings ---------------------------------------
@@ -94,6 +97,7 @@ set mail_check_stats
 # set sidebar_delim='|'
 # set sidebar_sort=yes
 mailboxes =inbox =ml
+bind index C noop
 bind index CP sidebar-prev
 bind index CN sidebar-next
 bind index CO sidebar-open
