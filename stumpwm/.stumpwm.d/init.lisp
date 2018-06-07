@@ -255,55 +255,30 @@ windows used to draw the numbers in. The caller must destroy them."
 ;; (add-hook *focus-window-hook* (lambda (win lastw) (run-shell-command "polybar-msg hook stumpgroups 1")))
 ;; (add-hook *focus-group-hook* (lambda (grp lastg) (run-shell-command "polybar-msg hook stumpgroups 1")))
 
-(defun find-group-number (number)
-  (find number (screen-groups (current-screen)) :key 'group-number :test '=))
-
 ;; I like i3 style group management
 ;; when switching to a group create it if it doesn't exist
 ;; if it's empty when switching away, remove it.
-(defcommand i3-switch-old (to-group) ((:number "Select Group: "))
-  "i3wm style group switching/creation"
-  (let* ((cgroup (current-group)))
-    (if (find-group-number to-group)
-        (run-commands (format nil "gselect ~a" to-group))
-        (setf (group-number (gnew (write-to-string to-group))) to-group))
-    (if (and (not (group-windows cgroup)) ;
-             (not (member (group-name cgroup) *permanent-groups* :test 'string=)))
-        (kill-group cgroup (find-group-number to-group)))))
+(defcommand i3-switch (to-group) ((:number "Select Group: "))
+  "Switch to numbered group. If it doesn't exist create it and then switch to
+it."
+  (create-or-switch-group to-group))
 
-;; (defcommand i3-switch (to-group) ((:number "Select Group: "))
-;;   (i3-switch-fun to-group))
+(defcommand window-to-group (to-group) ((:number "Select Group: "))
+  "Move the current window to group number"
+  (let ((cwindow (current-window))
+        (cgroup (current-group))
+        (ngroup (create-or-get-group to-group)))
+    (move-window-to-group cwindow ngroup)
+    (switch-to-group ngroup)))
 
-;; (defun create-or-get-group (to-group)
-;;   "Return group, creating it if it doesn't exist"
-;;   (let ((ngroup (find-group-number to-group)))
-;;     (if (not ngroup)
-;;         (let ((new-group (add-group (current-screen) (write-to-string to-group))))
-;;           (setf ngroup new-group)
-;;           (setf (group-number ngroup) to-group)))
-;;     ngroup))
-
-;; (defun delete-group-if-empty (cgroup)
-;;   "Delete to-group if it's empty"
-;;   (if (and (not (group-windows cgroup))
-;;            (not (member (group-name cgroup) *permanent-groups* :test 'string=)))
-;;       (kill-group cgroup (find-group-number 1))))
-
-;; ;; meh, this isn't quite right, but close
-;; (defun i3-switch-fun (to-group)
-;;   "i3wm style group switching/creation"
-;;   (let* ((cgroup (current-group))
-;;          (ngroup (create-or-get-group to-group)))
-;;     (switch-to-group ngroup)
-;;     (if (not (eq ngroup cgroup))
-;;         (delete-group-if-empty cgroup))
-;;     ngroup))
+(defun find-group-number (number)
+  (find number (screen-groups (current-screen)) :key 'group-number :test '=))
 
 (defun create-or-get-group (to-group)
   "Return group, creating it if it doesn't exist"
   (let ((ngroup (find-group-number to-group)))
     (if (not ngroup)
-        (let ((new-group (add-group (current-screen) (write-to-string to-group))))
+        (let ((new-group (add-group (current-screen) (write-to-string to-group) :background t)))
           (setf ngroup new-group)
           (setf (group-number ngroup) to-group)))
     ngroup))
@@ -323,20 +298,7 @@ windows used to draw the numbers in. The caller must destroy them."
 
 (defun handle-group-change (cgroup pgroup)
   (delete-group-if-empty pgroup))
-
 (add-hook *focus-group-hook* 'handle-group-change)
-
-(defcommand i3-switch (to-group) ((:number "Select Group: "))
-"Switch to numbered group. If it doesn't exist create it and then switch to
-it."
-  (create-or-switch-group to-group))
-
-
-(defcommand window-to-group (to-group) ((:number "Select Group: "))
-  "Move the current window to group number"
-  (let ((cwindow (current-window))
-        (cgroup (current-group)))
-    (move-window-to-group cwindow (i3-switch to-group))))
 
 (run-shell-command "~/.config/polybar/launch.sh")
 (run-shell-command "/usr/bin/blueman-applet")
