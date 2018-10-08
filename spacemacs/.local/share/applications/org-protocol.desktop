@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=org-protocol
+Exec=emacsclient -c -F '(quote (name . "org-protocol-capture"))' %u
+Type=Application
+Terminal=false
+Categories=System;
+MimeType=x-scheme-handler/org-protocol;
+
+# run this after adding this file
+# update-desktop-database ~/.local/share/applications/

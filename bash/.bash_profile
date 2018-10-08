@@ -72,3 +72,4 @@ export HISTSIZE=
 export HISTFILE=~/.bash_eternal_history
 shopt -s histappend # append to history, don't overwrite it
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

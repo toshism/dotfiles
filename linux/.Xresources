@@ -1,6 +1,10 @@
-!Xft.dpi: 96
+!#if __has_include(".extend.Xresources")
+!#include ".extend.Xresources"
+!#endif
+
+Xft.dpi: 96
 !Xft.dpi: 192
-*.dpi: 192
+!*.dpi: 192
 Rofi.dpi: 192
 
 Xft.autohint: 0
@@ -40,43 +44,8 @@ URxvt.visualBell: true
 ! URxvt.fading: 15
 ! URxvt spells "eightBitInput" as "meta8" and defaults it to false
 
-
-! color scheme from https://terminal.sexy/#JjI47O_xJjI4_5gAi8NK_8EHA6n06R5jAJaIz9jcN0dP_6dNnMxl_6AAgdT6rRRXJqaa7O_x
-! special
-*.foreground:   #eceff1
-*.background:   #263238
-*.cursorColor:  #eceff1
-
-! black
-*.color0:       #263238
-*.color8:       #37474f
-
-! red
-*.color1:       #ff9800
-*.color9:       #ffa74d
-
-! green
-*.color2:       #8bc34a
-*.color10:      #9ccc65
-
-! yellow
-*.color3:       #ffc107
-*.color11:      #ffa000
-
-! blue
-! *.color4:       #03a9f4
-! *.color12:      #81d4fa
-*.color4:       #003d5c
-*.color12:      #869fac
-
-! magenta
-*.color5:       #e91e63
-*.color13:      #ad1457
-
-! cyan
-*.color6:       #009688
-*.color14:      #26a69a
-
-! white
-*.color7:       #cfd8dc
-*.color15:      #eceff1
+!XTerm*background: #2b2b2b
+!XTerm*foreground: #e7e7e7
+!XTerm*pointerColor: #16A085
+XTerm*faceName: Fixed
+XTerm*faceSize: 11

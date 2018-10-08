@@ -7,6 +7,8 @@
 (setf *startup-message* "Hello")
 (defvar *permanent-groups* '("Default" ".scratch"))
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
+(run-shell-command "xsetroot -cursor_name left_ptr")
+
 (set-module-dir "~/.stumpwm.d/modules")
 (add-to-load-path "~/quicklisp")
 (ql:quickload :cl-fad)
@@ -26,6 +28,7 @@
 
 (load-module :pass)
 (load-module :swm-emacs)
+;; (load-module :stumptray)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -57,7 +60,9 @@
   ))
 (define-key *root-map* (kbd "\C-m") '*tosh-music-bindings*)
 
-
+(define-key *top-map* (kbd "F11") "play-pause")
+(define-key *top-map* (kbd "XF86Tools") "spotify-previous")
+(define-key *top-map* (kbd "XF86Launch5") "spotify-next")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; volume
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -66,7 +71,7 @@
 (define-key *top-map* (kbd "F12") "volume-up")
 (defcommand volume-down () ()
   (run-shell-command "pactl set-sink-volume @DEFAULT_SINK@ -5%"))
-(define-key *top-map* (kbd "F11") "volume-down")
+(define-key *top-map* (kbd "F10") "volume-down")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; applications
@@ -175,8 +180,8 @@
 
 (define-key *root-map* (kbd "m") "gmove") ;
 
-(define-key *top-map* (kbd "M-n") "pull-hidden-next")
-(define-key *top-map* (kbd "M-p") "pull-hidden-previous")
+(define-key *top-map* (kbd "M-n") "next-in-frame")
+(define-key *top-map* (kbd "M-p") "prev-in-frame")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "windows and groups"
@@ -188,6 +193,12 @@
 ;; short cuts for moving window to group
 (loop for i from 1 to 9 do
   (define-key *groups-map* (kbd (format nil "~d" i)) (format nil "window-to-group ~d" i)))
+
+(define-key *top-map* (kbd "M-!") "window-to-group 1")
+(define-key *top-map* (kbd "M-@") "window-to-group 2")
+(define-key *top-map* (kbd "M-#") "window-to-group 3")
+(define-key *top-map* (kbd "M-$") "window-to-group $")
+(define-key *top-map* (kbd "M-%") "window-to-group 5")
 
 (define-key *top-map* (kbd "M-h") "move-focus left")
 (define-key *top-map* (kbd "M-j") "move-focus down")
@@ -300,7 +311,7 @@ it."
   (delete-group-if-empty pgroup))
 (add-hook *focus-group-hook* 'handle-group-change)
 
-(run-shell-command "~/.config/polybar/launch.sh")
+;; (run-shell-command "~/.config/polybar/launch.sh")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/dropbox start -i")
 (run-shell-command "/usr/bin/nm-applet")
@@ -313,6 +324,10 @@ it."
 
 ;; (post-event `(:stream "test_event" :category "lisp test" :date_time ,(format nil "~a" (local-time:now)) :name "stuff?"))
 (defcommand drinks (&optional drink) ()
-  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda") "Type: ")))
+  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea") "Type: ")))
     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
 (define-key *root-map* (kbd "c") "drinks")
+
+(run-shell-command "feh --bg-fill ~/Pictures/grey.png ~/Pictures/tosh4.png")
+
+;; (stumptray:stumptray)

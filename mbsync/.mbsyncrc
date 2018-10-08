@@ -6,7 +6,7 @@ User tosh@uniregistry.com
 PassCmd "gpg2 -q --batch --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
 #
 #AuthMechs LOGIN
-#SSLType IMAPS
+SSLType IMAPS
 #SSLVersions SSLv3
 
 IMAPStore uniregistry-remote

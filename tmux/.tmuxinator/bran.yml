@@ -22,8 +22,8 @@ pre_window: workon brandsight
 # startup_window: logs
 
 windows:
-  - shell:
-      - emacs --daemon
+  #- shell:
+      # - emacs --daemon
   - shell:
       - # fish
   - web:
@@ -31,10 +31,10 @@ windows:
       panes:
         - pserve ../brandsight_app/brandsight_app/ini/dev/dev.ini --reload
         #- pserve ../rar_app/rar_app/ini/dev/dev.ini --reload
-  - admin:
-      layout: even-horizontal
-      panes:
-        - cd ../rar_admin; and pserve development.ini --reload
+  #- admin:
+  #    layout: even-horizontal
+  #    panes:
+  #      - cd ../rar_admin; and pserve development.ini --reload
   - backend:
       layout: even-horizontal
       panes:

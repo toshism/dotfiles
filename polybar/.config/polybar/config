@@ -14,7 +14,7 @@ margin-bottom = 2
 
 [bar/top]
 ; monitor = ${env:MONITOR:DP-1-8}
-monitor = DP-1-8
+monitor = HDMI-2
 monitor-fallback = eDP-1
 width = 100%
 height = 28
@@ -87,12 +87,12 @@ label = %percentage_used%%
 
 [module/wlan]
 type = internal/network
-interface = wlo1
+interface = wlp59s0
 interval = 3
 
 format-connected = "<label-connected> "
 format-connected-prefix = "  "
-format-connected-underline = ${colors.accent-light}
+# format-connected-underline = ${colors.accent-light}
 
 label-connected = %essid%
 label-disconnected =  WLAN

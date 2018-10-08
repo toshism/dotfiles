@@ -14,7 +14,7 @@ set $mod Mod1
 # i3 gaps specific stuff
 
 # disable title bars for i3 gaps
-for_window [class="^.*"] border pixel 1
+for_window [class="^.*"] border pixel 2
 
 gaps inner 10
 #gaps outer 10
@@ -35,6 +35,7 @@ gaps inner 10
 # exec /usr/lib/system76-driver/system76-hidpi-daemon
 exec /usr/bin/blueman-applet
 exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always /usr/bin/dropbox start -i
 
 exec /usr/bin/nm-applet
 for_window [instance="^scratch"] move scratchpad
@@ -238,6 +239,7 @@ bindsym $mod+n exec ~/.mbsync.sh; exec notify-send "Checking mail..."
 # bindsym $mod+o exec termite -e "emacsclient -t -e '(org-capture)'"
 bindsym $mod+o exec emacsclient -c -F '(quote (name . "org-protocol-capture"))' -e '(org-capture)'
 bindsym $mod+e exec emacsclient -c -e '(switch-to-buffer nil)'
+bindsym $mod+shift+o exec emacsclient -c -F '(quote (name . "org-agenda-quickview"))' -e '(org-agenda nil "w")'
 
 # spotify
 assign [class="Spotify"] 4
@@ -296,6 +298,6 @@ bindsym $mod+m mode "spotify"
 client.unfocused        #3a4c55 #4a626d #ffffff #2e9ef4   #333F45
 client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
 # client.focused          #263238 #263238 #ffffff #292d2e   #222222
-client.focused          #263238 #263238 #ffffff #292d2e   #5b7786
+client.focused          #008fd6 #263238 #ffffff #292d2e   #5b7786
 client.urgent           #2f343a #900000 #ffffff #900000   #900000
 client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c

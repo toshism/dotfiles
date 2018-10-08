@@ -116,7 +116,11 @@ org drill, think this comes from org-
 #+END_SRC
 ** Markdown export
 #+BEGIN_SRC emacs-lisp
-  (require 'ox-md)
+(require 'ox-md)
+#+END_SRC
+** Org-protocol
+#+BEGIN_SRC emacs-lisp
+(require 'org-protocol)
 #+END_SRC
 * Capture templates
 #+BEGIN_SRC emacs-lisp
@@ -128,14 +132,14 @@ org drill, think this comes from org-
     :PROPERTIES:
     :CREATED: %U
     :END:
-    " :clock-in t :clock-resume t)
+    " :clock-in t :clock-resume t :empty-lines 1)
 
     ("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
     "* TODO %?
     :PROPERTIES:
     :CREATED: %U
     :END:
-    " :clock-in t :clock-resume t)
+    " :clock-in t :clock-resume t :empty-lines 1)
 
     ;; these are for anything that interupts my current task
     ("i" "interruption" entry (file+headline "~/dev/notes/uniregistry.org" "Interuptions")
@@ -143,7 +147,7 @@ org drill, think this comes from org-
     :PROPERTIES:
     :CREATED: %U
     :END:
-    " :clock-in t :clock-resume t)
+    " :clock-in t :clock-resume t :empty-lines 1)
 
     ;; ("r" "respond" entry (file+headline "~/dev/notes/uniregistry.org" "Tasks")
     ;; "* NEXT Respond to %:from on %:subject
@@ -158,7 +162,7 @@ org drill, think this comes from org-
     :CREATED: %U
     :END:
     %a
-    " :clock-in t :clock-resume t)
+    " :clock-in t :clock-resume t :empty-lines 1)
 
     ("s" "code snippet" entry (file+headline "~/dev/notes/stuff.org" "Refile")
     "* %?
@@ -171,7 +175,7 @@ org drill, think this comes from org-
     :PROPERTIES:
     :CREATED: %U
     :END:
-  " :clock-in t :clock-resume t)
+  " :clock-in t :clock-resume t :empty-lines 1)
 
     ;; ("w" "org-protocol" entry (file "~/dev/notes/refile.org")
     ;;  "* TODO Review %c\nCREATED: %U\n" :immediate-finish t)
@@ -181,7 +185,7 @@ org drill, think this comes from org-
     :PROPERTIES:
     :CREATED: %U
     :END:
-  " :clock-in t :clock-resume t)
+  " :clock-in t :clock-resume t :empty-lines 1)
 
     ;; ("d" "NowU Deploy" entry (file+olp "~/dev/notes/gannet.org" "Tasks" "Deploy")
     ;;  "* CREATED: %U\nrelease %?\n%[~/dev/notes/gannet_deployment_task.org]" :clock-in t :clock-resume t)
@@ -197,11 +201,13 @@ org drill, think this comes from org-
     :END:
   ")
 
+    ("b" "Link from browser" entry (file "~/dev/notes/bookmarks.org")
+     "* TODO %? |- (%:description) :BOOKMARK:\n:PROPERTIES:\n:CREATED: %U\n:Source: %:link\n:END:\n%i\n" :clock-in t :clock-resume t)
+    ("s" "Selection from browser" entry (file "~/dev/notes/bookmarks.org")
+     "* TODO %? :BOOKMARK:\n%(replace-regexp-in-string \"\n.*\" \"\" \"%i\")\n:PROPERTIES:\n:CREATED: %U\n:Source: %:link\n:END:\n%i\n" :clock-in t :clock-resume t)
+
     )))
 #+END_SRC
-
-#+RESULTS:
-| w | work todo | entry | (file+headline ~/dev/notes/uniregistry.org Tasks) | * TODO %? |
 
 * Capture settings
   test 1
