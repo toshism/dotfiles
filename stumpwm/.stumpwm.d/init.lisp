@@ -146,6 +146,8 @@
   (window-send-string (get-x-selection)))
 (define-key *root-map* (kbd "\C-p") "paste")
 
+(define-key *top-map* (kbd "M-w") "windowlist")
+
 ;; Web browsing commands
 ;; Get the X selection and order the GUI browser to open it. Presumably it
 ;; is a HTTP address.
