@@ -20,3 +20,4 @@ import subprocess
 
 # keys
 config.bind('sb', 'spawn --userscript org-bookmark')
+config.bind('sj', 'spawn --userscript load-bookmark.sh')
