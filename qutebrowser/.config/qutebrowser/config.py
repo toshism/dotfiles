@@ -17,3 +17,6 @@ c.fonts.prompts = c.fonts.monospace
 
 # hacky mess to handle switching from hidpi laptop only to mixed with external monitor
 import subprocess
+
+# keys
+config.bind('sb', 'spawn --userscript org-bookmark')

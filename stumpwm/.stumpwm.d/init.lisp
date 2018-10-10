@@ -117,7 +117,10 @@
 (defcommand chrome () ()
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "chromium-browser" '(:class "Chromium")))
-(define-key *root-map* (kbd "b") "chrome")
+(defcommand qutebrowser () ()
+  "Launch new qutebrowser window"
+  (run-shell-command "qutebrowser"))
+(define-key *root-map* (kbd "b") "qutebrowser")
 
 (defcommand mutt () ()
   "Start or switch to mutt"
