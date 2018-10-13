@@ -18,6 +18,7 @@ the osx configs.
 - mbsync - osx/linux
 - mutt - osx/linux
 - notmuch - linux
+- polybar - linux
 - powerline - osx
 - qutebrowser - linux
 - rofi - linux
