@@ -129,15 +129,15 @@
 
 (defcommand zulip () ()
   "Start or switch to zulip"
-  (run-or-raise "chromium-browser -title zulip --app=http://zulip.uniregistry.com"
+  (run-or-raise "qutebrowser https://zulip.uniregistry.com"
                 '(:instance "zulip.uniregistry.com")))
 (define-key *root-map* (kbd "z") "zulip")
 
 (defcommand slack () ()
   "Start or switch to slack"
-  (run-or-raise "chromium-browser -title slack --app=http://not-uniregistry.slack.com"
+  (run-or-raise "qutebrowser https://not-uniregistry.slack.com"
                 '(:instance "not-uniregistry.slack.com"))
-  (run-or-raise "chromium-browser -title slack --app=http://12s.slack.com"
+  (run-or-raise "qutebrowser https://12s.slack.com"
                 '(:instance "12s.slack.com")))
 (define-key *root-map* (kbd "\C-c") "slack")
 
