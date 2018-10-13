@@ -67,34 +67,60 @@ skip stuff i no longer care about
 
 show agenda as the only window
 #+BEGIN_SRC emacs-lisp
-  (setq org-agenda-window-setup "only-window")
+(setq org-agenda-window-setup "only-window")
 #+END_SRC
 
 if agenda was opened from i3 (frame name will be "org-agenda-quickview"
 then close the frame when we are done
 #+BEGIN_SRC emacs-lisp
-  (defadvice org-agenda-quit
-      (after close-agenda-quickview)
-    (if (equal "org-agenda-quickview" (frame-parameter nil 'name))
-        (delete-frame)))
+(defadvice org-agenda-quit
+    (after close-agenda-quickview)
+  (if (equal "org-agenda-quickview" (frame-parameter nil 'name))
+      (delete-frame)))
 
-  (ad-activate 'org-agenda-quit)
+(ad-activate 'org-agenda-quit)
 #+END_SRC
 
 *** custom agenda commands
-    #+BEGIN_SRC emacs-lisp
-      (setq org-agenda-custom-commands
-            '(("w" "Work agenda view"
-               ((tags "PRIORITY=\"A\""
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                       (org-agenda-overriding-header "High-priority unfinished tasks:")))
-                (agenda "")
-                (tags "@work"
-                      ((org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("IN_REVIEW")))
-                       (org-agenda-overriding-header "Review follow up"))))
-               ((org-agenda-tag-filter-preset '("+@work")))))
-            )
-    #+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (defun cmp-date-property (prop)
+    "Compare two `org-mode' agenda entries, `A' and `B', by some date property.
+
+  If a is before b, return -1. If a is after b, return 1. If they
+  are equal return t."
+    (lexical-let ((prop prop))
+      #'(lambda (a b)
+
+          (let* ((a-pos (get-text-property 0 'org-marker a))
+                 (b-pos (get-text-property 0 'org-marker b))
+                 (a-date (or (org-entry-get a-pos prop)
+                             (format "<%s>" (org-read-date t nil "now"))))
+                 (b-date (or (org-entry-get b-pos prop)
+                             (format "<%s>" (org-read-date t nil "now"))))
+                 (cmp (compare-strings a-date nil nil b-date nil nil))
+                 )
+            (if (eq cmp t) nil (signum cmp))
+            ))))
+
+  (setq org-agenda-custom-commands
+        '(("w" "Work agenda view"
+           ((tags "PRIORITY=\"A\""
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                   (org-agenda-overriding-header "High-priority unfinished tasks:")))
+            (agenda "")
+            (tags "@work"
+                  ((org-agenda-skip-function '(org-agenda-skip-entry-if 'nottodo '("IN_REVIEW")))
+                   (org-agenda-overriding-header "Review follow up"))))
+           ((org-agenda-tag-filter-preset '("+@work"))))
+          ("b" "Bookmarks view"
+            ((org-tags-view "BOOKMARK")
+            (org-agenda-cmp-user-defined (cmp-date-property
+                                          "CREATED"))
+            (org-agenda-sorting-strategy '(user-defined-down))
+            )))
+        )
+#+END_SRC
+
 ** org link open
 #+BEGIN_SRC emacs-lisp
   (setq org-link-frame-setup
@@ -344,4 +370,8 @@ around arbitrarily in my org files and the link to it still works.
   (setq org-src-tab-acts-natively nil)
   (setq org-confirm-babel-evaluate nil)
   (setq org-src-window-setup 'other-frame)
+#+END_SRC
+* Export settings
+#+BEGIN_SRC emacs-lisp
+(setq org-html-htmlize-output-type 'css)
 #+END_SRC
