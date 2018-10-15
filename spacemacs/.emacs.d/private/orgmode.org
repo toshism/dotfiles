@@ -134,6 +134,10 @@ then close the frame when we are done
 #+BEGIN_SRC emacs-lisp
   (setq org-startup-indented t)
 #+END_SRC
+** Autosave org files
+#+BEGIN_SRC emacs-lisp
+(add-hook 'auto-save-hook 'org-save-all-org-buffers)
+#+END_SRC
 * Extra includes/packages etc.
 ** Org Drill
 org drill, think this comes from org-
