@@ -2,6 +2,8 @@ c.tabs.show = "multiple"
 c.tabs.last_close = "close"
 c.tabs.tabs_are_windows = True
 
+c.url.start_pages = "about:blank"
+
 c.input.insert_mode.auto_load = True
 c.input.insert_mode.auto_leave = False
 

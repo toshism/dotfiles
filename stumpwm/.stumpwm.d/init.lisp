@@ -110,6 +110,11 @@
   (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"w\")'"))
 (define-key *top-map* (kbd "M-O") "emacs-work-agenda")
 
+(defcommand emacs-agenda () ()
+  "Show work agenda"
+  (run-shell-command "emacsclient -c -F '(quote (name . \"org-protocol-agenda\"))' -e '(org-agenda)'"))
+(define-key *top-map* (kbd "C-M-O") "emacs-agenda")
+
 ;; launch Web browser
 (defcommand firefox () ()
   "Start Firefox or switch to it, if it is already running."
@@ -146,7 +151,7 @@
   (window-send-string (get-x-selection)))
 (define-key *root-map* (kbd "\C-p") "paste")
 
-(define-key *top-map* (kbd "M-w") "windowlist")
+(Define-key *top-map* (kbd "M-w") "windowlist")
 
 ;; Web browsing commands
 ;; Get the X selection and order the GUI browser to open it. Presumably it
@@ -161,11 +166,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require :swank)
 (swank-loader:init)
-(swank:create-server :port 4005
-                     :style swank:*communication-style*
-                     :dont-close t)
-
-
+(defcommand swank () ()
+  (handler-case  
+      (swank:create-server :port 4005
+                           :style swank:*communication-style*
+                           :dont-close t)
+    (error () nil)))
+(swank)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -217,8 +224,24 @@
 
 (define-key *top-map* (kbd "M-f") "fullscreen")
 
-(define-key *top-map* (kbd "M-v") "hsplit")
-(define-key *top-map* (kbd "M-V") "vsplit")
+(defcommand tl/hsplit () ()
+  (progn
+    (hsplit)
+    (balance-frames)))
+
+(defcommand tl/vsplit () ()
+  (progn
+    (vsplit)
+    (balance-frames)))
+
+(define-key *top-map* (kbd "M-v") "tl/hsplit")
+(define-key *top-map* (kbd "M-V") "tl/vsplit")
+
+(defcommand tl/remove () ()
+  (progn
+    (remove-split)
+    (balance-frames)))
+(define-key *top-map* (kbd "C-r") "tl/remove")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
@@ -329,10 +352,31 @@ it."
 
 ;; (post-event `(:stream "test_event" :category "lisp test" :date_time ,(format nil "~a" (local-time:now)) :name "stuff?"))
 (defcommand drinks (&optional drink) ()
-  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea") "Type: ")))
+  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier") "Type: ")))
     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
 (define-key *root-map* (kbd "c") "drinks")
 
 (run-shell-command "feh --bg-fill ~/Pictures/grey.png ~/Pictures/tosh4.png")
 
 ;; (stumptray:stumptray)
+
+(defun get-today ()
+  (multiple-value-bind
+	      (second minute hour date month year day-of-week dst-p tz)
+	    (get-decoded-time)
+    (format nil "~4,'0d-~2,'0d-~2,'0d"
+            year
+            month
+            date)))
+
+(defun get-drinks (daday)
+  (dex:get (format nil "http://127.0.0.1:1323/api/v1/activities/drinks?startTime=~aT00:00:00%2B00:00&endTime=~aT23:59:59%2B00:00" daday daday)))
+
+(defun format-drinks (drinks)
+  (loop for d in (cl-json:decode-json-from-string drinks) append (list `(,(cdr (assoc :name d)) ,(cdr (assoc :*created-at d))))))
+
+(defcommand drinks-today () ()
+  (echo (format nil "~{~a~% ~}" (format-drinks (get-drinks (get-today))))))
+
+;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
+

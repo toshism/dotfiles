@@ -74,3 +74,19 @@ function fish_right_prompt
     end
   end
 end
+
+# pyenv stuff 
+set -x PATH "/home/tosh/.pyenv/bin" $PATH
+status --is-interactive; and . (pyenv init -|psub)
+#status --is-interactive; and . (pyenv virtualenv-init -|psub)
+
+
+# nodenv stuff 
+set -x PATH "/home/tosh/.nodenv/bin" $PATH
+status --is-interactive; and . (nodenv init -|psub)
+
+# mount fake ext4 dir for dropbox
+if status --is-login
+    systemctl --user restart dropbox-zfs.service
+end
+

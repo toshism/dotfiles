@@ -1,14 +1,6 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export NVM_DIR=~/.nvm
-. $(brew --prefix nvm)/nvm.sh
-
-powerline-daemon -q
-POWERLINE_BASH_CONTINUATION=1
-POWERLINE_BASH_SELECT=1
-. /usr/local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
-
 # Set architecture flags
 export ARCHFLAGS="-arch x86_64"
 # Ensure user-installed binaries take precedence
@@ -17,31 +9,16 @@ export PATH=/usr/local/bin:$PATH
 # test -f ~/.bashrc && source ~/.bashrc
 
 
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-fi
+export GOPATH=$HOME/dev/projects/go
 
-export GOPATH=$HOME/dev/go
-export PATH=$PATH:$GOPATH/bin:/usr/local/Cellar/postgresql/9.4.5/bin
-# add gnu utils path
-PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
-# and their man path
-MANPATH="/usr/local/opt/gnu-tar/libexec/gnuman:$MANPATH"
-
-source /usr/local/bin/virtualenvwrapper.sh
-
-# GO
+# source /usr/local/bin/virtualenvwrapper.sh
 
 alias ll='ls -l'
 alias la='ls -a'
 alias l='ls -la'
-# alias es='/usr/local/Cellar/emacs-mac/emacs-24.5-rc1-mac-5.6/bin/emacs -nw'
-# alias ec='/usr/local/Cellar/emacs-mac/emacs-24.5-rc1-mac-5.6/bin/emacsclient -t'
-alias ec='/usr/local/Cellar/emacs-mac/HEAD/bin/emacsclient -t --alternate-editor="" -c "$@"'
-alias eg='/usr/local/Cellar/emacs-mac/HEAD/bin/emacsclient --alternate-editor="" -c "$@"'
 
-# export EDITOR='/usr/local/Cellar/emacs-mac/HEAD/bin/emacsclient -t --alternate-editor="" -c "$@"'
 # exec emacsclient --alternate-editor="" -c "$@"
+#export EDITOR=emacsclient --alternate-editor="" -c "$@"
 export EDITOR=vim
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
@@ -72,4 +49,11 @@ export HISTSIZE=
 export HISTFILE=~/.bash_eternal_history
 shopt -s histappend # append to history, don't overwrite it
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+if [ -e /home/tosh/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tosh/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+# mount fake ext4 drive for dropbox
+systemctl --user restart dropbox-zfs.service
