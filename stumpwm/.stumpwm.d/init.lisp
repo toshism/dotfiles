@@ -1,11 +1,12 @@
 (in-package :stumpwm)
 
+(setf *default-group-name* "Emacs")
 (setf *message-window-gravity* :center)
 (setf *input-window-gravity* :center)
 (setf *frame-hint-border-width* 30)
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
-(defvar *permanent-groups* '("Default" ".scratch"))
+;; (defvar *permanent-groups* '("Default" ".scratch"))
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 
@@ -14,6 +15,11 @@
 (ql:quickload :cl-fad)
 (ql:quickload :cl-json)
 (ql:quickload :dexador)
+(ql:quickload :clx-truetype)
+
+(defvar *confdir* "~/.stumpwm.d")
+(defun load-conf-file (filename)
+  (load (format nil "~A/~A" *confdir* filename)))
 
 (defcommand three () ()
   "Split group into 3 vertical frames"
@@ -22,13 +28,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "theme"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(load-module :stumpwm-base16)
-(stumpwm-base16:load-theme "material" "materialtheme")
+;; (load-module :stumpwm-base16)
+;; (stumpwm-base16:load-theme "material" "materialtheme")
 (run-shell-command "xsetroot -solid rgb:2F/38/41")
 
 (load-module :pass)
 (load-module :swm-emacs)
+(load-module :ttf-fonts)
 ;; (load-module :stumptray)
+(xft:cache-fonts)
+;; (set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 9))
+(set-font (make-instance 'xft:font :family "Verdana" :subfamily "Regular" :size 9))
+
+(load-conf-file "modeline.lisp")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -167,11 +179,15 @@
 (require :swank)
 (swank-loader:init)
 (defcommand swank () ()
-  (handler-case  
-      (swank:create-server :port 4005
-                           :style swank:*communication-style*
-                           :dont-close t)
-    (error () nil)))
+  (setf stumpwm:*top-level-error-action* :break)
+  ;; (when (not (getf (swank:connection-info) :pid))
+  (swank:create-server :port 4005
+                       :style swank:*communication-style*
+                       :dont-close t)
+  (echo-string
+   (current-screen)
+   "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
+
 (swank)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
@@ -198,6 +214,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "windows and groups"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; create default groups
+(gnew "Web")
+(gnew "Comm")
+(gnew "Extra")
+(gnew "Music")
+
 ;; short cuts for group switching
 (loop for i from 1 to 9 do
   (define-key *top-map* (kbd (format nil "M-~d" i)) (format nil "i3-switch ~d" i)))
@@ -335,15 +357,15 @@ it."
     (switch-to-group ngroup)
     ngroup))
 
-(defun handle-group-change (cgroup pgroup)
-  (delete-group-if-empty pgroup))
-(add-hook *focus-group-hook* 'handle-group-change)
+;; (defun handle-group-change (cgroup pgroup)
+;;   (delete-group-if-empty pgroup))
+;; (add-hook *focus-group-hook* 'handle-group-change)
 
 ;; (run-shell-command "~/.config/polybar/launch.sh")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/dropbox start -i")
 (run-shell-command "/usr/bin/nm-applet")
-
+;; (run-shell-command "/home/tosh/.config/polybar/launch.sh |
 
 (defun post-event (event)
   (dex:post "http://127.0.0.1:1323/api/v1/event/add"
@@ -352,7 +374,7 @@ it."
 
 ;; (post-event `(:stream "test_event" :category "lisp test" :date_time ,(format nil "~a" (local-time:now)) :name "stuff?"))
 (defcommand drinks (&optional drink) ()
-  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier") "Type: ")))
+  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier" "coke") "Type: ")))
     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
 (define-key *root-map* (kbd "c") "drinks")
 
@@ -379,4 +401,8 @@ it."
   (echo (format nil "~{~a~% ~}" (format-drinks (get-drinks (get-today))))))
 
 ;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
+
+(i3-switch 1)
+;; (run-shell-command "~/.config/polybar/launch.sh")
+
 
