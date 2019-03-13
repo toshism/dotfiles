@@ -1,12 +1,8 @@
 (in-package :stumpwm)
 
 (setf *default-group-name* "Emacs")
-(setf *message-window-gravity* :center)
-(setf *input-window-gravity* :center)
-(setf *frame-hint-border-width* 30)
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
-;; (defvar *permanent-groups* '("Default" ".scratch"))
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 
@@ -30,17 +26,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; (load-module :stumpwm-base16)
 ;; (stumpwm-base16:load-theme "material" "materialtheme")
-(run-shell-command "xsetroot -solid rgb:2F/38/41")
 
 (load-module :pass)
 (load-module :swm-emacs)
 (load-module :ttf-fonts)
-;; (load-module :stumptray)
-(xft:cache-fonts)
-;; (set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 9))
-(set-font (make-instance 'xft:font :family "Verdana" :subfamily "Regular" :size 9))
+(load-module :stumptray)
 
-(load-conf-file "modeline.lisp")
+(load-conf-file "themes/tosh.lisp")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -361,11 +353,9 @@ it."
 ;;   (delete-group-if-empty pgroup))
 ;; (add-hook *focus-group-hook* 'handle-group-change)
 
-;; (run-shell-command "~/.config/polybar/launch.sh")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/dropbox start -i")
 (run-shell-command "/usr/bin/nm-applet")
-;; (run-shell-command "/home/tosh/.config/polybar/launch.sh |
 
 (defun post-event (event)
   (dex:post "http://127.0.0.1:1323/api/v1/event/add"
@@ -377,8 +367,6 @@ it."
   (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier" "coke") "Type: ")))
     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
 (define-key *root-map* (kbd "c") "drinks")
-
-(run-shell-command "feh --bg-fill ~/Pictures/grey.png ~/Pictures/tosh4.png")
 
 ;; (stumptray:stumptray)
 
@@ -403,6 +391,5 @@ it."
 ;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
 
 (i3-switch 1)
-;; (run-shell-command "~/.config/polybar/launch.sh")
 
 
