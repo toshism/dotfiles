@@ -5,6 +5,7 @@
 (setf *startup-message* "Hello")
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
+(setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
 (set-module-dir "~/.stumpwm.d/modules")
 (add-to-load-path "~/quicklisp")
@@ -30,7 +31,7 @@
 (load-module :pass)
 (load-module :swm-emacs)
 (load-module :ttf-fonts)
-(load-module :stumptray)
+;; (load-module :stumptray)
 
 (load-conf-file "themes/tosh.lisp")
 
@@ -91,7 +92,11 @@
   "Start gnome-terminal"
   (run-shell-command "gnome-terminal"))
 ;; (define-key *root-map* (kbd "c") "gt")
-(define-key *top-map* (kbd "M-RET") "gt")
+
+(defcommand terminator () ()
+  "Start terminator"
+  (run-shell-command "terminator"))
+(define-key *top-map* (kbd "M-RET") "terminator")
 
 (defcommand rofi () ()
   "Start rofi"
@@ -102,7 +107,8 @@
 (defcommand ec () ()
   "New emacsclient"
   (run-shell-command "emacsclient -c -e '(switch-to-buffer nil)'"))
-(define-key *top-map* (kbd "M-e") "ec")
+(define-key *root-map* (kbd "e") "ec")
+;;(define-key *top-map* (kbd "M-e") "ec")
 
 (defcommand emacs-capture () ()
   "Open emacs client in capture templates"
@@ -155,7 +161,7 @@
   (window-send-string (get-x-selection)))
 (define-key *root-map* (kbd "\C-p") "paste")
 
-(Define-key *top-map* (kbd "M-w") "windowlist")
+;;(define-key *top-map* (kbd "M-w") "windowlist")
 
 ;; Web browsing commands
 ;; Get the X selection and order the GUI browser to open it. Presumably it
@@ -223,7 +229,7 @@
 (define-key *top-map* (kbd "M-!") "window-to-group 1")
 (define-key *top-map* (kbd "M-@") "window-to-group 2")
 (define-key *top-map* (kbd "M-#") "window-to-group 3")
-(define-key *top-map* (kbd "M-$") "window-to-group $")
+(define-key *top-map* (kbd "M-$") "window-to-group 4")
 (define-key *top-map* (kbd "M-%") "window-to-group 5")
 
 (define-key *top-map* (kbd "M-h") "move-focus left")
@@ -236,26 +242,29 @@
 (define-key *top-map* (kbd "M-K") "move-window up")
 (define-key *top-map* (kbd "M-L") "move-window right")
 
-(define-key *top-map* (kbd "M-f") "fullscreen")
+;; (define-key *top-map* (kbd "M-f") "fullscreen")
+(define-key *root-map* (kbd "f") "fullscreen")
 
 (defcommand tl/hsplit () ()
   (progn
     (hsplit)
     (balance-frames)))
+(define-key *root-map* (kbd "s") "tl/hsplit")
 
 (defcommand tl/vsplit () ()
   (progn
     (vsplit)
     (balance-frames)))
+(define-key *root-map* (kbd "S") "tl/vsplit")
 
-(define-key *top-map* (kbd "M-v") "tl/hsplit")
-(define-key *top-map* (kbd "M-V") "tl/vsplit")
+;;(define-key *top-map* (kbd "M-v") "tl/hsplit")
+;;(define-key *top-map* (kbd "M-V") "tl/vsplit")
 
 (defcommand tl/remove () ()
   (progn
     (remove-split)
     (balance-frames)))
-(define-key *top-map* (kbd "C-r") "tl/remove")
+(define-key *root-map* (kbd "r") "tl/remove")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
@@ -367,8 +376,6 @@ it."
   (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier" "coke") "Type: ")))
     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
 (define-key *root-map* (kbd "c") "drinks")
-
-;; (stumptray:stumptray)
 
 (defun get-today ()
   (multiple-value-bind

@@ -52,7 +52,7 @@
 ;; (update-color-map (current-screen))
 
 (setf *group-format* " %t ")
-;; (setf *window-format* "%m%50t ")
+; (setf *window-format* "%m%50t ")
 (setf *window-format* "%m[^[^8 %n ^]] - %30t ")
 ;; (setf *window-format* "%m%n%s%20t ")
 (setf *mode-line-timeout* 2)
@@ -73,8 +73,9 @@
             ))
 
 (setf *mode-line-border-width* 0)
-(setf *mode-line-background-color* "#2F3841")
-(setf *mode-line-foreground-color* "#4f5b66")
+(setf *mode-line-border-color* (nth 1 *colors*))
+(setf *mode-line-background-color* (nth 1 *colors*))
+(setf *mode-line-foreground-color* (nth 2 *colors*));;"#4f5b66")
 
-(if (not (head-mode-line (current-head)))
-    (toggle-mode-line (current-screen) (current-head)))
+;; (if (not (head-mode-line (current-head)))
+;;     (toggle-mode-line (current-screen) (current-head)))

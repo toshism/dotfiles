@@ -70,7 +70,7 @@
 (setf *window-format* "%m[^[^8 %n ^]] - %30t ")
 (setf *mode-line-timeout* 2)
 (setf *mode-line-highlight-template* "^[^4~A^]")
-(setf *time-modeline-string* "^8/^3 %a %b %d^4%l:%M")
+(setf *time-modeline-string* "^8/^3 %a %b %d ^4 %l:%M")
 
 (defun get-date-modeline ()
   (stumpwm:run-shell-command
@@ -87,6 +87,8 @@
 
 (if (not (head-mode-line (current-head)))
     (toggle-mode-line (current-screen) (current-head)))
+
+(stumptray:stumptray)
 
 ;; Toggle the mode line so that changes are applied
 (toggle-mode-line (current-screen) (current-head))
