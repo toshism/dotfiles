@@ -5,6 +5,8 @@ set PATH ~/bin $PATH
 set PATH /usr/local/go/bin $PATH
 set PATH /snap/bin/ $PATH
 set PATH ~/.nimble/bin $PATH
+set PATH ~/.cargo/bin $PATH
+set PATH ~/.yarn/bin $PATH
 
 eval (python -m virtualfish compat_aliases)
 
@@ -17,6 +19,8 @@ set -x ALTERNATE_EDITOR ""
 alias mux="tmuxinator"
 alias cdrar="cd ~/dev/projects/uniregistrar"
 alias cdp="cd ~/dev/projects"
+alias cdgo="cd $GOPATH/src"
+alias cds="cd $GOPATH/src/bitbucket.uniregistry.com/rar/swerve"
 
 function fish_prompt
   test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color yellow)(hostname)' '
@@ -80,6 +84,9 @@ set -x PATH "/home/tosh/.pyenv/bin" $PATH
 status --is-interactive; and . (pyenv init -|psub)
 #status --is-interactive; and . (pyenv virtualenv-init -|psub)
 
+# perl/plenv
+set -x PATH "/home/tosh/.plenv/bin" $PATH
+status --is-interactive; and . (plenv init -|psub)
 
 # nodenv stuff 
 set -x PATH "/home/tosh/.nodenv/bin" $PATH

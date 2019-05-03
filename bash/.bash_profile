@@ -57,3 +57,5 @@ if [ -e /home/tosh/.nix-profile/etc/profile.d/nix.sh ]; then . /home/tosh/.nix-p
 
 # mount fake ext4 drive for dropbox
 systemctl --user restart dropbox-zfs.service
+
+export PATH="$HOME/.cargo/bin:$PATH"
