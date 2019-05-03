@@ -13,6 +13,7 @@ IMAPStore uniregistry-remote
 Account uniregistry
 
 MaildirStore uniregistry-local
+SubFolders Legacy
 # The trailing "/" is important
 Path ~/.mbsync/
 Inbox ~/.mbsync/INBOX
@@ -42,6 +43,7 @@ IMAPStore toshism-remote
 Account toshism
 
 MaildirStore toshism-local
+SubFolders Legacy
 # The trailing "/" is important
 Path ~/.toshism_mail/
 Inbox ~/.toshism_mail/Inbox
