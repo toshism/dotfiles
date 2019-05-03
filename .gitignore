@@ -10,3 +10,7 @@
 /emacs/.emacs.d/*
 !/emacs/.emacs.d/init.el
 !/emacs/.emacs.d/personal
+
+/mutt/.mutt/temp
+/stumpwm/.stumpwm.d/group-dumps
+/stumpwm/.stumpwm.d/modules/
