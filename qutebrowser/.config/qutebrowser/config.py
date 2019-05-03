@@ -9,6 +9,7 @@ c.input.insert_mode.auto_leave = False
 
 # aliases
 c.aliases['pr'] = 'open -t https://stash.uniregistry.com/projects/RAR/repos/uniregistrar/pull-requests'
+c.aliases['jira'] = 'open https://jira.uniregistry.com/secure/RapidBoard.jspa?rapidView=37&quickFilter=138'
 
 c.fonts.monospace = "Ubuntu Mono"
 c.fonts.statusbar = c.fonts.monospace
@@ -16,6 +17,7 @@ c.fonts.tabs = c.fonts.monospace
 c.fonts.web.family.sans_serif = c.fonts.monospace
 c.fonts.prompts = c.fonts.monospace
 
+c.content.headers.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
 
 # hacky mess to handle switching from hidpi laptop only to mixed with external monitor
 import subprocess
