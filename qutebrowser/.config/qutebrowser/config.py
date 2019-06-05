@@ -19,8 +19,7 @@ c.fonts.prompts = c.fonts.monospace
 
 c.content.headers.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36'
 
-# hacky mess to handle switching from hidpi laptop only to mixed with external monitor
-import subprocess
+c.hints.chars = 'asdfjkl;'
 
 # keys
 config.bind('sb', 'spawn --userscript org-bookmark')

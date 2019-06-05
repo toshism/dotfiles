@@ -42,6 +42,6 @@ windows:
   - frontend:
       layout: even-horizontal
       panes:
-        - cd ../brandsight_app/brandsight_app/js/brandsight; npm run watch
+        - nvm use default; and cd ../brandsight_app/brandsight_app/js/brandsight; npm run watch
         #- cd ./uniregistrar/js/rar; npm run watch
         #- cd ../rar_admin/rar_admin/js/rar_admin/; and npm run watch

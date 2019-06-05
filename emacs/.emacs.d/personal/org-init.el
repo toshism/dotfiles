@@ -1,4 +1,4 @@
-;;; flycheck-init.el --- tosh's flycheck setup       -*- lexical-binding: t; -*-
+;;; org-init.el --- tosh's org mode config           -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2019  tosh
 
@@ -20,16 +20,16 @@
 
 ;;; Commentary:
 
-;; tosh's flycheck setup
+;; my personal org-mode config
 
 ;;; Code:
 
 
-(use-package flycheck
-  :diminish flycheck-mode
+(use-package org
+  :ensure org-plus-contrib
   :init
-  (global-flycheck-mode))
+  (require 'cl)
+  (require 'org-drill))
 
-(provide 'flycheck-init)
-
-;;; flycheck-init.el ends here
+(provide 'org-init)
+;;; org-init.el ends here

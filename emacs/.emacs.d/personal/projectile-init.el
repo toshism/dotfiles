@@ -1,6 +1,7 @@
 (use-package projectile
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
+  :bind
+  (("C-c p" . projectile-command-map)
+   ("C-x C-f" . projectile-find-file))
   :config
   (projectile-discover-projects-in-directory "~/dev/projects/")
   (setq-default

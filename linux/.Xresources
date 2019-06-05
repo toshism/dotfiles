@@ -1,18 +1,15 @@
-!#if __has_include(".extend.Xresources")
-!#include ".extend.Xresources"
-!#endif
 
 Xft.dpi: 96
 !Xft.dpi: 192
 !*.dpi: 192
 Rofi.dpi: 192
 
-Xft.autohint: 0
-Xft.lcdfilter:  lcddefault
-Xft.hintstyle:  hintfull
-Xft.hinting: 1
-Xft.antialias: 1
-Xft.rgba: rgb
+!Xft.autohint: 0
+!Xfft.lcdfilter:  lcddefault
+!Xft.hintstyle:  hintfull
+!Xft.hinting: 1
+!Xft.antialias: 1
+!Xft.rgba: rgb
 
 
 ! xterm*faceSize: 14
@@ -36,9 +33,10 @@ xterm*colorBD: rgb:fc/fc/fc
 ! https://unix4lyfe.org/xterm/
 URxvt.loginShell: true
 URxvt.saveLines: 10000
-URxvt.cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
-URxvt.font: xft:monospace:size=12
-URxvt.italicFont: xft:monospace:size=12
+!URxvt.cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
+! URxvt.font: xft:monospace:size=12
+URxvt.font: xft:Source\ Code\ Pro:Regular:size=11
+!URxvt.italicFont: xft:monospace:size=12
 URxvt.scrollBar: false
 URxvt.visualBell: true
 ! URxvt.fading: 15
@@ -47,5 +45,43 @@ URxvt.visualBell: true
 !XTerm*background: #2b2b2b
 !XTerm*foreground: #e7e7e7
 !XTerm*pointerColor: #16A085
-XTerm*faceName: Fixed
-XTerm*faceSize: 11
+!XTerm*faceName: Fixed
+!XTerm*faceSize: 11
+
+*background:   #2F3841
+*foreground:   #B2CCD6
+
+*color0:       #263238
+*color1:       #2F3841
+*color2:       #414d5a
+*color3:       #546E7A
+*color4:       #B2CCD6
+*color5:      #EEFFFF
+*color6:       #EEFFFF
+*color7:      #FFFFFF
+*color8:       #F07178
+*color9:      #F78C6C
+*color10:       #ffcb6b
+*color11:      #C3E88D
+*color12:       #89DDFF
+*color13:      #82AAFF
+*color14:       #C792EA
+*color15:      #FF5370
+
+
+! "#263238" ;; 0
+! "#2F3841" ;; 1
+! "#414d5a" ;; 2
+! "#546E7A" ;; 3
+! "#B2CCD6" ;; 4
+! "#EEFFFF" ;; 5
+! "#EEFFFF" ;; 6
+! "#FFFFFF" ;; 7
+! "#F07178" ;; 8
+! "#F78C6C" ;; 9
+! "#ffcb6b" ;; 10
+! "#C3E88D" ;; 11
+! "#89DDFF" ;; 12
+! "#82AAFF" ;; 13
+! "#C792EA" ;; 14
+! "#FF5370" ;; 15

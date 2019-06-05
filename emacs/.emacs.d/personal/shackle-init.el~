@@ -1,0 +1,9 @@
+;; get some control over how/when/where windows pop up
+;; https://github.com/wasamasa/shackle
+
+(use-package shackle
+  :config
+  (setq shackle-rules '((compilation-mode :other t :frame t)))
+  (shackle-mode t))
+
+(provide 'shacke-init)

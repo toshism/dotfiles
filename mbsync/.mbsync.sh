@@ -6,6 +6,6 @@ killall mbsync &>/dev/null
 /usr/bin/mbsync uniregistry
 #notify-send -t 3000 "$(/usr/local/bin/notmuch new)"
 /usr/local/bin/notmuch new
-/usr/local/bin/afew -tvn
+/usr/bin/afew -tvn
 
 /usr/bin/mbsync toshism

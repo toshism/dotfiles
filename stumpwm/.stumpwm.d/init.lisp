@@ -1,5 +1,6 @@
 (in-package :stumpwm)
 
+(set-prefix-key (kbd "C-M-'"))
 (setf *default-group-name* "Emacs")
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
@@ -67,7 +68,7 @@
 
 (define-key *top-map* (kbd "F11") "play-pause")
 (define-key *top-map* (kbd "XF86Tools") "spotify-previous")
-(define-key *top-map* (kbd "XF86Launch5") "spotify-next")
+(define-key *top-map* (kbd "XF86AudioNext") "spotify-next")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; volume
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -86,7 +87,7 @@
 ;; FIXME If urxvt is not installed, let default keybinding
 (defcommand urxvt () ()
   "Start an urxvt instance."
-  (run-shell-command "urxvt"))
+  (run-shell-command "urxvtcd"))
 
 (defcommand gt () ()
   "Start gnome-terminal"
@@ -96,6 +97,8 @@
 (defcommand terminator () ()
   "Start terminator"
   (run-shell-command "terminator"))
+
+;; start terminal
 (define-key *top-map* (kbd "M-RET") "terminator")
 
 (defcommand rofi () ()
@@ -243,7 +246,7 @@
 (define-key *top-map* (kbd "M-L") "move-window right")
 
 ;; (define-key *top-map* (kbd "M-f") "fullscreen")
-(define-key *root-map* (kbd "f") "fullscreen")
+(define-key *root-map* (kbd "F") "fullscreen")
 
 (defcommand tl/hsplit () ()
   (progn
@@ -310,7 +313,7 @@ windows used to draw the numbers in. The caller must destroy them."
                   (concat "%{F#ECEFF4 B#882E3440 u#8A9899 +u}" display-text "[" n-win "] " "%{F- B- u- -u}  ")
                   (concat "%{F#8A9899}" display-text "[" n-win "]" "%{F-}  "))))
           (sort (screen-groups (current-screen)) #'< :key #'group-number))))
-;; 
+;;
 ;; Update polybar group indicator
 ;; (add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
 ;; (add-hook *destroy-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
@@ -362,9 +365,9 @@ it."
 ;;   (delete-group-if-empty pgroup))
 ;; (add-hook *focus-group-hook* 'handle-group-change)
 
-(run-shell-command "/usr/bin/blueman-applet")
-(run-shell-command "/usr/bin/dropbox start -i")
-(run-shell-command "/usr/bin/nm-applet")
+;; (run-shell-command "/usr/bin/blueman-applet")
+;; (run-shell-command "/usr/bin/dropbox start -i")
+;; (run-shell-command "/usr/bin/nm-applet")
 
 (defun post-event (event)
   (dex:post "http://127.0.0.1:1323/api/v1/event/add"
@@ -398,5 +401,3 @@ it."
 ;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
 
 (i3-switch 1)
-
-

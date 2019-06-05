@@ -1,23 +1,23 @@
-*.foreground:   #aab0bc
-*.background:   #131822
-*.cursorColor:  #aab0bc
+! *.foreground:   #aab0bc
+! *.background:   #131822
+! *.cursorColor:  #aab0bc
 
-*.color0:       #131822
-*.color8:       #626975
-*.color1:       #7b8ba3
-*.color9:       #7b8ba3
-*.color2:       #657893
-*.color10:      #657893
-*.color3:       #4e6584
-*.color11:      #4e6584
-*.color4:       #233f66
-*.color12:      #233f66
-*.color5:       #1c3251
-*.color13:      #1c3251
-*.color6:       #15253d
-*.color14:      #15253d
-*.color7:       #aab0bc
-*.color15:      #aab0bc
+! *.color0:       #131822
+! *.color8:       #626975
+! *.color1:       #7b8ba3
+! *.color9:       #7b8ba3
+! *.color2:       #657893
+! *.color10:      #657893
+! *.color3:       #4e6584
+! *.color11:      #4e6584
+! *.color4:       #233f66
+! *.color12:      #233f66
+! *.color5:       #1c3251
+! *.color13:      #1c3251
+! *.color6:       #15253d
+! *.color14:      #15253d
+! *.color7:       #aab0bc
+! *.color15:      #aab0bc
 
 
 
@@ -42,7 +42,8 @@ URxvt.internalBorder: 6
 ! URxvt.font: xft:monofur:size=12
 URxvt.geometry: 80x20
 URxvt.depth: 32
-URxvt.background:	[100]#131822
+! URxvt.background:	[100]#131822
+URxvt*background: #2F3841
 URxvt*scrollBar:                      false
 URxvt*mouseWheelScrollPage:           false
 URxvt*cursorBlink:                    true
@@ -71,25 +72,46 @@ rofi.padding: 5
 rofi.fixed-num-lines: true
 rofi.hide-scrollbar: true
 
-! xterm colors !
+!  colors !
+*foreground:   #aab0bc
+*background:   #2F3841
+*cursorColor:  #aab0bc
 
-xterm*.foreground:   #aab0bc
-xterm*.background:   #131822
-xterm*.cursorColor:  #aab0bc
+! "#263238" ;; 0
+! "#2F3841" ;; 1
+! "#414d5a" ;; 2
+! "#546E7A" ;; 3
+! "#B2CCD6" ;; 4
+! "#EEFFFF" ;; 5
+! "#EEFFFF" ;; 6
+! "#FFFFFF" ;; 7
+! "#F07178" ;; 8
+! "#F78C6C" ;; 9
+! "#ffcb6b" ;; 10
+! "#C3E88D" ;; 11
+! "#89DDFF" ;; 12
+! "#82AAFF" ;; 13
+! "#C792EA" ;; 14
+! "#FF5370" ;; 15
 
-xterm*.color0:       #131822
-xterm*.color8:       #626975
-xterm*.color1:       #7b8ba3
-xterm*.color9:       #7b8ba3
-xterm*.color2:       #657893
-xterm*.color10:      #657893
-xterm*.color3:       #4e6584
-xterm*.color11:      #4e6584
-xterm*.color4:       #233f66
-xterm*.color12:      #233f66
-xterm*.color5:       #1c3251
-xterm*.color13:      #1c3251
-xterm*.color6:       #15253d
-xterm*.color14:      #15253d
-xterm*.color7:       #aab0bc
-xterm*.color15:      #aab0bc
+
+
+
+
+
+*color0:       #263238
+*color8:       #2F3841
+*color1:       #414d5a
+*color9:       #546E7A
+*color2:       #B2CCD6
+*color10:      #EEFFFF
+*color3:       #EEFFFF
+*color11:      #FFFFFF
+*color4:       #F07178
+*color12:      #F78C6C
+*color5:       #ffcb6b
+*color13:      #C3E88D
+*color6:       #89DDFF
+*color14:      #82AAFF
+*color7:       #C792EA
+*color15:      #FF5370

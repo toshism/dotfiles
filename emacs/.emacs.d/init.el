@@ -1,22 +1,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;
-;; general settings
-;;;;;;;;;;;;;;;;;;;;;;;;;
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(setq backup-directory-alist `(("." . "~/.emacs.d/auto-saves")))
-(server-start)
-
-;; ediff
-;; show ediff all in a single frame
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; packaging stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;;(add-to-list 'package-archives '("gnu" . "https://epla.gnu.org/packages/"))
+
 (package-initialize)
 
 ;; Bootstrap `use-package'
@@ -27,6 +15,18 @@
 (require 'use-package-ensure)
 (setq use-package-always-ensure t)
 
+(setq user-full-name "tosh"
+      user-mail-address "tosh.lyons@gmail.com")
+
+(use-package quelpa)
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://framagit.org/steckerhalter/quelpa-use-package.git"))
+(require 'quelpa-use-package)
+
+(quelpa-use-package-activate-advice)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; install/configure packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -34,6 +34,7 @@
 
 ;; my packages
 (add-to-list 'load-path (expand-file-name "personal" user-emacs-directory))
+
 (require 'flycheck-init)
 (require 'python-init)
 (require 'go-init)
@@ -45,23 +46,8 @@
 (require 'whichkey-init)
 (require 'avy-init)
 (require 'multiple-cursors-init)
+(require 'shackle-init)
+(require 'org-init)
 
+(require 'misc-init)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; emacs auto added stuff
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (multiple-cursors flycheck-golangci-lint slime slime-mode avy helm-swoop flycheck helm-lsp helm-projectile helm-ag helm-grep ripgrep which-key go-mode projectile counsel magit diminish use-package lsp-ui lsp-python ivy doom-themes company-lsp)))
- '(safe-local-variable-values (quote ((python-backend . lsp)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )

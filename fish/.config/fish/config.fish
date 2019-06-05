@@ -7,6 +7,7 @@ set PATH /snap/bin/ $PATH
 set PATH ~/.nimble/bin $PATH
 set PATH ~/.cargo/bin $PATH
 set PATH ~/.yarn/bin $PATH
+# set PATH ~/dev/projects/plan9port/bin $PATH
 
 eval (python -m virtualfish compat_aliases)
 
