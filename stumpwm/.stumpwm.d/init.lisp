@@ -6,9 +6,12 @@
 (setf *startup-message* "Hello")
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
+(run-shell-command "~/bin/kbd_udev")
+(run-shell-command "~/.screenlayout/work2.sh")
+
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
-(set-module-dir "~/.stumpwm.d/modules")
+(set-module-dir "~/.stumpwm.d/stumpwm-contrib")
 (add-to-load-path "~/quicklisp")
 (ql:quickload :cl-fad)
 (ql:quickload :cl-json)
@@ -29,9 +32,13 @@
 ;; (load-module :stumpwm-base16)
 ;; (stumpwm-base16:load-theme "material" "materialtheme")
 
-(load-module :pass)
-(load-module :swm-emacs)
-(load-module :ttf-fonts)
+;(load-module :pass)
+					;
+;(load-module :swm-emacs)
+;
+;(load-module :ttf-fonts)
+
+
 ;; (load-module :stumptray)
 
 (load-conf-file "themes/tosh.lisp")
@@ -99,7 +106,7 @@
   (run-shell-command "terminator"))
 
 ;; start terminal
-(define-key *top-map* (kbd "M-RET") "terminator")
+(define-key *top-map* (kbd "M-RET") "gt")
 
 (defcommand rofi () ()
   "Start rofi"
@@ -177,19 +184,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swank stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require :swank)
-(swank-loader:init)
-(defcommand swank () ()
-  (setf stumpwm:*top-level-error-action* :break)
-  ;; (when (not (getf (swank:connection-info) :pid))
-  (swank:create-server :port 4005
-                       :style swank:*communication-style*
-                       :dont-close t)
-  (echo-string
-   (current-screen)
-   "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
+;(require :swank)
+;(swank-loader:init)
+;(defcommand swank () ()
+;  (setf stumpwm:*top-level-error-action* :break)
+;  ;; (when (not (getf (swank:connection-info) :pid))
+;  (swank:create-server :port 4005
+;                       :style swank:*communication-style*
+;                       :dont-close t)
+;  (echo-string
+;   (current-screen)
+;   "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
 
-(swank)
+;(swank)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

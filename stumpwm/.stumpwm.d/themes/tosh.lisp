@@ -1,4 +1,4 @@
-(in-package :stumpwm)
+-(in-package :stumpwm)
 
 (setf *colors*
       '("#263238" ;; 0
@@ -56,11 +56,11 @@
 	    *mode-line-background-color* (color 1)
 	    *mode-line-border-color* (color 3))
 
-(xft:cache-fonts)
+;(xft:cache-fonts)
 ;; (set-font (make-instance 'xft:font :family "DejaVu Sans Mono" :subfamily "Book" :size 9))
-(set-font (make-instance 'xft:font :family "Verdana" :subfamily "Regular" :size 9))
+;(set-font (make-instance 'xft:font :family "Verdana" :subfamily "Regular" :size 9))
 
-(run-shell-command "feh --bg-fill ~/Pictures/grey.png ~/Pictures/tosh4.png")
+;(run-shell-command "feh --bg-fill ~/Pictures/grey.png ~/Pictures/tosh4.png")
 
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; modeline
@@ -88,7 +88,7 @@
 (if (not (head-mode-line (current-head)))
     (toggle-mode-line (current-screen) (current-head)))
 
-(stumptray:stumptray)
+;(stumptray:stumptray)
 
 ;; Toggle the mode line so that changes are applied
 (toggle-mode-line (current-screen) (current-head))
