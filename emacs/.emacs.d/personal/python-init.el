@@ -28,9 +28,11 @@
 (use-package lsp-mode
   :commands lsp
   :after python
+  :hook ((python-mode . lsp))
   :config
-  (add-hook 'python-mode-hook #'lsp)
   (setq lsp-prefer-flymake t)
+  (setq lsp-pyls-plugins-pylint-enabled nil
+	lsp-pyls-configuration-sources ["flake8"])
   :bind (:map python-mode-map
 	      ("C-c g" . lsp-find-definition)))
 
@@ -53,7 +55,14 @@
 (use-package company
   :diminish company-mode)
 
-(use-package virtualenvwrapper)
+(use-package virtualenvwrapper
+  :after projectile
+  :config
+  (setq venv-dirlookup-names '(".venv" "venv" "env"))
+  (setq-default projectile-switch-project-action '(lambda ()
+						    (magit-status)
+						    (venv-set-location (projectile-project-root))
+						    (venv-projectile-auto-workon))))
 
 (use-package flymake
   :ensure nil
@@ -67,7 +76,16 @@
   ;; :bind (:map python-mode-map
   ;; 	      ("C-c t" . pytest-one)))
 
-(use-package yapfify)
+;(use-package yapfify)
+(use-package blacken
+  :quelpa (blacken :fetcher github :repo "pythonic-emacs/blacken")
+  :after python
+  :config
+  (add-hook 'python-mode-hook 'blacken-mode))
+
+(use-package pyenv-mode)
+
+(use-package py-isort)
 
 (provide 'python-init)
 
