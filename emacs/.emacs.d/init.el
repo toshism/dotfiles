@@ -51,3 +51,4 @@
 
 (require 'misc-init)
 
+(put 'narrow-to-region 'disabled nil)
