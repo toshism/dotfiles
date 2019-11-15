@@ -29,7 +29,23 @@
   :ensure org-plus-contrib
   :init
   (require 'cl)
-  (require 'org-drill))
+  (require 'org-drill)
+  :config
+  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org"))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((sql . t))))
+
+(use-package org-gcal
+  :after org
+  :config
+  (setq org-gcal-client-id "71536857775-kcp6qlffjbm5r8drn683dnr1fu396rhl.apps.googleusercontent.com"
+      org-gcal-client-secret "iszKaun3J0JFreP4Jj5wwXj2"
+      org-gcal-file-alist '(("tosh.lyons@scoutbee.com" .  "~/dev/notes/scoutbee-cal.org"))))
+
+(use-package calfw)
+
+(use-package calfw-org)
 
 (provide 'org-init)
 ;;; org-init.el ends here

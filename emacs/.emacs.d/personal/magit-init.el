@@ -26,12 +26,13 @@
 
 
 (use-package magit
-  :bind 
+  :bind
   ("C-x g" . 'magit-status)
   :config
   (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
 
-
+(use-package forge
+  :after magit)
 
 (provide 'magit-init)
 

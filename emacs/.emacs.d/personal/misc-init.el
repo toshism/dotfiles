@@ -29,6 +29,7 @@
 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
 
 ;; use frames instead of windows (mostly)
@@ -113,6 +114,10 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package iedit)
 
 (use-package protobuf-mode)
+
+(use-package yasnippet)
+
+(use-package yaml-mode)
 
 (provide 'misc-init)
 

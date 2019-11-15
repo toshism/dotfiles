@@ -32,7 +32,8 @@
   :config
   (setq lsp-prefer-flymake t)
   (setq lsp-pyls-plugins-pylint-enabled nil
-	lsp-pyls-configuration-sources ["flake8"])
+	lsp-pyls-configuration-sources ["flake8"]
+	lsp-ui-doc-enable nil)
   :bind (:map python-mode-map
 	      ("C-c g" . lsp-find-definition)))
 

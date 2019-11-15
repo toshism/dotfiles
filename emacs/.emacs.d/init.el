@@ -48,6 +48,7 @@
 (require 'multiple-cursors-init)
 (require 'shackle-init)
 (require 'org-init)
+(require 'js-init)
 
 (require 'misc-init)
 
