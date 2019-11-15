@@ -6,8 +6,8 @@
 (setf *startup-message* "Hello")
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
-(run-shell-command "~/bin/kbd_udev")
-(run-shell-command "~/.screenlayout/work2.sh")
+;; (run-shell-command "~/bin/kbd_udev")
+;; (run-shell-command "~/.screenlayout/work2.sh")
 
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
@@ -89,6 +89,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; applications
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcommand lock () ()
+  "lock screen"
+  (run-shell-command "i3lock"))
+(define-key *root-map* (kbd "l") "lock")
+
 ;; run an `urxvt' terminal (instead of `xterm')
 ;; TODO Install `rxvt-unicode'
 ;; FIXME If urxvt is not installed, let default keybinding
