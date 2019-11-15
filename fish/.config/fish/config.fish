@@ -1,27 +1,28 @@
 set PATH /usr/local/bin $PATH
-set PATH /usr/lib/postgresql/9.4/bin $PATH
-set PATH ~/.local/bin $PATH
+# set PATH /usr/lib/postgresql/9.4/bin $PATH
+# set PATH ~/.local/bin $PATH
 set PATH ~/bin $PATH
-set PATH /usr/local/go/bin $PATH
+# set PATH /usr/local/go/bin $PATH
 set PATH /snap/bin/ $PATH
-set PATH ~/.nimble/bin $PATH
-set PATH ~/.cargo/bin $PATH
-set PATH ~/.yarn/bin $PATH
+# set PATH ~/.nimble/bin $PATH
+# set PATH ~/.cargo/bin $PATH
+# set PATH ~/.yarn/bin $PATH
 # set PATH ~/dev/projects/plan9port/bin $PATH
 
-eval (python -m virtualfish compat_aliases)
+# eval (python -m virtualfish compat_aliases)
 
-set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
-set PATH $PATH $GOPATH/bin
+# set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
+# set PATH $PATH $GOPATH/bin
 
 set -x EDITOR "emacsclient -t"
 set -x ALTERNATE_EDITOR ""
 
-alias mux="tmuxinator"
-alias cdrar="cd ~/dev/projects/uniregistrar"
+# alias mux="tmuxinator"
+# alias cdrar="cd ~/dev/projects/uniregistrar"
 alias cdp="cd ~/dev/projects"
-alias cdgo="cd $GOPATH/src"
-alias cds="cd $GOPATH/src/bitbucket.uniregistry.com/rar/swerve"
+# alias cdgo="cd $GOPATH/src"
+# alias cds="cd $GOPATH/src/bitbucket.uniregistry.com/rar/swerve"
+alias cds="cd ~/dev/projects/scoutbee"
 
 function fish_prompt
   test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color yellow)(hostname)' '
@@ -80,21 +81,20 @@ function fish_right_prompt
   end
 end
 
-# pyenv stuff 
-set -x PATH "/home/tosh/.pyenv/bin" $PATH
+# pyenv stuff
+set -x PATH "/home/tosh.lyons/.pyenv/bin" $PATH
 status --is-interactive; and . (pyenv init -|psub)
-#status --is-interactive; and . (pyenv virtualenv-init -|psub)
+status --is-interactive; and . (pyenv virtualenv-init -|psub)
 
 # perl/plenv
-set -x PATH "/home/tosh/.plenv/bin" $PATH
-status --is-interactive; and . (plenv init -|psub)
+# set -x PATH "/home/tosh/.plenv/bin" $PATH
+# status --is-interactive; and . (plenv init -|psub)
 
-# nodenv stuff 
-set -x PATH "/home/tosh/.nodenv/bin" $PATH
-status --is-interactive; and . (nodenv init -|psub)
+# nodenv stuff
+# set -x PATH "/home/tosh/.nodenv/bin" $PATH
+# status --is-interactive; and . (nodenv init -|psub)
 
 # mount fake ext4 dir for dropbox
-if status --is-login
-    systemctl --user restart dropbox-zfs.service
-end
-
+# if status --is-login
+#     systemctl --user restart dropbox-zfs.service
+# end
