@@ -58,8 +58,6 @@
 ;;   ("C-s" . helm-swoop))
 
 
-(use-package helm-ag)
-
 (provide 'helm-init)
 
 ;;; helm-init.el ends here

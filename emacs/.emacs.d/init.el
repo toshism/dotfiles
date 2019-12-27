@@ -37,7 +37,6 @@
 ;; my packages
 (add-to-list 'load-path (expand-file-name "personal" user-emacs-directory))
 
-(require 'flycheck-init)
 (require 'python-init)
 (require 'go-init)
 (require 'lisp-init)
@@ -45,13 +44,8 @@
 (require 'theme-init)
 (require 'magit-init)
 (require 'projectile-init)
-(require 'whichkey-init)
-(require 'avy-init)
-(require 'multiple-cursors-init)
 (require 'shackle-init)
 (require 'org-init)
 (require 'js-init)
 
 (require 'misc-init)
-
-(put 'narrow-to-region 'disabled nil)

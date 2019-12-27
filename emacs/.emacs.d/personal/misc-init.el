@@ -35,6 +35,9 @@
 ;; use frames instead of windows (mostly)
 (setq pop-up-windows t)
 
+;; what is confusing about narrow to region?
+(put 'narrow-to-region 'disabled nil)
+
 ;; do not split the window for buffers listed here
 ;; (setq special-display-buffer-names
 ;;       '("*grep*" "*ripgrep-search*"))
@@ -65,12 +68,6 @@
 ;; put all auto save files in one place
 (setq auto-save-file-name-transforms
       `((".*" "~/.emacs.d/auto-saves/" t)))
-
-;; rcirc
-(setq rcirc-server-alist
-	     '(("somethingsomething.us"
-		:nick "tosh"
-		:port 1025)))
 
 ;; delete trailing whitespace on save
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -133,6 +130,25 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package flycheck
+  :diminish flycheck-mode
+  :init
+  (global-flycheck-mode))
+
+(use-package multiple-cursors
+  :bind
+  ("C-c m" . 'mc/mark-all-dwim))
+
+(use-package which-key
+  :init
+  (which-key-mode)
+  :diminish which-key-mode)
+
+(use-package avy
+  :bind
+  ("M-g g" . 'avy-goto-line)
+  ("M-g c" . 'avy-goto-char-timer))
 
 (use-package iedit)
 
