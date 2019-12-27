@@ -43,11 +43,16 @@
   :bind (:map python-mode-map
 	      ("C-c x" . lsp-ui-imenu))
   :config
-  (setq lsp-ui-doc-use-webkit nil)
-  (setq lsp-ui-flycheck-enable t)
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-ui-doc-position 'top)
-  (setq lsp-ui-doc-use-childframe t)
+  (setq lsp-ui-doc-use-webkit nil
+	lsp-ui-flycheck-enable t
+	lsp-ui-doc-enable nil
+	lsp-ui-doc-position 'top
+	lsp-ui-doc-use-childframe t
+	lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25)
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
   (add-hook 'python-mode-hook 'flycheck-mode))
 
 (use-package company-lsp

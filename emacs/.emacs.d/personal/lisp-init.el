@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; my lisp dev setup
+;; my Lisp dev setup
 
 ;;; Code:
 
@@ -41,6 +41,6 @@
         slime-contribs '(slime-fancy))
   )
 
-(provide 'list-init)
+(provide 'lisp-init)
 
 ;;; lisp-init.el ends here

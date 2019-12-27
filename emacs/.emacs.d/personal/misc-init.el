@@ -28,7 +28,7 @@
 
 
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+;;(menu-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
 
@@ -36,14 +36,19 @@
 (setq pop-up-windows t)
 
 ;; do not split the window for buffers listed here
-(setq special-display-buffer-names
-      '("*grep*" "*ripgrep-search*"))
+;; (setq special-display-buffer-names
+;;       '("*grep*" "*ripgrep-search*"))
 
 ;; keep customize stuff out of init. i don't use customize
 (setq custom-file (make-temp-file "emacs-custom"))
 
 ;; y or n is enough
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+;; i use fish but bash is easier with emacs
+(setq explicit-shell-file-name "/bin/bash")
+(setq shell-file-name "bash")
+(setenv "SHELL" shell-file-name)
 
 ;; ediff
 ;; show ediff all in a single frame
@@ -99,6 +104,24 @@ Position the cursor at it's beginning, according to the current mode."
   (indent-according-to-mode))
 (global-set-key [(control shift return)] 'tl/smart-open-line-above)
 
+(defun remove-newlines-in-region ()
+  "Remove all newlines in the region."
+  (interactive)
+  (save-restriction
+    (narrow-to-region (point) (mark))
+    (goto-char (point-min))
+    (while (search-forward "\n" nil t) (replace-match "" nil t))))
+
+(defun just-one-space-in-region (beg end)
+  "Replace all whitespace in the region (BEG -> END) with single spaces."
+  (interactive "r")
+  (save-excursion
+    (save-restriction
+      (narrow-to-region beg end)
+      (goto-char (point-min))
+      (while (re-search-forward "\\s-+" nil t)
+        (replace-match " ")))))
+
 ;;;;;;;;;;;;;;
 ;; smaller packages that don't need much configuration
 ;;;;;;;;;;;;;;
@@ -118,6 +141,8 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package yasnippet)
 
 (use-package yaml-mode)
+
+(use-package restclient)
 
 (provide 'misc-init)
 

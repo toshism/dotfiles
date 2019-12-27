@@ -29,7 +29,8 @@
   :bind
   ("C-x g" . 'magit-status)
   :config
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1))
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1
+	magit-repository-directories '(("~/dev/projects" . 3))))
 
 (use-package forge
   :after magit)

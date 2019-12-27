@@ -31,7 +31,7 @@
    ("C-x C-f" . projectile-find-file))
   :config
   (setq-default
-   projectile-project-search-path '("~/dev/projects/" "~/dev/projects/scoutbee/")
+   projectile-project-search-path '("~/dev/projects/" "~/dev/projects/scoutbee/" "~/go/src/")
    projectile-completion-system 'helm)
   (projectile-discover-projects-in-search-path))
 

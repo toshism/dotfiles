@@ -18,7 +18,12 @@
 (setq user-full-name "tosh"
       user-mail-address "tosh.lyons@gmail.com")
 
-(use-package quelpa)
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; install/configure packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+(use-package quelpa
+  :config
+  (setq quelpa-update-melpa-p nil))
 (quelpa
  '(quelpa-use-package
    :fetcher git
@@ -27,9 +32,6 @@
 
 (quelpa-use-package-activate-advice)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; install/configure packages
-;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package diminish)
 
 ;; my packages
@@ -38,7 +40,7 @@
 (require 'flycheck-init)
 (require 'python-init)
 (require 'go-init)
-
+(require 'lisp-init)
 (require 'helm-init)
 (require 'theme-init)
 (require 'magit-init)

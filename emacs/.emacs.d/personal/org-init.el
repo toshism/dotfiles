@@ -31,21 +31,35 @@
   (require 'cl)
   (require 'org-drill)
   :config
-  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org"))
+  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org")
+	org-confirm-babel-evaluate nil
+	org-log-into-drawer t
+	truncate-lines nil)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((sql . t))))
-
-(use-package org-gcal
-  :after org
-  :config
-  (setq org-gcal-client-id "71536857775-kcp6qlffjbm5r8drn683dnr1fu396rhl.apps.googleusercontent.com"
-      org-gcal-client-secret "iszKaun3J0JFreP4Jj5wwXj2"
-      org-gcal-file-alist '(("tosh.lyons@scoutbee.com" .  "~/dev/notes/scoutbee-cal.org"))))
+   '((sql . t)
+     (restclient . t)
+     (python . t)
+     (shell . t)
+     (js . t))))
 
 (use-package calfw)
 
 (use-package calfw-org)
+
+(use-package ob-restclient
+  :after restclient)
+
+(use-package org-jira)
+
+(use-package gojira
+  :quelpa (gojira :fetcher file :path "~/dev/projects/gojira/gojira.el")
+  :after org-jira
+  :bind (("C-c j" . gojira-insert-issue-as-org)
+         ("C-c u" . gojira-refresh-issue)
+         ("C-c U" . gojira-refresh-issue-for-id))
+  :config
+  (setq jiralib-url "https://scoutbee.atlassian.net"))
 
 (provide 'org-init)
 ;;; org-init.el ends here

@@ -27,7 +27,8 @@
 
 (use-package go-mode
   :config
-  (setq gofmt-command "goimports")
+  (setq gofmt-command "goimports"
+	exec-path (append exec-path '("~/go/bin/")))
   (defun go-test ()
     (interactive)
     (progn

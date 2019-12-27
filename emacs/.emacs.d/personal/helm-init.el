@@ -45,15 +45,17 @@
 
 (use-package helm-lsp)
 
-;; (use-package helm-swoop
-;;   :bind
-;;   ("C-s" . helm-swoop))
+(use-package helm-swoop
+  :bind
+  ("C-s" . helm-swoop))
 
 ;; use patched version to fix edit functionality
 ;; see here: https://github.com/ShingoFukuyama/helm-swoop/issues/133
-(use-package helm-swoop
-  :after quelpa-use-package
-  :quelpa ((helm-swoop :fetcher github :repo "ashiklom/helm-swoop") :upgrade t))
+;; (use-package helm-swoop
+;;   :after quelpa-use-package
+;;   :quelpa ((helm-swoop :fetcher github :repo "ashiklom/helm-swoop"))
+;;   :bind
+;;   ("C-s" . helm-swoop))
 
 
 (use-package helm-ag)
