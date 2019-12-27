@@ -39,7 +39,6 @@
 (load-module "battery-portable")
 (load-module "wifi")
 (load-module :ttf-fonts)
-(load-module :stumptray)
 
 (run-shell-command "xsetroot -solid rgb:2F/38/41")
 (setf *message-window-gravity* :center)
@@ -87,8 +86,6 @@
 
 (if (not (head-mode-line (current-head)))
     (toggle-mode-line (current-screen) (current-head)))
-
-;(stumptray:stumptray)
 
 ;; Toggle the mode line so that changes are applied
 (toggle-mode-line (current-screen) (current-head))

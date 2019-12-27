@@ -1,6 +1,6 @@
 (in-package :stumpwm)
 
-(set-prefix-key (kbd "C-M-'"))
+(set-prefix-key (kbd "C-t"))
 (setf *default-group-name* "Emacs")
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
@@ -17,6 +17,8 @@
 (ql:quickload :cl-json)
 (ql:quickload :dexador)
 (ql:quickload :clx-truetype)
+(ql:quickload :alexandria)
+(ql:quickload :anaphora)
 
 (defvar *confdir* "~/.stumpwm.d")
 (defun load-conf-file (filename)
@@ -42,6 +44,8 @@
 ;; (load-module :stumptray)
 
 (load-conf-file "themes/tosh.lisp")
+
+(load-module "scratchpad")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; spotify
@@ -189,35 +193,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swank stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;(require :swank)
-;(swank-loader:init)
-;(defcommand swank () ()
-;  (setf stumpwm:*top-level-error-action* :break)
-;  ;; (when (not (getf (swank:connection-info) :pid))
-;  (swank:create-server :port 4005
-;                       :style swank:*communication-style*
-;                       :dont-close t)
-;  (echo-string
-;   (current-screen)
-;   "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
+(require :swank)
+(swank-loader:init)
+(defcommand swank () ()
+ (setf stumpwm:*top-level-error-action* :break)
+ ;; (when (not (getf (swank:connection-info) :pid))
+ (swank:create-server :port 4005
+                      :style swank:*communication-style*
+                      :dont-close t)
+ (echo-string
+  (current-screen)
+  "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
 
-;(swank)
+(define-key *root-map* (kbd "\C-s") "swank")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(clear-window-placement-rules)
-
-(define-frame-preference "comm"
-  (0 nil t :instance "zulip.uniregistry.com")
-  (1 nil t :instance "not-uniregistry.slack.com")
-  (1 nil t :instance "12s.slack.com")
-  (3 nil t :title "mutt"))
-
-(defcommand tcomm () ()
-  "set up comm group"
-  (gnew "comm")
-  (restore-from-file "~/group-dump.lisp"))
 
 (define-key *root-map* (kbd "m") "gmove") ;
 
@@ -258,7 +249,7 @@
 (define-key *top-map* (kbd "M-L") "move-window right")
 
 ;; (define-key *top-map* (kbd "M-f") "fullscreen")
-(define-key *root-map* (kbd "F") "fullscreen")
+(define-key *root-map* (kbd "f") "fullscreen")
 
 (defcommand tl/hsplit () ()
   (progn
@@ -280,6 +271,9 @@
     (remove-split)
     (balance-frames)))
 (define-key *root-map* (kbd "r") "tl/remove")
+
+;; resize
+(define-key *root-map* (kbd "R") "iresize")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
@@ -413,3 +407,14 @@ it."
 ;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
 
 (i3-switch 1)
+
+
+(defcommand scratchpad-term () ()
+  (scratchpad:toggle-floating-scratchpad "term" "gnome-terminal"
+                                         :initial-gravity :top))
+                                         ;; :initial-width 800
+                                         ;; :initial-height 600))
+(define-key *top-map* (kbd "s-t") "scratchpad-term")
+
+(load-module :stumptray)
+(stumptray::stumptray)
