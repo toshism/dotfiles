@@ -2,10 +2,10 @@
 ;; https://github.com/wasamasa/shackle
 '
 (use-package shackle
-  :demand t
+  ;; :demand t
   :config
-  (setq shackle-rules '((comint-mode :other t :frame t))
-	shackle-default-rule '(:ignore t))
+  (setq shackle-rules '((comint-mode :other t :frame t) (python-pytest-mode :select nil :other t :frame t))
+	);;shackle-default-rule '(:ignore t))
   (shackle-mode t))
 
 (provide 'shackle-init)

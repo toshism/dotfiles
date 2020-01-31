@@ -74,6 +74,9 @@
 
 (server-start)
 
+;; show my work org file on startup
+(setq initial-buffer-choice "~/dev/notes/scoutbee.org")
+
 ;;;;;;;;;;;;;;
 ;; keybinding
 ;;;;;;;;;;;;;;
@@ -159,6 +162,14 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package yaml-mode)
 
 (use-package restclient)
+
+(use-package open-junk-file)
+
+(use-package shackle
+  :config
+  (setq shackle-rules '((comint-mode :other t :frame t)
+			(python-pytest-mode :select nil :other t :frame t)))
+  (shackle-mode t))
 
 (provide 'misc-init)
 

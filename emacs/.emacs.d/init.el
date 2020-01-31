@@ -44,7 +44,6 @@
 (require 'theme-init)
 (require 'magit-init)
 (require 'projectile-init)
-(require 'shackle-init)
 (require 'org-init)
 (require 'js-init)
 

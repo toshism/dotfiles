@@ -71,18 +71,17 @@
 						    (venv-projectile-auto-workon))))
 
 (use-package flymake
-  :ensure nil
   :diminish flymake-mode)
 
 (use-package eldoc
-  :ensure nil
   :diminish eldoc-mode)
 
-(use-package python-pytest)
+(use-package python-pytest
+  ;; not sure why, but this map does not get enabled as expected
   ;; :bind (:map python-mode-map
-  ;; 	      ("C-c t" . pytest-one)))
+  ;; 	      ("C-c t" . python-pytest-popup)))
+  :bind ("C-c t" . python-pytest-popup))
 
-;(use-package yapfify)
 (use-package blacken
   :quelpa (blacken :fetcher github :repo "pythonic-emacs/blacken")
   :after python
