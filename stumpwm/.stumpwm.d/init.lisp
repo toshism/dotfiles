@@ -414,7 +414,7 @@ it."
                                          :initial-gravity :top))
                                          ;; :initial-width 800
                                          ;; :initial-height 600))
-(define-key *top-map* (kbd "s-t") "scratchpad-term")
+(define-key *root-map* (kbd "c") "scratchpad-term")
 
 (load-module :stumptray)
 (stumptray::stumptray)
