@@ -30,10 +30,11 @@
   :after python
   :hook ((python-mode . lsp))
   :config
-  (setq lsp-prefer-flymake t)
-  (setq lsp-pyls-plugins-pylint-enabled nil
+  (setq lsp-prefer-flymake t
+	lsp-pyls-plugins-pylint-enabled nil
 	lsp-pyls-configuration-sources ["flake8"]
-	lsp-ui-doc-enable nil)
+	lsp-ui-doc-enable nil
+	lsp-enable-snippet nil)
   :bind (:map python-mode-map
 	      ("C-c g" . lsp-find-definition)))
 
@@ -77,10 +78,9 @@
   :diminish eldoc-mode)
 
 (use-package python-pytest
-  ;; not sure why, but this map does not get enabled as expected
-  ;; :bind (:map python-mode-map
-  ;; 	      ("C-c t" . python-pytest-popup)))
-  :bind ("C-c t" . python-pytest-popup))
+  :after python
+  :bind (:map python-mode-map
+  	      ("C-c t" . python-pytest-popup)))
 
 (use-package blacken
   :quelpa (blacken :fetcher github :repo "pythonic-emacs/blacken")

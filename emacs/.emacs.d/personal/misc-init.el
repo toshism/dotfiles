@@ -28,7 +28,7 @@
 
 
 (tool-bar-mode -1)
-;;(menu-bar-mode -1)
+(menu-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
 
@@ -133,6 +133,9 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package rainbow-delimiters
   :config
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+
+(use-package rainbow-mode
+  :diminish rainbow-mode)
 
 (use-package flycheck
   :diminish flycheck-mode
