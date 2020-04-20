@@ -1,34 +1,32 @@
-IMAPAccount uniregistry
-# Address to connect to
-Host imap.uniregistry.com
-User tosh@uniregistry.com
-# To store the password in an encrypted file use PassCmd instead of Pass
-PassCmd "gpg2 -q --batch --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
-#
-#AuthMechs LOGIN
+# scoutbee mail
+IMAPAccount scoutbee
+Host imap.gmail.com
+User tosh.lyons@scoutbee.com
+PassCmd "gpg2 -q --batch --for-your-eyes-only --no-tty -d ~/.scoutbee.gpg"
 SSLType IMAPS
-#SSLVersions SSLv3
+CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore uniregistry-remote
-Account uniregistry
+IMAPStore scoutbee-remote
+Account scoutbee
 
-MaildirStore uniregistry-local
+MaildirStore scoutbee-local
 SubFolders Legacy
 # The trailing "/" is important
-Path ~/.mbsync/
-Inbox ~/.mbsync/INBOX
+Path ~/.scoutbee_mail/
+Inbox ~/.scoutbee_mail/Inbox
 
-Channel uniregistry
-Master :uniregistry-remote:
-Slave :uniregistry-local:
+Channel scoutbee
+Master :scoutbee-remote:
+Slave :scoutbee-local:
 # Exclude everything under the internal [Gmail] folder, except the interesting folders
-#Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
 # Or include everything
-Patterns *
+#Patterns *
 # Automatically create missing mailboxes, both locally and on the server
 Create Both
 # Save the synchronization state files in the relevant directory
 SyncState *
+
 
 
 # pesonal gmail stuff
