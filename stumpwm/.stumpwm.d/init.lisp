@@ -7,7 +7,7 @@
 (defvar *group-dump-dir* "~/.stumpwm.d/group-dumps")
 (run-shell-command "xsetroot -cursor_name left_ptr")
 ;; (run-shell-command "~/bin/kbd_udev")
-;; (run-shell-command "~/.screenlayout/work2.sh")
+;;(run-shell-command "~/.screenlayout/work3.sh")
 
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
@@ -136,7 +136,7 @@
 
 (defcommand emacs-work-agenda () ()
   "Show work agenda"
-  (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"w\")'"))
+  (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"a\")'"))
 (define-key *top-map* (kbd "M-O") "emacs-work-agenda")
 
 (defcommand emacs-agenda () ()
@@ -416,5 +416,11 @@ it."
                                          ;; :initial-height 600))
 (define-key *root-map* (kbd "c") "scratchpad-term")
 
-(load-module :stumptray)
-(stumptray::stumptray)
+(defcommand scratchpad-agenda () ()
+  (scratchpad:toggle-floating-scratchpad "agenda" "emacsclient -c -e'(org-agenda nil \"a\")'"
+                                         :initial-gravity :top))
+                                         ;; :initial-width 800
+                                         ;; :initial-height 600))
+(define-key *root-map* (kbd "a") "scratchpad-agenda")
+;; (load-module :stumptray)
+;; (stumptray::stumptray)

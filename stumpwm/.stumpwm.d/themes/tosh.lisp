@@ -1,4 +1,4 @@
--(in-package :stumpwm)
+(in-package :stumpwm)
 
 (setf *colors*
       '("#263238" ;; 0
@@ -88,5 +88,16 @@
     (toggle-mode-line (current-screen) (current-head)))
 
 ;; Toggle the mode line so that changes are applied
-(toggle-mode-line (current-screen) (current-head))
-(toggle-mode-line (current-screen) (current-head))
+;;(toggle-mode-line (current-screen) (current-head))
+;;(load-module :stumptray)
+;;(stumptray::stumptray)
+;; (schedule-timer (make-t.imer (lambda ()
+;; 			      (run-shell-command "~/.screenlayout/work3.sh")))
+;;                 2)
+;; (schedule-timer (make-timer
+;; 			      (run-shell-command "~/.screenlayout/work3.sh"))
+;;                 2)
+;;(schedule-timer (make-timer (lambda ()
+			      ;;(load-module :stumptray)
+			      ;;(stumptray::stumptray)))
+                ;;4)
