@@ -77,6 +77,8 @@
 ;; show my work org file on startup
 (setq initial-buffer-choice "~/dev/notes/scoutbee.org")
 
+(show-paren-mode 1)
+(visual-line-mode t)
 ;;;;;;;;;;;;;;
 ;; keybinding
 ;;;;;;;;;;;;;;
@@ -166,13 +168,16 @@ Position the cursor at it's beginning, according to the current mode."
 
 (use-package restclient)
 
-(use-package open-junk-file)
+(use-package open-junk-file
+  :bind
+  ("C-x j" . 'open-junk-file))
 
 (use-package shackle
   :config
   (setq shackle-rules '((comint-mode :other t :frame t)
 			(python-pytest-mode :select nil :other t :frame t)))
   (shackle-mode t))
+
 
 (provide 'misc-init)
 

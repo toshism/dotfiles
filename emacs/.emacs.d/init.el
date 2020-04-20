@@ -46,5 +46,6 @@
 (require 'projectile-init)
 (require 'org-init)
 (require 'js-init)
+(require 'notmuch-init)
 
 (require 'misc-init)

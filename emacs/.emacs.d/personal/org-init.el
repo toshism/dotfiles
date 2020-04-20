@@ -29,11 +29,22 @@
   :ensure org-plus-contrib
   :init
   (require 'cl)
-  (require 'org-drill)
+  ;; (require 'org-drill)
+  (require 'ol-notmuch)
   (require 'org-id)
   (require 'org-protocol)
+  (require 'org-checklist)
   :config
-  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org")
+  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org" "~/dev/notes/todo.org")
+	org-agenda-window-setup 'only-window
+	org-indent-mode nil
+	org-hide-leading-stars t
+	org-refile-use-outline-path t
+	org-outline-path-complete-in-steps nil ;; helm is quite annoying without this
+	org-refile-targets '(("~/dev/notes/scoutbee.org" :maxlevel . 3)
+			     ("~/dev/notes/bookmarks.org" :maxlevel . 3)
+			     ("~/dev/notes/todo.org" :maxlevel . 3)
+			     ("~/dev/notes/stuff.org" :maxlevel . 3))
 	org-confirm-babel-evaluate nil
 	org-drawers (quote ("PROPERTIES" "LOGBOOK"))
 	org-log-into-drawer t
@@ -42,9 +53,11 @@
 	org-duration-format (quote h:mm)
 	org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
 	org-clock-in-switch-to-state 'bh/clock-in-to-started
+	org-src-window-setup 'same-window
+	org-directory "~/dev/notes/"
 	org-todo-keyword-faces
 	(quote (("TODO" :foreground "#D08770" :weight bold)
-		("IN_PROGRESS" :foreground "#DFDFDF" :background "#D08770" :weight bold)
+		;; ("IN_PROGRESS" :foreground "#DFDFDF" :background "#D08770" :weight bold)
 		("PR_CREATED" :foreground "#D08770" :weight bold)
 		("WAITING" :foreground "#D08770" :weight bold)
 		;; ("STORY" :foreground "#8FA1B3" :weight bold)
@@ -59,7 +72,8 @@
      (restclient . t)
      (python . t)
      (shell . t)
-     (js . t)))
+     (js . t)
+     ))
 
 ;; capture templates
 (setq org-capture-templates
@@ -69,6 +83,23 @@
 :PROPERTIES:
 :CREATED: %U
 :END:
+
+%(if (not (string= \"%i\" \"\"))
+   \"#+begin_src %^{language|python|js|sql}\n%i\n#+end_src\")
+
+%(if (string= \"%:link\" \"\")
+   \"[[%F]]\")
+%(if (not (string= \"%:link\" \"\"))
+   \"%:link\")
+
+" :empty-lines 1)
+
+("n" "work note" entry (file+headline "~/dev/notes/scoutbee.org" "Tech notes")
+ "* %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
 " :empty-lines 1)
 
 ("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
@@ -76,6 +107,16 @@
 :PROPERTIES:
 :CREATED: %U
 :END:
+" :empty-lines 1)
+
+("p" "note" entry (file+headline "~/dev/notes/stuff.org" "Refile")
+ "* %? %^g
+:PROPETIES:
+:CREATED: %U
+:END:
+
+%a
+
 " :empty-lines 1)
 
 ("m" "meeting" entry (file+headline "~/dev/notes/scoutbee.org" "Meetings")
@@ -88,11 +129,114 @@ SCHEDULED: %^{Scheduled to begin}T
 
 ;; these are for anything that interupts my current task
 ("i" "interruption" entry (file+headline "~/dev/notes/scoutbee.org" "Interuptions")
-"* TODO %? :interruption:
+"* IN_PROGRESS %^{who|florian|timo|carolina|martin|KH|julian} :interruption:
 :PROPERTIES:
 :CREATED: %U
 :END:
-" :clock-in t :clock-resume t :empty-lines 1))))
+:LOGBOOK:
+:END:
+
+%?
+
+interupted: %K
+" :clock-in t :clock-resume t :empty-lines 1)
+
+("b" "Link from browser" entry (file+headline "~/dev/notes/bookmarks.org" "Refile")
+"* TODO %:description %^g
+:PROPERTIES:
+:CREATED: %U
+:SOURCE: %:link
+:END:
+
+%:link
+
+%?
+
+%(if (not (string= \"%:initial\" \"\"))
+   \"#+begin_quote\n%:initial\n#+end_quote\")
+
+" :empty-lines 1)
+
+("g" "test things" entry (file "~/junk/test.org")
+ "* TODO %?
+
+" :empty-lines 1)
+)))
+
+
+  ;; (defun tl/testtemp ()
+  ;;   "test stuff"
+  ;;   (progn
+  ;;     ;; (org-id-get-create)
+  ;;     ;; (org-store-link nil)
+  ;;     (helm-org-rifle)
+  ;;     "kk"
+  ;;     ))
+
+
+  (defun aj/org-completing-read-tags (prompt coll pred req initial hist def inh)
+    (if (not (string= "Tags: " prompt))
+	;; Not a tags prompt.  Use normal completion by calling
+	;; `org-icompleting-read' again without this function in
+	;; `helm-completing-read-handlers-alist'
+	(let ((helm-completing-read-handlers-alist (rassq-delete-all
+						    'aj/org-completing-read-tags
+						    helm-completing-read-handlers-alist)))
+	  (org-icompleting-read prompt coll pred req initial hist def inh))
+      ;; Tags prompt
+      (let* ((initial (and (stringp initial)
+			   (not (string= initial ""))
+			   initial))
+	     (curr (when initial
+		     (org-split-string initial ":")))
+	     (table (org-uniquify
+		     (mapcar 'car org-last-tags-completion-table)))
+	     (table (if curr
+			;; Remove current tags from list
+			(cl-delete-if (lambda (x)
+					(member x curr))
+				      table)
+		      table))
+	     (prompt (if initial
+			 (concat "Tags " initial)
+		       prompt)))
+	(concat initial (mapconcat 'identity
+				   (nreverse (aj/helm-completing-read-multiple
+					      prompt table pred nil nil hist def
+					      t "Org tags" "*Helm org tags*" ":"))
+				   ":")))))
+
+  (defun aj/helm-completing-read-multiple (prompt choices
+						  &optional predicate require-match initial-input hist def
+						  inherit-input-method name buffer sentinel)
+    "Read multiple items with `helm-completing-read-default-1'. Reading stops
+when the user enters SENTINEL. By default, SENTINEL is
+\"*done*\". SENTINEL is disambiguated with clashing completions
+by appending _ to SENTINEL until it becomes unique. So if there
+are multiple values that look like SENTINEL, the one with the
+most _ at the end is the actual sentinel value. See
+documentation for `ido-completing-read' for details on the
+other parameters."
+    (let ((sentinel (or sentinel "*done*"))
+	  this-choice res done-reading)
+      ;; Uniquify the SENTINEL value
+      (while (cl-find sentinel choices)
+	(setq sentinel (concat sentinel "_")))
+      (setq choices (cons sentinel choices))
+      ;; Read choices
+      (while (not done-reading)
+	(setq this-choice (helm-completing-read-default-1 prompt choices
+							  predicate require-match initial-input hist def
+							  inherit-input-method name buffer nil t))
+	(if (equal this-choice sentinel)
+	    (setq done-reading t)
+	  (setq res (cons this-choice res))
+	  (setq prompt (concat prompt this-choice ":"))))
+      res))
+
+  (add-to-list 'helm-completing-read-handlers-alist '(org-capture . aj/org-completing-read-tags))
+  (add-to-list 'helm-completing-read-handlers-alist '(org-set-tags . aj/org-completing-read-tags))
+;;(add-to-list 'helm-completing-read-handlers-alist '(org-set-tags . helm-org-completing-read-tags))
 
   (defun bh/clock-in-to-started (kw)
     "Switch task from TODO to IN_PROGRESS when clocking in"
@@ -100,7 +244,6 @@ SCHEDULED: %^{Scheduled to begin}T
 	     (not (string-equal (buffer-name) "*Remember*")))
 	"IN_PROGRESS"
       nil))
-  ;; (setq org-clock-in-switch-to-state (quote bh/clock-in-to-started))
 
   (defun bh/clock-in-task-by-id (id)
     "Clock in a task by id"
@@ -111,21 +254,68 @@ SCHEDULED: %^{Scheduled to begin}T
     (interactive)
     (bh/clock-in-task-by-id "12f05474-644b-4625-aa47-a23d320d9cb0"))
 
-  (defadvice org-switch-to-buffer-other-window
-      (after supress-window-splitting activate)
-    "Delete the extra window if we're in a capture frame"
-    (if (equal "org-protocol-capture" (frame-parameter nil 'name))
-	(delete-other-windows)))
+  ;; (defadvice org-switch-to-buffer-other-window
+  ;;     (after supress-window-splitting activate)
+  ;;   "Delete the extra window if we're in a capture frame"
+  ;;   (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+  ;; 	(delete-other-windows)))
+
+  ;; i can just handle ths in tl/helm-bookmark-ql
+  ;; for handling bookmarks in org
+  ;; (defun tl/close-bookmarks (&rest rest)
+  ;;   "If frame opened from qutebrowser as bookmarks, close the frame
+  ;;    after opening a link"
+  ;;   (if (equal "qute-bookmarks" (frame-parameter nil 'name))
+  ;; 	(delete-frame)))
+  ;; (advice-add 'org-open-at-point :after 'tl/close-bookmarks)
 
   (defun tosh/post-capture ()
-    (if (equal "org-protocol-capture" (frame-parameter nil 'name))
-	(delete-frame)))
-
+    (unless org-capture-is-refiling
+      (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+	  (delete-frame))))
   (add-hook 'org-capture-after-finalize-hook 'tosh/post-capture)
+
+  (defun tosh/post-capture-refile ()
+    (if (equal "org-protocol-capture" (frame-parameter nil 'name))
+  	(delete-frame)))
+  (advice-add 'org-capture-refile :after 'tosh/post-capture-refile)
+
+  ;; (defun tosh/post-agenda-quit ()
+  ;;   (message (frame-parameter nil 'name))
+  ;;   (if (string-prefix-p "*Org QL View" (frame-parameter nil 'name))
+  ;; 	(delete-frame)))
+  ;; (advice-add 'burry-buffer :after 'tosh/post-agenda-quit)
+
+  (defun tl/current-time-stamp-inactive ()
+    "Insert an inactive time stamp for the current datetime, without prompting"
+    (interactive)
+    (call-interactively (org-time-stamp-inactive '(16))))
+
+  (defun tl/helm-bookmark-ql ()
+    (interactive)
+    "Setup the helm-org-ql search interface."
+    (add-to-list 'helm-org-ql-actions '("tl-temp-bookmark" . tl/open-link) nil)
+    ;; (let ((helm-full-frame t))
+      (helm-org-ql "~/dev/notes/bookmarks.org");)
+    (pop helm-org-ql-actions))
+
+  (defun tl/open-link (marker)
+    (interactive)
+    (save-excursion
+      (switch-to-buffer (marker-buffer marker))
+      (goto-char marker)
+      (org-open-link-from-string (org-entry-get (point) "SOURCE")))
+    (if (equal "tl-bookmarks-load" (frame-parameter nil 'name))
+	(delete-frame)))
 
   :bind (("C-c i" . org-clock-in)
 	 ("C-c o" . org-clock-out)
-	 ("C-c s" . tl/clock-standup)))
+	 ("C-c a" . org-agenda)
+	 ;; ("C-c s" . tl/clock-standup)
+	 ;; ("C-c l" . org-store-link)
+	 ("C-c c" . org-capture)
+	 ("C-c t" . tl/current-time-stamp-inactive)
+	 ))
 
 (use-package calfw)
 
@@ -145,6 +335,50 @@ SCHEDULED: %^{Scheduled to begin}T
   :config
   (setq jiralib-url "https://scoutbee.atlassian.net"))
 
+
+(use-package org-super-links
+  :quelpa (org-super-links
+	   :fetcher file
+	   :path "~/dev/projects/org-super-links/"
+	   :upgrade t)
+  :bind (("C-c s s" . sl-link)
+	 ("C-c s l" . sl-store-link)
+	 ("C-c s C-l" . sl-insert-link)))
+
+(use-package helm-org-rifle)
+
+(use-package helm-org)
+
+(use-package org-ql
+  :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql" :upgrade t)
+  :after helm-org
+  :config
+  (require 'helm-org-ql))
+
+(use-package org-sidebar
+  :quelpa (org-sidebar :fetcher github :repo "alphapapa/org-sidebar"))
+
+(use-package org-super-agenda
+  :config
+  (setq org-super-agenda-groups
+	'(;; Each group has an implicit boolean OR operator between its selectors.
+	  (:name "Overdue"
+		 :and (:todo ("TODO" "IN_PROGRESS") :deadline past)
+		 :and (:todo ("TODO" "IN_PROGRESS") :scheduled past))
+	  (:name "Today"  ; Optionally specify section name
+		 :time-grid t  ; Items that appear on the time grid
+		 :and (:scheduled today :todo ("TODO" "IN_PROGRESS" "SOMEDAY")))
+	  (:name "Important"
+		 :priority "A")
+	  (:name "Follow Up"
+		 :todo ("WAITING" "TESTING" "PR_CREATED"))
+	  (:name "Due Soon"
+		 :and (:deadline future :todo ("TODO" "IN_PROGRESS" "WAITING" "PR_CREATED" "SOMEDAY")))
+	  (:name "Someday"
+		 :todo "SOMEDAY")
+	  ;; After the last group, the agenda will display items that didn't
+	  ;; match any of these groups, with the default order position of 99
+	  )))
 
 (provide 'org-init)
 ;;; org-init.el ends here

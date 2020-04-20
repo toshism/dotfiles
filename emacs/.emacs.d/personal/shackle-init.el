@@ -4,7 +4,10 @@
 (use-package shackle
   ;; :demand t
   :config
-  (setq shackle-rules '((comint-mode :other t :frame t) (python-pytest-mode :select nil :other t :frame t))
+  (setq shackle-rules '(
+			(comint-mode :other t :frame t)
+			(python-pytest-mode :select nil :other t :frame t))
+			;; (org-agenda-mode :frame t :other nil))
 	);;shackle-default-rule '(:ignore t))
   (shackle-mode t))
 
