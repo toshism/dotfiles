@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+emacsclient -c -F '(quote (name . "tl-bookmarks-load"))' -e '(progn (find-file "~/dev/notes/bookmarks.org")(org-global-cycle 3)(tl/helm-bookmark-ql))'

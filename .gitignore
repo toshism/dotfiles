@@ -14,3 +14,7 @@
 /mutt/.mutt/temp
 /stumpwm/.stumpwm.d/group-dumps
 /stumpwm/.stumpwm.d/modules/
+/qutebrowser/.config/qutebrowser/quickmarks
+/qutebrowser/.config/qutebrowser/bookmarks/
+/qutebrowser/.config/qutebrowser/autoconfig.yml
+/qutebrowser/.config/qutebrowser/qsettings/

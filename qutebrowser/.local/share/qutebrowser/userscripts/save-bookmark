@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# QUTE_URL: The current URL.
+# QUTE_TITLE: The title of the current page.
+# QUTE_SELECTED_TEXT:
+
+protocol_link="org-protocol://capture?template=b&url=$QUTE_URL&title=$QUTE_TITLE&body=$QUTE_SELECTED_TEXT"
+emacsclient -c -F '(quote (name . "org-protocol-capture"))' "$protocol_link"
