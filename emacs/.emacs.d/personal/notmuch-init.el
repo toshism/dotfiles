@@ -90,10 +90,21 @@
 	(add-to-list 'minor-mode-overriding-map-alist new-ro-bind))
       (goto-char (point-min))))
 
+  (defun tl/notmuch-add-followup (&optional beg end)
+    "mark for follow up"
+    (interactive (notmuch-interactive-region))
+    (notmuch-search-tag (list "+fu") beg end)
+    (notmuch-search-next-thread))
 
+  (defun tl/notmuch-remove-followup (&optional beg end)
+    "mark for follow up"
+    (interactive (notmuch-interactive-region))
+    (notmuch-search-tag (list "-fu") beg end)
+    (notmuch-search-next-thread))
 
   :config
   (setq notmuch-saved-searches '((:name "current" :query "date:today AND tag:inbox AND tag:unread" :key "c")
+				 (:name "Follow up" :query "tag:fu" :key "f")
 				 (:name "inbox" :query "tag:inbox" :key "i")
 				 (:name "unread" :query "tag:unread" :key "u"))
 	notmuch-show-indent-messages-width 8
@@ -105,6 +116,10 @@
 	("u" . tl/notmuch-mark-read))
   (:map notmuch-tree-mode-map
 	("u" . tl/notmuch-toggle-inbox-tree))
+  (:map notmuch-search-mode-map
+	("f" . tl/notmuch-add-followup))
+  (:map notmuch-search-mode-map
+	("F" . tl/notmuch-remove-followup))
   (:map notmuch-show-part-map
 	("d" . tl/notmuch-show-view-as-patch)))
 

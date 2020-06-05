@@ -32,7 +32,11 @@
   :config
   (setq-default
    projectile-project-search-path '("~/dev/projects/" "~/dev/projects/scoutbee/" "~/go/src/")
-   projectile-completion-system 'helm)
+   projectile-completion-system 'helm
+   projectile-switch-project-action '(lambda ()
+				       (magit-status)))
+				       ;; (venv-set-location (projectile-project-root))
+				       ;; (venv-projectile-auto-workon)))
   (projectile-discover-projects-in-search-path))
 
 

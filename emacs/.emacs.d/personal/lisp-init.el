@@ -34,12 +34,16 @@
 ;;   (add-to-list 'slime-lisp-implementations '((sbcl ("/usr/bin/sbcl"))))
 ;;   (slime-setup))
 
-(use-package slime
-  :commands slime
+;; (use-package slime
+;;   :commands slime
+;;   :config
+;;   (setq inferior-lisp-program "sbcl"
+;;         slime-contribs '(slime-fancy))
+;;   )
+
+(use-package sly
   :config
-  (setq inferior-lisp-program "sbcl"
-        slime-contribs '(slime-fancy))
-  )
+  (setq inferior-lisp-program "sbcl"))
 
 (provide 'lisp-init)
 

@@ -28,7 +28,8 @@
 (use-package lsp-mode
   :commands lsp
   :after python
-  :hook ((python-mode . lsp))
+  :hook ((python-mode . lsp)
+	 (lsp-mode . lsp-enable-which-key-integration))
   :config
   (setq lsp-prefer-flymake t
 	lsp-pyls-plugins-pylint-enabled nil
@@ -62,14 +63,16 @@
 (use-package company
   :diminish company-mode)
 
-(use-package virtualenvwrapper
-  :after projectile
-  :config
-  (setq venv-dirlookup-names '(".venv" "venv" "env"))
-  (setq-default projectile-switch-project-action '(lambda ()
-						    (magit-status)
-						    (venv-set-location (projectile-project-root))
-						    (venv-projectile-auto-workon))))
+;; (use-package virtualenvwrapper
+;;   :after projectile
+;;   :config
+;;   (setq venv-dirlookup-names '(".venv" "venv" "env"))
+;;   (setq-default projectile-switch-project-action '(lambda ()
+;; 						    (magit-status)
+;; 						    (venv-set-location (projectile-project-root))
+;; 						    (venv-projectile-auto-workon))))
+
+(use-package pyvenv)
 
 (use-package flymake
   :diminish flymake-mode)
@@ -88,9 +91,22 @@
   :config
   (add-hook 'python-mode-hook 'blacken-mode))
 
-(use-package pyenv-mode)
-
 (use-package py-isort)
+
+(defun tl-region-to-def ()
+  "wrap a region in a function"
+  (interactive)
+  (if (use-region-p)
+      (let ((fname (read-string "Function name: "))
+	    (beg (region-beginning))
+	    (end (region-end)))
+	(save-excursion
+	  (goto-char beg)
+	  (insert (concat "def " fname "("))
+	  (set-register ?t (point))
+	  (insert "):\n"))
+	(indent-region beg (region-end))
+	(goto-char (get-register ?t)))))
 
 (provide 'python-init)
 

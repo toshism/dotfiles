@@ -178,6 +178,9 @@ Position the cursor at it's beginning, according to the current mode."
 			(python-pytest-mode :select nil :other t :frame t)))
   (shackle-mode t))
 
+(use-package gif-screencast)
+  ;; :bind
+  ;; ("C-c g" . 'gif-screencast-start-or-stop))
 
 (provide 'misc-init)
 

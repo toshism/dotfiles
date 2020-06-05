@@ -158,7 +158,7 @@ determine the exact padding."
    (markdown-code-face :background (doom-darken bg 0.1))
 
    ;; org-mode
-   (org-block            :background (doom-darken bg-alt 0.04))
+   (org-block            :background (doom-lighten bg-alt 0.02))
    (org-block-begin-line :foreground base4 :slant 'italic :background (doom-darken bg 0.04))
 
    (org-level-1 :foreground fg   :weight 'ultra-bold :inherit 'hl-line :height 1.2)
@@ -170,6 +170,8 @@ determine the exact padding."
    (org-level-7 :foreground (doom-blend magenta blue 0.6) :weight 'bold)
    (org-level-8 :foreground fg :weight 'semi-bold)
 
+   (org-tag :foreground (doom-blend fg bg 0.3) :height 0.8)
+   (org-drawer :foreground (doom-blend fg bg 0.3) :height 0.8) ;;"LightSkyBlue" :height 0.8)
    (org-ellipsis         :underline nil :background bg    :foreground red)
    (org-quote            :background base1)
 

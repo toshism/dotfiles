@@ -29,22 +29,24 @@
   :ensure org-plus-contrib
   :init
   (require 'cl)
-  ;; (require 'org-drill)
+  (require 'org-habit)
   (require 'ol-notmuch)
   (require 'org-id)
   (require 'org-protocol)
   (require 'org-checklist)
+  (require 'ox-md)
   :config
-  (setq org-agenda-files '("~/dev/notes/scoutbee-cal.org" "~/dev/notes/scoutbee.org" "~/dev/notes/todo.org")
+  (setq org-agenda-files '("~/dev/notes/")
 	org-agenda-window-setup 'only-window
 	org-indent-mode nil
+	org-blank-before-new-entry '((heading . t) (plain-list-item . auto))
 	org-hide-leading-stars t
 	org-refile-use-outline-path t
 	org-outline-path-complete-in-steps nil ;; helm is quite annoying without this
 	org-refile-targets '(("~/dev/notes/scoutbee.org" :maxlevel . 3)
 			     ("~/dev/notes/bookmarks.org" :maxlevel . 3)
 			     ("~/dev/notes/todo.org" :maxlevel . 3)
-			     ("~/dev/notes/stuff.org" :maxlevel . 3))
+			     ("~/dev/notes/stuff.org" :maxlevel . 5))
 	org-confirm-babel-evaluate nil
 	org-drawers (quote ("PROPERTIES" "LOGBOOK"))
 	org-log-into-drawer t
@@ -102,7 +104,7 @@
 
 " :empty-lines 1)
 
-("t" "todo" entry (file+headline "~/dev/notes/refile.org" "Tasks")
+("t" "todo" entry (file+headline "~/dev/notes/todo.org" "Refile")
 "* TODO %?
 :PROPERTIES:
 :CREATED: %U
@@ -111,7 +113,7 @@
 
 ("p" "note" entry (file+headline "~/dev/notes/stuff.org" "Refile")
  "* %? %^g
-:PROPETIES:
+:PROPERTIES:
 :CREATED: %U
 :END:
 
@@ -124,6 +126,7 @@
 SCHEDULED: %^{Scheduled to begin}T
 :PROPERTIES:
 :CREATED: %U
+:PEOPLE: %^{PEOPLE}
 :END:
 " :empty-lines 1)
 
@@ -132,6 +135,7 @@ SCHEDULED: %^{Scheduled to begin}T
 "* IN_PROGRESS %^{who|florian|timo|carolina|martin|KH|julian} :interruption:
 :PROPERTIES:
 :CREATED: %U
+:PEOPLE: %\\1
 :END:
 :LOGBOOK:
 :END:
@@ -157,10 +161,18 @@ interupted: %K
 
 " :empty-lines 1)
 
-("g" "test things" entry (file "~/junk/test.org")
+("g" "test things" entry (file+headline "~/junk/test.org" "Tasks")
  "* TODO %?
 
 " :empty-lines 1)
+
+
+("d" "german phrase"
+ entry
+ (file "~/dev/notes/german.org")
+ (file "~/dev/notes/german-phrase-template")
+ :empty-lines 1
+ :immediate-finish t)
 )))
 
 
@@ -235,7 +247,7 @@ other parameters."
       res))
 
   (add-to-list 'helm-completing-read-handlers-alist '(org-capture . aj/org-completing-read-tags))
-  (add-to-list 'helm-completing-read-handlers-alist '(org-set-tags . aj/org-completing-read-tags))
+  (add-to-list 'helm-completing-read-handlers-alist '(org-set-tags-command . aj/org-completing-read-tags))
 ;;(add-to-list 'helm-completing-read-handlers-alist '(org-set-tags . helm-org-completing-read-tags))
 
   (defun bh/clock-in-to-started (kw)
@@ -308,6 +320,18 @@ other parameters."
     (if (equal "tl-bookmarks-load" (frame-parameter nil 'name))
 	(delete-frame)))
 
+  (setq org-agenda-custom-commands
+             '(("w" "Work Dialy"
+               agenda ""
+               (;(org-agenda-start-day "2017-01-09")
+                (org-agenda-span 1)
+		(org-agenda-files '("~/dev/notes/scoutbee.org"))
+                ))
+	       ("h" "Personal Daily"
+		agenda ""
+		((org-agenda-span 1)
+		 (org-agenda-files '("~/dev/notes/todo.org"))))))
+
   :bind (("C-c i" . org-clock-in)
 	 ("C-c o" . org-clock-out)
 	 ("C-c a" . org-agenda)
@@ -334,7 +358,17 @@ other parameters."
          ("C-c U" . gojira-refresh-issue-for-id))
   :config
   (setq jiralib-url "https://scoutbee.atlassian.net"))
+;;(setq jiralib-url "https://scoutbee.atlassian.net")
 
+;; (use-package org-super-links
+;;   :quelpa (org-super-links
+;; 	   :fetcher github
+;; 	   :repo "toshism/org-super-links"
+;; 	   :branch "develop"
+;; 	   :upgrade t)
+;;   :bind (("C-c s s" . sl-link)
+;; 	 ("C-c s l" . sl-store-link)
+;; 	 ("C-c s C-l" . sl-insert-link)))
 
 (use-package org-super-links
   :quelpa (org-super-links
@@ -345,6 +379,18 @@ other parameters."
 	 ("C-c s l" . sl-store-link)
 	 ("C-c s C-l" . sl-insert-link)))
 
+;; (use-package org-super-notes
+;;   :quelpa (org-super-notes
+;; 	   :fetcher file
+;; 	   :path "~/dev/projects/org-super-notes/"
+;; 	   :upgrade t)
+;;   :bind (("C-c s b" . org-super-sidebar)
+;; 	 ("C-c s d" . sl-quick-insert-drawer-link)
+;; 	 ("C-c s i" . sl-quick-insert-inline-link)
+;; 	 ;;("C-c s i" . sl-quick-insert-related)))
+;; 	 ("C-c s c" . sl-quick-insert-copied-related)))
+
+
 (use-package helm-org-rifle)
 
 (use-package helm-org)
@@ -353,7 +399,8 @@ other parameters."
   :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql" :upgrade t)
   :after helm-org
   :config
-  (require 'helm-org-ql))
+  (require 'helm-org-ql)
+  (require 'helm-org))
 
 (use-package org-sidebar
   :quelpa (org-sidebar :fetcher github :repo "alphapapa/org-sidebar"))
@@ -365,8 +412,8 @@ other parameters."
 	  (:name "Overdue"
 		 :and (:todo ("TODO" "IN_PROGRESS") :deadline past)
 		 :and (:todo ("TODO" "IN_PROGRESS") :scheduled past))
-	  (:name "Today"  ; Optionally specify section name
-		 :time-grid t  ; Items that appear on the time grid
+	  (:name "Today"
+		 :time-grid t
 		 :and (:scheduled today :todo ("TODO" "IN_PROGRESS" "SOMEDAY")))
 	  (:name "Important"
 		 :priority "A")
@@ -379,6 +426,25 @@ other parameters."
 	  ;; After the last group, the agenda will display items that didn't
 	  ;; match any of these groups, with the default order position of 99
 	  )))
+
+(use-package org-drill)
+
+(use-package org-bullets
+  :hook (org-mode . org-bullets-mode))
+
+(use-package hydra
+  :init
+  (defun person-related ()
+    (let ((person (read-string "People: ")))
+      (message person)
+      (org-ql-search (current-buffer) '(and (property "PEOPLE") ,person))))
+  :config
+  ;; org
+  (defhydra hydra-org (global-map "C-c v")
+    "org stuff"
+    ("c" org-clock-goto "goto current clock")
+    ("p" (person-related) "related to person")
+  ))
 
 (provide 'org-init)
 ;;; org-init.el ends here
