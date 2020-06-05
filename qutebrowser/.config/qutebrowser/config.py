@@ -22,5 +22,5 @@ c.content.headers.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleW
 c.hints.chars = 'asdfjkl;'
 
 # keys
-config.bind('sb', 'spawn --userscript org-bookmark')
-config.bind('sj', 'spawn --userscript load-bookmark.sh')
+config.bind('sb', 'spawn --userscript save-bookmark')
+config.bind('sj', 'spawn --userscript load-bookmark')
