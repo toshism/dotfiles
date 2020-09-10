@@ -47,5 +47,6 @@
 (require 'org-init)
 (require 'js-init)
 (require 'notmuch-init)
+(require 'slack-init)
 
 (require 'misc-init)
