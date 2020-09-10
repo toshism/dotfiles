@@ -102,3 +102,9 @@ status --is-interactive; and . (pyenv virtualenv-init -|psub)
 #     systemctl --user restart dropbox-zfs.service
 # end
 set fish_function_path $fish_function_path ~/dev/projects/plugin-foreign-env/functions
+
+eval (direnv hook fish)
+
+function fish_greeting
+	 fortune -s
+end
