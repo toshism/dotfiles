@@ -5,7 +5,7 @@ windows:
   - services:
       layout: cc6f,199x50,0,0{97x50,0,0,0,101x50,98,0[101x24,98,0,1,101x25,98,25,2]}
       panes:
-        - cd server; and source env/bin/activate.fish; and posix-source env.tosh; and python manage.py runserver
+        - cd server; and python manage.py runserver
         - cd react-components; and nvm use default; and yarn start
         - cd client; and nvm use default; and source envsets/env_streamline.tosh; and yarn start
   - chat:
