@@ -136,7 +136,7 @@
 
 (defcommand emacs-work-agenda () ()
   "Show work agenda"
-  (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"a\")'"))
+  (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"w\")'"))
 (define-key *top-map* (kbd "M-O") "emacs-work-agenda")
 
 (defcommand emacs-agenda () ()
@@ -149,12 +149,23 @@
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "firefox" '(:class "Firefox")))
 (defcommand chrome () ()
-  "Start Firefox or switch to it, if it is already running."
+  "Start Chromium or switch to it, if it is already running."
   (run-or-raise "chromium-browser" '(:class "Chromium")))
+(defcommand google-chrome () ()
+  "Start Google Chrome or switch to it, if it is already running."
+  (run-or-raise "google-chrome" '(:class "GoogleChrome")))
 (defcommand qutebrowser () ()
   "Launch new qutebrowser window"
   (run-shell-command "qutebrowser"))
-(define-key *root-map* (kbd "b") "qutebrowser")
+;(define-key *root-map* (kbd "b") "qutebrowser")
+
+(defvar *tosh-browser-bindings*
+  (let ((B (make-sparse-keymap)))
+    (define-key B (kbd "q") "qutebrowser")
+    (define-key B (kbd "f") "firefox")
+    (define-key B (kbd "g") "google-chrome")
+    B))
+(define-key *root-map* (kbd "\C-b") '*tosh-browser-bindings*)
 
 (defcommand mutt () ()
   "Start or switch to mutt"
@@ -193,19 +204,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swank stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(require :swank)
-(swank-loader:init)
-(defcommand swank () ()
- (setf stumpwm:*top-level-error-action* :break)
- ;; (when (not (getf (swank:connection-info) :pid))
- (swank:create-server :port 4005
-                      :style swank:*communication-style*
-                      :dont-close t)
- (echo-string
-  (current-screen)
-  "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
+;;(require :swank)
+;;(swank-loader:init)
+;; (defcommand swank () ()
+;;  (setf stumpwm:*top-level-error-action* :break)
+;;  ;; (when (not (getf (swank:connection-info) :pid))
+;;  (swank:create-server :port 4005
+;;                       :style swank:*communication-style*
+;;                       :dont-close t)
+;;  (echo-string
+;;   (current-screen)
+;;   "Starting swank. M-x slime-connect RET RET, then (in-package :stumpwm)."))
 
-(define-key *root-map* (kbd "\C-s") "swank")
+;;(define-key *root-map* (kbd "\C-s") "swank")
+
+;; slynk
+(ql:quickload :slynk)
+(defcommand slynk () ()
+  (slynk:create-server :dont-close t))
+
+(define-key *root-map* (kbd "\C-s") "slynk")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -219,6 +238,7 @@
 ;; "windows and groups"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; create default groups
+(grename "Emacs")
 (gnew "Web")
 (gnew "Comm")
 (gnew "Extra")
@@ -303,22 +323,6 @@ windows used to draw the numbers in. The caller must destroy them."
                 w))
             (group-frames group))))
 
-;; groups for polybar
-(defun polybar-groups ()
-  "Return string representation for polybar stumpgroups module"
-  (apply #'concatenate 'string
-         (mapcar
-          (lambda (g)
-            (let* ((name (string-upcase (group-name g)))
-                   (n-win (write-to-string (length (group-windows g))))
-                   (display-text (cond ((string-equal name "MAIN" ) "MAIN ")
-                                       ((string-equal name "CANVAS") "CANVAS ")
-                                       ((string-equal name "FLOAT") "FLOAT ")
-                                       (t (concat "  " name " ")))))
-              (if (eq g (current-group))
-                  (concat "%{F#ECEFF4 B#882E3440 u#8A9899 +u}" display-text "[" n-win "] " "%{F- B- u- -u}  ")
-                  (concat "%{F#8A9899}" display-text "[" n-win "]" "%{F-}  "))))
-          (sort (screen-groups (current-screen)) #'< :key #'group-number))))
 ;;
 ;; Update polybar group indicator
 ;; (add-hook *new-window-hook* (lambda (win) (run-shell-command "polybar-msg hook stumpgroups 1")))
@@ -417,10 +421,73 @@ it."
 (define-key *root-map* (kbd "c") "scratchpad-term")
 
 (defcommand scratchpad-agenda () ()
-  (scratchpad:toggle-floating-scratchpad "agenda" "emacsclient -c -e'(org-agenda nil \"a\")'"
-                                         :initial-gravity :top))
-                                         ;; :initial-width 800
-                                         ;; :initial-height 600))
+  (scratchpad:toggle-floating-scratchpad "agenda" "emacsclient -c -e '(org-agenda nil \"w\")' -e '(org-agenda-redo-all)'"
+                                         :initial-gravity :top
+                                         ;; :initial-width 1400
+                                         :initial-height 800))
 (define-key *root-map* (kbd "a") "scratchpad-agenda")
-;; (load-module :stumptray)
-;; (stumptray::stumptray)
+(define-key *root-map* (kbd "z") "scratchpad-agenda h")
+
+(defcommand scratchpad-bookmarks () ()
+  (scratchpad:toggle-floating-scratchpad "bookmarks" "bookmarks"
+                                         :initial-gravity :top
+                                         ;; :initial-width 1000
+                                         :initial-height 600))
+(defcommand bookmark-popup () ()
+	   (with-open-window "bookmarks" nil #'center-float))
+
+(define-key *root-map* (kbd "b") "scratchpad-bookmarks")
+
+;; eh, not sure how i want to do this yet
+;; (define-remapped-keys
+;;   '(("(Emacs)"
+;;     ("k" . "C-x" "5" "0"))))
+
+
+;; using https://github.com/toshism/scratchpad instead of the below
+
+;; (defparameter *with-window*
+;; ;;  "function, arguments, class restrictor."
+;;   '(nil nil nil))`
+
+;; (defun with-open-window (cmd restrict-class function &rest args)
+;;   "stores the {function}, {args}, and {restrict-class} variables in a dynamic
+;; variable so that with-window-hanger can grab them. it then hangs
+;; with-window-hanger on focus-window-hook. then it checks if {cmd} is a string,
+;; in which case its a shell command and is run. otherwise its treated as a
+;; stumpwm command (or list of commands) and run that way."
+;;   (progn
+;;     (setf (first *with-window*) function)
+;;     (setf (second *with-window*) args)
+;;     (setf (third *with-window*) restrict-class)
+;;     (add-hook *focus-window-hook* 'with-window-hanger)
+;;     (if (stringp cmd)
+;;         (run-shell-command cmd)
+;;         (if (cdr cmd)
+;;             (reduce #'run-commands cmd)
+;;             (funcall #'run-commands (car cmd))))))
+
+;; (defun with-window-hanger (cwin lwin)
+;;   "this gets hung on focus-window-hook. it will call the function with {cwin}
+;; and calls the function, and then removes itself from the hook. It gets hung
+;; on the *focus-window-hook* so that any command that foucuses a window
+;; may be used, not just ones that create windows.
+;; update: added protection against bad functions that error via unwind-protect"
+;;   (declare (ignore lwin))
+;;   (let ((func (first *with-window*))
+;;         (args (second *with-window*))
+;;         (restrictor (third *with-window*)))
+;;     (when (or (not restrictor) (equal restrictor (window-class cwin)))
+;;       (unwind-protect
+;;            (if args
+;;                (reduce func (cons cwin args))
+;;                (funcall func cwin))
+;;         (remove-hook *focus-window-hook* 'with-window-hanger)))))
+
+;; (defun center-float (cwin)
+;;   (let* ((width 1000)
+;; 	 (height 600)
+;; 	 (x (/ (- (head-width (current-head)) width) 2))
+;; 	 (y (/ (- (head-height (current-head)) height) 2)))
+;;   (float-window cwin (current-group))
+;;   (float-window-move-resize cwin :x x :y y :width width :height height)))
