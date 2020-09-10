@@ -56,7 +56,7 @@
 (use-package company
   :config
   (progn
-    (global-company-mode)
+    ;; (global-company-mode)
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 2)))
 

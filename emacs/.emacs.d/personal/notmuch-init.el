@@ -105,6 +105,9 @@
   :config
   (setq notmuch-saved-searches '((:name "current" :query "date:today AND tag:inbox AND tag:unread" :key "c")
 				 (:name "Follow up" :query "tag:fu" :key "f")
+				 (:name "github" :query "(tag:lists/server OR tag:lists/client) AND tag:unread" :key "g")
+				 (:name "jira" :query "tag:jira AND tag:unread AND mentioned you")
+				 (:name "sentry" :query "tag:sentry AND tag:unread")
 				 (:name "inbox" :query "tag:inbox" :key "i")
 				 (:name "unread" :query "tag:unread" :key "u"))
 	notmuch-show-indent-messages-width 8

@@ -2,7 +2,7 @@
 
 (use-package doom-themes
   :config
-  ;; (load-theme 'doom-one t)
+  (load-theme 'doom-spacegrey t)
   (doom-themes-org-config))
 
 (use-package all-the-icons)

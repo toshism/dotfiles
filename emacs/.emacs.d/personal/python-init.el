@@ -39,6 +39,18 @@
   :bind (:map python-mode-map
 	      ("C-c g" . lsp-find-definition)))
 
+(use-package lsp-python-ms
+  :ensure t
+  :init (setq lsp-python-ms-auto-install-server t)
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-python-ms)
+                          (lsp))))  ; or lsp-deferred
+;; (use-package lsp-pyright
+;;   :ensure t
+;;   :hook (python-mode . (lambda ()
+;;                           (require 'lsp-pyright)
+;;                           (lsp))))  ; or lsp-deferred
+
 (use-package lsp-ui
   :commands lsp-ui-mode
   :after python
@@ -107,6 +119,13 @@
 	  (insert "):\n"))
 	(indent-region beg (region-end))
 	(goto-char (get-register ?t)))))
+
+(use-package sphinx-doc)
+
+(use-package direnv
+ :config
+ (direnv-mode))
+
 
 (provide 'python-init)
 

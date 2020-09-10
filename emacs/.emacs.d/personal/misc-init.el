@@ -78,7 +78,7 @@
 (setq initial-buffer-choice "~/dev/notes/scoutbee.org")
 
 (show-paren-mode 1)
-(visual-line-mode t)
+(visual-line-mode 1)
 ;;;;;;;;;;;;;;
 ;; keybinding
 ;;;;;;;;;;;;;;
@@ -162,7 +162,9 @@ Position the cursor at it's beginning, according to the current mode."
 
 (use-package protobuf-mode)
 
-(use-package yasnippet)
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :config (yas/global-mode))
 
 (use-package yaml-mode)
 
@@ -181,6 +183,19 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package gif-screencast)
   ;; :bind
   ;; ("C-c g" . 'gif-screencast-start-or-stop))
+
+
+(use-package hyperbole
+  :bind
+  ("C-c h" . 'hkey-either))
+
+
+(use-package alert
+  :commands (alert)
+  :init
+  (setq alert-default-style 'notifier))
+
+(use-package htmlize)
 
 (provide 'misc-init)
 

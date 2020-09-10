@@ -43,6 +43,8 @@
   (setenv "PATH" (concat (getenv "PATH") ":/home/tosh.lyons/.nvm/versions/node/v10.16.3/bin"))
   (setq exec-path (append exec-path '("/home/tosh.lyons/.nvm/versions/node/v10.16.3/bin"))))
 
+(setq css-indent-offset 2)
+
 (provide 'js-init)
 
 ;;; js-init.el ends here

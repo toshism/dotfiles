@@ -166,6 +166,14 @@ interupted: %K
 
 " :empty-lines 1)
 
+("s" "cross team standup minutes" entry (file+headline "~/dev/notes/scoutbee.org" "cross team standup")
+"* My topics
+
+%?
+
+* Minutes
+
+" :empty-lines 1)
 
 ("d" "german phrase"
  entry
@@ -173,8 +181,8 @@ interupted: %K
  (file "~/dev/notes/german-phrase-template")
  :empty-lines 1
  :immediate-finish t)
-)))
 
+)))
 
   ;; (defun tl/testtemp ()
   ;;   "test stuff"
@@ -358,7 +366,6 @@ other parameters."
          ("C-c U" . gojira-refresh-issue-for-id))
   :config
   (setq jiralib-url "https://scoutbee.atlassian.net"))
-;;(setq jiralib-url "https://scoutbee.atlassian.net")
 
 ;; (use-package org-super-links
 ;;   :quelpa (org-super-links
@@ -377,7 +384,12 @@ other parameters."
 	   :upgrade t)
   :bind (("C-c s s" . sl-link)
 	 ("C-c s l" . sl-store-link)
-	 ("C-c s C-l" . sl-insert-link)))
+	 ("C-c s C-l" . sl-insert-link)
+	 ("C-c s d" . sl-quick-insert-drawer-link)
+	 ("C-c s i" . sl-quick-insert-inline-link))
+  :config
+  (setq sl-related-into-drawer t
+  	sl-link-prefix 'sl-link-prefix-timestamp))
 
 ;; (use-package org-super-notes
 ;;   :quelpa (org-super-notes
