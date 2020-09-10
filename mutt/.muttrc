@@ -2,7 +2,7 @@
 #source "gpg2 -dq $HOME/.authinfo.gpg |"
 
 # Paths ----------------------------------------------
-set folder           = ~/.toshism_mail                # mailbox location
+set folder           = ~/.toshism_mail       # mailbox location
 set alias_file       = ~/.mutt/alias         # where to store aliases
 set header_cache     = ~/.mutt/cache/headers # where to store headers
 set message_cachedir = ~/.mutt/cache/bodies  # where to store bodies
@@ -71,7 +71,7 @@ set ssl_starttls=yes
 set ssl_force_tls=yes
 set from = "toshism@gmail.com"
 set smtp_authenticators = 'gssapi:login'
-set smtp_url="smtps://toshism@gmail.com@smtp.gmail.com:465/"
+set smtp_url="smtp://toshism@gmail.com@smtp.gmail.com:587/"
 set smtp_pass="`pass mail/gmail/mutt`"
 set realname="Tosh Lyons"
 
