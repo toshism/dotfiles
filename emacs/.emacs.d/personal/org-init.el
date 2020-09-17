@@ -40,6 +40,7 @@
 	org-agenda-window-setup 'only-window
 	org-indent-mode nil
 	org-blank-before-new-entry '((heading . t) (plain-list-item . auto))
+	org-cycle-separator-lines 1
 	org-hide-leading-stars t
 	org-refile-use-outline-path t
 	org-outline-path-complete-in-steps nil ;; helm is quite annoying without this
