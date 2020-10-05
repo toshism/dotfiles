@@ -35,7 +35,12 @@
   (require 'org-protocol)
   (require 'org-checklist)
   (require 'ox-md)
+  :hook
+  (org-capture-prepare-finalize . my-org-capture-newlines-at-end)
   :config
+  (defun my-org-capture-newlines-at-end ()
+    (goto-char (point-max))
+    (insert "\n\n"))
   (setq org-agenda-files '("~/dev/notes/")
 	org-agenda-window-setup 'only-window
 	org-indent-mode nil
@@ -58,6 +63,8 @@
 	org-clock-in-switch-to-state 'bh/clock-in-to-started
 	org-src-window-setup 'same-window
 	org-directory "~/dev/notes/"
+	org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar"
+	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
 	org-todo-keyword-faces
 	(quote (("TODO" :foreground "#D08770" :weight bold)
 		;; ("IN_PROGRESS" :foreground "#DFDFDF" :background "#D08770" :weight bold)
@@ -76,6 +83,8 @@
      (python . t)
      (shell . t)
      (js . t)
+     (plantuml . t)
+     (ditaa . t)
      ))
 
 ;; capture templates
@@ -103,6 +112,8 @@
 :CREATED: %U
 :END:
 
+
+
 " :empty-lines 1)
 
 ("t" "todo" entry (file+headline "~/dev/notes/todo.org" "Refile")
@@ -129,10 +140,13 @@ SCHEDULED: %^{Scheduled to begin}T
 :CREATED: %U
 :PEOPLE: %^{PEOPLE}
 :END:
+
+
+
 " :empty-lines 1)
 
 ;; these are for anything that interupts my current task
-("i" "interruption" entry (file+headline "~/dev/notes/scoutbee.org" "Interuptions")
+("z" "interruption" entry (file+headline "~/dev/notes/scoutbee.org" "Interuptions")
 "* IN_PROGRESS %^{who|florian|timo|carolina|martin|KH|julian} :interruption:
 :PROPERTIES:
 :CREATED: %U
@@ -168,11 +182,30 @@ interupted: %K
 " :empty-lines 1)
 
 ("s" "cross team standup minutes" entry (file+headline "~/dev/notes/scoutbee.org" "cross team standup")
-"* My topics
+"* %^U
+** My topics
 
 %?
 
-* Minutes
+** Action items
+
+
+
+** Minutes
+
+- tosh
+
+- anastasiia
+
+- fares
+
+- konstantin
+
+- can
+
+- ali
+
+- michael
 
 " :empty-lines 1)
 
@@ -183,6 +216,18 @@ interupted: %K
  :empty-lines 1
  :immediate-finish t)
 
+("i" "Interview" entry (file+headline "~/dev/notes/scoutbee.org" "Meetings")
+"* TODO Interview %(progn (setq-local who (read-string \"Who? \")) who)  :interview:%(subst-char-in-string ?  ?_ who):
+SCHEDULED: %^{Scheduled to begin}T
+:PROPERTIES:
+:CREATED: %U
+:PEOPLE: %(tl/scoutbee-people-source 'tl/concat-helm-candidates) %(subst-char-in-string ?  ?_ who)
+:END:
+
+%?
+
+"
+:empty-lines 1)
 )))
 
   ;; (defun tl/testtemp ()
@@ -194,6 +239,56 @@ interupted: %K
   ;;     "kk"
   ;;     ))
 
+(defun tl/scoutbee-people ()
+  "Return a list of scoutbee people.
+Eventually i want to make this easier to manage or dynamically pull previously used names or something."
+  '(timo michael_lindqvist timo_l florian theo ali nkoyo carolina anastasiia gregor martin))
+
+(defun tl/concat-helm-candidates (x)
+  "Return a space separated list of selected candidates from helm.
+Used as the `action' for a helm source.
+X is ignored"
+  (mapconcat (lambda (x) x) (helm-marked-candidates) " "))
+
+(defun tl/scoutbee-people-source (action)
+  "Generic helm source to do things with a list of scoutbee people.
+Requires an ACTION for what to do with them."
+  (helm :sources (helm-build-sync-source "Select people"
+		    :candidates (tl/scoutbee-people)
+		    :action action)))
+
+
+(defun tl/people-query (candidate)
+  "Action to build an `org-ql' query to search for people from a helm source.
+CANDIDATE is ignored."
+  `(or
+    ,(cons 'tags (helm-marked-candidates))
+    (and (property "PEOPLE")
+	 ,(let ((members '(or)))
+	    (dolist (name (helm-marked-candidates) members)
+	      (push
+	       `(member ,name (split-string (org-entry-get (point) "PEOPLE")))
+	       members))
+	    (reverse members)))))
+
+
+(defun tl/people-helm-source ()
+  "Helm source wrapper to build an org-ql-search query for people."
+  (tl/scoutbee-people-source 'tl/people-query))
+;; (helm :sources (helm-build-sync-source "Select people"
+;; 				    :candidates (tl/scoutbee-people)
+;; 				    :action 'tl/people-query)))
+
+(defun tl/people-search ()
+  "Search for things related to scoutbee people in my notes."
+  (interactive)
+  (let ((where-q (tl/people-helm-source)))
+    (org-ql-search (org-agenda-files) ;; "~/junk/2020/10/blah.org"
+      where-q
+      :title "Find people"
+      :sort '(date priority todo)
+      ;; :super-groups '((:auto-parent t)))))
+      :super-groups '((:auto-outline-path t)))))
 
   (defun aj/org-completing-read-tags (prompt coll pred req initial hist def inh)
     (if (not (string= "Tags: " prompt))
