@@ -24,11 +24,10 @@
 
 ;;; Code:
 
-
 (use-package go-mode
   :config
   (setq gofmt-command "goimports"
-	exec-path (append exec-path '("~/go/bin/")))
+	exec-path (append exec-path '("~/go/bin/" "/usr/local/go/bin/")))
   (defun go-test ()
     (interactive)
     (progn
