@@ -13,4 +13,13 @@
 
 (require 'tosh-spacegrey)
 
+;; hack for first frame
+;; not sure why the first frame background color does not get properly set
+(set-background-color "#2F3841")
+(set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 110
+                    :weight 'normal
+                    :width 'normal)
+
 (provide 'theme-init)

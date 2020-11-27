@@ -37,16 +37,32 @@
 ;; my packages
 (add-to-list 'load-path (expand-file-name "personal" user-emacs-directory))
 
-(require 'python-init)
-(require 'go-init)
-(require 'lisp-init)
-(require 'helm-init)
-(require 'theme-init)
-(require 'magit-init)
-(require 'projectile-init)
-(require 'org-init)
-(require 'js-init)
-(require 'notmuch-init)
-(require 'slack-init)
+(require 'ssconfig)
+(setq ssconfig-config-dir "~/.emacs.d/personal")
+(setq ssconfig-files '("python-init"
+		       "go-init"
+		       "org-mode"
+		       "lisp-init"
+		       "helm-init"
+		       "theme-init"
+		       "magit-init"
+		       "projectile-init"
+		       ;; "org-init"
+		       "js-init"
+		       "notmuch-init"
+		       "misc-init"))
+(ssconfig-init)
 
-(require 'misc-init)
+;; (require 'python-init)
+;; (require 'go-init)
+;; (require 'lisp-init)
+;; (require 'helm-init)
+;; (require 'theme-init)
+;; (require 'magit-init)
+;; (require 'projectile-init)
+;; (require 'org-init)
+;; (require 'js-init)
+;; (require 'notmuch-init)
+;; (require 'slack-init)
+
+;; (require 'misc-init)

@@ -176,10 +176,7 @@ interupted: %K
 
 " :empty-lines 1)
 
-("g" "test things" entry (file+headline "~/junk/test.org" "Tasks")
- "* TODO %?
 
-" :empty-lines 1)
 
 ("s" "cross team standup minutes" entry (file+headline "~/dev/notes/scoutbee.org" "cross team standup")
 "* %^U
@@ -228,6 +225,12 @@ SCHEDULED: %^{Scheduled to begin}T
 
 "
 :empty-lines 1)
+
+("g" "test things" entry (file+headline "~/junk/test.org" "Tasks")
+ "* TODO %?
+
+" :empty-lines 1)
+
 )))
 
   ;; (defun tl/testtemp ()
@@ -238,6 +241,7 @@ SCHEDULED: %^{Scheduled to begin}T
   ;;     (helm-org-rifle)
   ;;     "kk"
   ;;     ))
+
 
 (defun tl/scoutbee-people ()
   "Return a list of scoutbee people.
@@ -255,21 +259,26 @@ X is ignored"
 Requires an ACTION for what to do with them."
   (helm :sources (helm-build-sync-source "Select people"
 		    :candidates (tl/scoutbee-people)
-		    :action action)))
+		    :action action
+		    :must-match 'ignore)))
 
 
 (defun tl/people-query (candidate)
   "Action to build an `org-ql' query to search for people from a helm source.
 CANDIDATE is ignored."
-  `(or
-    ,(cons 'tags (helm-marked-candidates))
-    (and (property "PEOPLE")
-	 ,(let ((members '(or)))
-	    (dolist (name (helm-marked-candidates) members)
-	      (push
-	       `(member ,name (split-string (org-entry-get (point) "PEOPLE")))
-	       members))
-	    (reverse members)))))
+  (print (helm-marked-candidates))
+  (let ((candidates (if (helm-marked-candidates)
+			(helm-marked-candidates)
+		      `(,candidate))))
+    `(or
+      ,(cons 'tags candidates)
+      (and (property "PEOPLE")
+	   ,(let ((members '(or)))
+	      (dolist (name candidates members)
+		(push
+		 `(member ,name (split-string (org-entry-get (point) "PEOPLE")))
+		 members))
+	      (reverse members))))))
 
 
 (defun tl/people-helm-source ()
@@ -482,7 +491,13 @@ other parameters."
 	 ("C-c s l" . sl-store-link)
 	 ("C-c s C-l" . sl-insert-link)
 	 ("C-c s d" . sl-quick-insert-drawer-link)
-	 ("C-c s i" . sl-quick-insert-inline-link))
+	 ("C-c s i" . sl-quick-insert-inline-link)
+	 ("C-c s c" . sl-related-to-last-capture))
+  :init
+  (defun sl-related-to-last-capture ()
+    (interactive)
+    (sl--insert-link org-capture-last-stored-marker))
+    ;;(remove-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture))
   :config
   (setq sl-related-into-drawer t
   	sl-link-prefix 'sl-link-prefix-timestamp))

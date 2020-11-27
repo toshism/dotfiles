@@ -43,7 +43,15 @@
 
 (use-package sly
   :config
-  (setq inferior-lisp-program "sbcl"))
+  (setq sly-lisp-implementations
+	'((default ("ros" "run"))
+	  (sbcl ("ros" "run" "--lisp" "sbcl-bin")))))
+
+;;  (setq inferior-lisp-program "sbcl"))
+
+(use-package lispy
+  :hook ((emacs-lisp-mode . lispy-mode )
+	 (lisp-interaction-mode . lispy-mode )))
 
 (provide 'lisp-init)
 

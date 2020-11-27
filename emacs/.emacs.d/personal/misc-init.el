@@ -28,7 +28,7 @@
 
 
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+;; (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
 
@@ -37,6 +37,9 @@
 
 ;; what is confusing about narrow to region?
 (put 'narrow-to-region 'disabled nil)
+
+;; these break some auto build stuff, like yarn run
+(setq create-lockfiles nil)
 
 ;; do not split the window for buffers listed here
 ;; (setq special-display-buffer-names
@@ -196,6 +199,10 @@ Position the cursor at it's beginning, according to the current mode."
   (setq alert-default-style 'notifier))
 
 (use-package htmlize)
+
+(use-package origami)
+
+(use-package dockerfile-mode)
 
 (provide 'misc-init)
 

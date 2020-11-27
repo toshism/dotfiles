@@ -72,6 +72,12 @@
 (use-package company-lsp
   :commands company-lsp)
 
+;; (use-package eglot
+;;   :ensure t
+;;   :hook
+;;   ((go-mode . eglot-ensure)
+;;    (python-mode . eglot-ensure)))
+
 (use-package company
   :diminish company-mode)
 

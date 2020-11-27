@@ -18,3 +18,4 @@
 /qutebrowser/.config/qutebrowser/bookmarks/
 /qutebrowser/.config/qutebrowser/autoconfig.yml
 /qutebrowser/.config/qutebrowser/qsettings/
+/emacs/.emacs.d/personal/org-mode/org-mode.el

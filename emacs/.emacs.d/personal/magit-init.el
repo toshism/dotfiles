@@ -35,6 +35,8 @@
 (use-package forge
   :after magit)
 
+(use-package github-review)
+
 (provide 'magit-init)
 
 ;;; magit-init.el ends here

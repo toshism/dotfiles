@@ -25,20 +25,38 @@
 
 ;;; Code:
 
-(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
+;;(add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
 (use-package rjsx-mode
   :mode "\\.js\\'"
   :config
   (setq js-indent-level 2))
 
+(use-package web-mode
+  :mode "\\.tsx\\'"
+  :config
+  (setq web-mode-markup-indent-offset 2
+	web-mode-code-indent-offset 2
+	web-mode-css-indent-offset 2))
+
+;; (use-package typescript-mode
+;;   :mode (("\\.tsx\\'" . typescript-mode) ("\\.ts\\'" . typescript-mode)))
+
 (use-package tide
+  :ensure t
+  :after (typescript-mode company flycheck)
   :hook ((js-mode . tide-setup)
-	 (rjsx-mode . tide-setup)))
+	 (rjsx-mode . tide-setup)
+	 (typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+	 (web-mode . tide-setup)
+         (before-save . tide-format-before-save)))
 
 (use-package prettier-js
   :hook ((js-mode . prettier-js-mode)
-	 (rjsx-mode . prettier-js-mode))
+	 (rjsx-mode . prettier-js-mode)
+	 (web-mode . prettier-js-mode)
+	 (typescript-mode . prettier-js-mode))
   :init
   (setenv "PATH" (concat (getenv "PATH") ":/home/tosh.lyons/.nvm/versions/node/v10.16.3/bin"))
   (setq exec-path (append exec-path '("/home/tosh.lyons/.nvm/versions/node/v10.16.3/bin"))))

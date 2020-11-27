@@ -10,5 +10,6 @@
 			;; (org-agenda-mode :frame t :other nil))
 	);;shackle-default-rule '(:ignore t))
   (shackle-mode t))
+(setq toshtest "hI")
 
 (provide 'shackle-init)
