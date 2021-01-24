@@ -1,6 +1,10 @@
 (in-package :stumpwm)
 
-(set-prefix-key (kbd "C-t"))
+;; janky super as prefix
+(run-shell-command "xmodmap -e 'clear mod4'" t)
+(run-shell-command "xmodmap -e \'keycode 133 = F20\'" t)
+(set-prefix-key (kbd "F20"))
+
 (setf *default-group-name* "Emacs")
 (setf *frame-number-map* "asdfjkl;")
 (setf *startup-message* "Hello")
@@ -13,8 +17,8 @@
 
 (set-module-dir "~/.stumpwm.d/stumpwm-contrib")
 (add-to-load-path "~/quicklisp")
-(ql:quickload :cl-fad)
-(ql:quickload :cl-json)
+;; (ql:quickload :cl-fad)
+;; (ql:quickload :cl-json)
 (ql:quickload :dexador)
 (ql:quickload :clx-truetype)
 (ql:quickload :alexandria)
@@ -115,7 +119,7 @@
   (run-shell-command "terminator"))
 
 ;; start terminal
-(define-key *top-map* (kbd "M-RET") "gt")
+(define-key *top-map* (kbd "M-RET") "urxvt")
 
 (defcommand rofi () ()
   "Start rofi"
@@ -176,7 +180,7 @@
   "Start or switch to zulip"
   (run-or-raise "qutebrowser https://zulip.uniregistry.com"
                 '(:instance "zulip.uniregistry.com")))
-(define-key *root-map* (kbd "z") "zulip")
+;;(define-key *root-map* (kbd "z") "zulip")
 
 (defcommand slack () ()
   "Start or switch to slack"
@@ -225,6 +229,25 @@
 
 (define-key *root-map* (kbd "\C-s") "slynk")
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; monitor
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defcommand monitor-external-only () ()
+  "external screen only"
+  (run-shell-command "~/.screenlayout/nitro_solo.sh")
+  (sleep 1)
+  (mode-line)
+  (mode-line))
+
+(defcommand monitor-vertical () ()
+  "vertical alignment"
+  (run-shell-command "~/.screenlayout/nitro_vertical.sh")
+  (sleep 1)
+  (mode-line)
+  (mode-line))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -243,6 +266,7 @@
 (gnew "Comm")
 (gnew "Extra")
 (gnew "Music")
+(gnew "Emacs 2")
 
 ;; short cuts for group switching
 (loop for i from 1 to 9 do
@@ -298,7 +322,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; here be hacks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; redefined so i can make big fat borders on frame hints
 (defun draw-frame-numbers (group)
     "Draw the number of each frame in its corner. Return the list of
@@ -379,16 +402,16 @@ it."
 ;; (run-shell-command "/usr/bin/dropbox start -i")
 ;; (run-shell-command "/usr/bin/nm-applet")
 
-(defun post-event (event)
-  (dex:post "http://127.0.0.1:1323/api/v1/event/add"
-            :headers '(("content-type" . "application/json"))
-            :content (cl-json:encode-json-plist-to-string event)))
+;; (defun post-event (event)
+;;   (dex:post "http://127.0.0.1:1323/api/v1/event/add"
+;;             :headers '(("content-type" . "application/json"))
+;;             :content (cl-json:encode-json-plist-to-string event)))
 
 ;; (post-event `(:stream "test_event" :category "lisp test" :date_time ,(format nil "~a" (local-time:now)) :name "stuff?"))
-(defcommand drinks (&optional drink) ()
-  (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier" "coke") "Type: ")))
-    (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
-(define-key *root-map* (kbd "c") "drinks")
+;; (defcommand drinks (&optional drink) ()
+;;   (let ((selection (select-from-menu (current-screen) '("coffee" "club soda" "tea" "perrier" "coke") "Type: ")))
+;;     (post-event `(:stream "drinks" :category ,selection :date_time ,(format nil "~a" (local-time:now)) :name ,selection))))
+;; (define-key *root-map* (kbd "c") "drinks")
 
 (defun get-today ()
   (multiple-value-bind
@@ -399,18 +422,18 @@ it."
             month
             date)))
 
-(defun get-drinks (daday)
-  (dex:get (format nil "http://127.0.0.1:1323/api/v1/activities/drinks?startTime=~aT00:00:00%2B00:00&endTime=~aT23:59:59%2B00:00" daday daday)))
+;; (defun get-drinks (daday)
+;;   (dex:get (format nil "http://127.0.0.1:1323/api/v1/activities/drinks?startTime=~aT00:00:00%2B00:00&endTime=~aT23:59:59%2B00:00" daday daday)))
 
-(defun format-drinks (drinks)
-  (loop for d in (cl-json:decode-json-from-string drinks) append (list `(,(cdr (assoc :name d)) ,(cdr (assoc :*created-at d))))))
+;; (defun format-drinks (drinks)
+;;   (loop for d in (cl-json:decode-json-from-string drinks) append (list `(,(cdr (assoc :name d)) ,(cdr (assoc :*created-at d))))))
 
 (defcommand drinks-today () ()
   (echo (format nil "~{~a~% ~}" (format-drinks (get-drinks (get-today))))))
 
 ;; (loop for d in (drinks-today) do (print (concat (cdr (assoc :name d)))))
 
-(i3-switch 1)
+;;(i3-switch 1)
 
 
 (defcommand scratchpad-term () ()
@@ -421,7 +444,7 @@ it."
 (define-key *root-map* (kbd "c") "scratchpad-term")
 
 (defcommand scratchpad-agenda () ()
-  (scratchpad:toggle-floating-scratchpad "agenda" "emacsclient -c -e '(org-agenda nil \"w\")' -e '(org-agenda-redo-all)'"
+  (scratchpad:toggle-floating-scratchpad "agenda2" "emacsclient -c -e '(org-agenda nil \"w\")' -e '(org-agenda-redo-all)'"
                                          :initial-gravity :top
                                          ;; :initial-width 1400
                                          :initial-height 800))
@@ -430,13 +453,26 @@ it."
 
 (defcommand scratchpad-bookmarks () ()
   (scratchpad:toggle-floating-scratchpad "bookmarks" "bookmarks"
-                                         :initial-gravity :top
+                                         :initial-gravity :center
                                          ;; :initial-width 1000
                                          :initial-height 600))
 (defcommand bookmark-popup () ()
 	   (with-open-window "bookmarks" nil #'center-float))
 
 (define-key *root-map* (kbd "b") "scratchpad-bookmarks")
+
+
+;; always float mpv
+(setf *float-window-names* '("mpv"))
+(defun float-window-check (w)
+  (mapc #'(lambda (n)
+	    (when (classed-p w n)
+	      (float-window w (current-group))))
+	      *float-window-names*))
+;;  (act-on-matching-windows (w) (classed-p w "mpv") (float-window w (current-group))))
+
+(add-hook *new-window-hook* 'float-window-check)
+
 
 ;; eh, not sure how i want to do this yet
 ;; (define-remapped-keys
@@ -491,3 +527,6 @@ it."
 ;; 	 (y (/ (- (head-height (current-head)) height) 2)))
 ;;   (float-window cwin (current-group))
 ;;   (float-window-move-resize cwin :x x :y y :width width :height height)))
+(run-shell-command "/usr/bin/dropbox start")
+(run-shell-command "/usr/bin/blueman-applet")
+(run-shell-command "/usr/bin/tint2")
