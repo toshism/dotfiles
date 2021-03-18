@@ -9,15 +9,23 @@ set PATH ~/.local/bin/ $PATH
 # set PATH ~/.cargo/bin $PATH
 # set PATH ~/.yarn/bin $PATH
 # set PATH ~/dev/projects/plan9port/bin $PATH
-
+# set PATH ~/.roswell/bin $PATH
 # eval (python -m virtualfish compat_aliases)
 
 # set -x GOPATH /home/tosh/dev/projects/go # the -x flag exports the variable
 # set PATH $PATH $GOPATH/bin
-set PATH $PATH /home/tosh.lyons/bin/go/bin
 set PATH $PATH /home/tosh.lyons/go/bin
+set PATH $PATH /usr/local/go/bin
+set PATH $PATH /home/tosh.lyons/.cask/bin
+set PATH $PATH /home/tosh.lyons/.cargo/bin # rust
+
 set -x EDITOR "emacsclient -t"
 set -x ALTERNATE_EDITOR ""
+set PYTHONDONTWRITEBYTECODE true
+
+set PKG_CONFIG_LIBDIR /usr/local/lib64/pkgconfig/ $PKG_CONFIG_LIBDIR
+
+
 
 # alias mux="tmuxinator"
 # alias cdrar="cd ~/dev/projects/uniregistrar"
@@ -33,7 +41,7 @@ test $SSH_TTY; and printf (set_color red)(whoami)(set_color white)'@'(set_color 
 test $USER = 'root'; and echo (set_color red)"#"
 
 # Main
-echo -n (set_color cyan)(prompt_pwd) (virtual_env_prompt) (set_color 3a4c55)'❯'(set_color 4a626d)'❯'(set_color 5b7786)'❯ '
+echo -n (set_color cyan)(prompt_pwd) (virtual_env_prompt) (set_color 3a4c55)'>'(set_color 4a626d)'>'(set_color 5b7786)'> '
 end
 
 function virtual_env_prompt
