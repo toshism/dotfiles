@@ -1,9 +1,7 @@
 (in-package :stumpwm)
-
-;; janky super as prefix
-(run-shell-command "xmodmap -e 'clear mod4'" t)
-(run-shell-command "xmodmap -e \'keycode 133 = F20\'" t)
-(set-prefix-key (kbd "F20"))
+(setf *debug-level* 20)
+;; (redirect-all-output "/home/tosh.lyons/stump-debug-output.txt")
+(set-prefix-key (kbd "C-t"))
 
 (setf *default-group-name* "Emacs")
 (setf *frame-number-map* "asdfjkl;")
@@ -20,7 +18,7 @@
 ;; (ql:quickload :cl-fad)
 ;; (ql:quickload :cl-json)
 (ql:quickload :dexador)
-(ql:quickload :clx-truetype)
+;; (ql:quickload :truetype-clx)
 (ql:quickload :alexandria)
 (ql:quickload :anaphora)
 
@@ -42,7 +40,7 @@
 					;
 ;(load-module :swm-emacs)
 ;
-;(load-module :ttf-fonts)
+;; (load-module :ttf-fonts)
 
 
 ;; (load-module :stumptray)
@@ -77,8 +75,8 @@
     (define-key m (kbd "p") "play-pause")
     (define-key m (kbd "n") "spotify-next")
     (define-key m (kbd "l") "spotify-previous")
-    m ; NOTE: this is important
-  ))
+    m					; NOTE: this is important
+    ))
 (define-key *root-map* (kbd "\C-m") '*tosh-music-bindings*)
 
 (define-key *top-map* (kbd "F11") "play-pause")
@@ -109,6 +107,10 @@
   "Start an urxvt instance."
   (run-shell-command "urxvtcd"))
 
+(defcommand alacritty () ()
+  "Start an alacritty terminal"
+  (run-shell-command "alacritty"))
+
 (defcommand gt () ()
   "Start gnome-terminal"
   (run-shell-command "gnome-terminal"))
@@ -119,29 +121,29 @@
   (run-shell-command "terminator"))
 
 ;; start terminal
-(define-key *top-map* (kbd "M-RET") "urxvt")
+(define-key *root-map* (kbd "RET") "alacritty")
 
 (defcommand rofi () ()
   "Start rofi"
   (run-shell-command "rofi -show run -combi-modi run,window"))
-(define-key *top-map* (kbd "M-SPC") "rofi")
+(define-key *root-map* (kbd "SPC") "rofi")
 
 ;; emacs stuff
 (defcommand ec () ()
   "New emacsclient"
   (run-shell-command "emacsclient -c -e '(switch-to-buffer nil)'"))
 (define-key *root-map* (kbd "e") "ec")
-;;(define-key *top-map* (kbd "M-e") "ec")
+;;(define-key *root-map* (kbd "e") "ec")
 
 (defcommand emacs-capture () ()
   "Open emacs client in capture templates"
   (run-shell-command "emacsclient -c -F '(quote (name . \"org-protocol-capture\"))' -e '(org-capture)'"))
-(define-key *top-map* (kbd "M-o") "emacs-capture")
+(define-key *root-map* (kbd "o") "emacs-capture")
 
 (defcommand emacs-work-agenda () ()
   "Show work agenda"
   (run-shell-command "emacsclient -c -F '(quote (name . \"org-agenda-quickview\"))' -e '(org-agenda nil \"w\")'"))
-(define-key *top-map* (kbd "M-O") "emacs-work-agenda")
+(define-key *root-map* (kbd "O") "emacs-work-agenda")
 
 (defcommand emacs-agenda () ()
   "Show work agenda"
@@ -204,7 +206,15 @@
   "docstring"
   (run-shell-command (cat "exec chromium-browser" (get-x-selection))))
 
-
+;; record audio using audio-recorder
+(defvar *recording* nil)
+(defcommand toggle-record () ()
+  "record audio toggle on/off"
+  (if *recording*
+      (run-shell-command "audio-recorder --command stop")
+      (run-shell-command "audio-recorder --command start"))
+  (setf *recording* (not *recording*)))
+(define-key *root-map* (kbd "a") "toggle-record")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; swank stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -254,8 +264,8 @@
 
 (define-key *root-map* (kbd "m") "gmove") ;
 
-(define-key *top-map* (kbd "M-n") "next-in-frame")
-(define-key *top-map* (kbd "M-p") "prev-in-frame")
+(define-key *root-map* (kbd "n") "next-in-frame")
+(define-key *root-map* (kbd "p") "prev-in-frame")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "windows and groups"
@@ -274,25 +284,25 @@
 
 ;; short cuts for moving window to group
 (loop for i from 1 to 9 do
-  (define-key *groups-map* (kbd (format nil "~d" i)) (format nil "window-to-group ~d" i)))
+  (define-key *groups-map* (kbd (format nil "S-M-~d" i)) (format nil "window-to-group ~d" i)))
 
-(define-key *top-map* (kbd "M-!") "window-to-group 1")
-(define-key *top-map* (kbd "M-@") "window-to-group 2")
-(define-key *top-map* (kbd "M-#") "window-to-group 3")
-(define-key *top-map* (kbd "M-$") "window-to-group 4")
-(define-key *top-map* (kbd "M-%") "window-to-group 5")
+(define-key *root-map* (kbd "!") "window-to-group 1")
+(define-key *root-map* (kbd "@") "window-to-group 2")
+(define-key *root-map* (kbd "#") "window-to-group 3")
+(define-key *root-map* (kbd "$") "window-to-group 4")
+(define-key *root-map* (kbd "%") "window-to-group 5")
 
-(define-key *top-map* (kbd "M-h") "move-focus left")
-(define-key *top-map* (kbd "M-j") "move-focus down")
-(define-key *top-map* (kbd "M-k") "move-focus up")
-(define-key *top-map* (kbd "M-l") "move-focus right")
+(define-key *root-map* (kbd "h") "move-focus left")
+(define-key *root-map* (kbd "j") "move-focus down")
+(define-key *root-map* (kbd "k") "move-focus up")
+(define-key *root-map* (kbd "l") "move-focus right")
 
-(define-key *top-map* (kbd "M-H") "move-window left")
-(define-key *top-map* (kbd "M-J") "move-window down")
-(define-key *top-map* (kbd "M-K") "move-window up")
-(define-key *top-map* (kbd "M-L") "move-window right")
+(define-key *root-map* (kbd "H") "move-window left")
+(define-key *root-map* (kbd "J") "move-window down")
+(define-key *root-map* (kbd "K") "move-window up")
+(define-key *root-map* (kbd "L") "move-window right")
 
-;; (define-key *top-map* (kbd "M-f") "fullscreen")
+;; (define-key *root-map* (kbd "f") "fullscreen")
 (define-key *root-map* (kbd "f") "fullscreen")
 
 (defcommand tl/hsplit () ()
@@ -307,8 +317,8 @@
     (balance-frames)))
 (define-key *root-map* (kbd "S") "tl/vsplit")
 
-;;(define-key *top-map* (kbd "M-v") "tl/hsplit")
-;;(define-key *top-map* (kbd "M-V") "tl/vsplit")
+;;(define-key *root-map* (kbd "v") "tl/hsplit")
+;;(define-key *root-map* (kbd "V") "tl/vsplit")
 
 (defcommand tl/remove () ()
   (progn
@@ -448,7 +458,7 @@ it."
                                          :initial-gravity :top
                                          ;; :initial-width 1400
                                          :initial-height 800))
-(define-key *root-map* (kbd "a") "scratchpad-agenda")
+;; (define-key *root-map* (kbd "a") "scratchpad-agenda")
 (define-key *root-map* (kbd "z") "scratchpad-agenda h")
 
 (defcommand scratchpad-bookmarks () ()
@@ -498,7 +508,7 @@ it."
 ;;     (setf (third *with-window*) restrict-class)
 ;;     (add-hook *focus-window-hook* 'with-window-hanger)
 ;;     (if (stringp cmd)
-;;         (run-shell-command cmd)
+;;         (Run-shell-command cmd)
 ;;         (if (cdr cmd)
 ;;             (reduce #'run-commands cmd)
 ;;             (funcall #'run-commands (car cmd))))))
@@ -530,3 +540,7 @@ it."
 (run-shell-command "/usr/bin/dropbox start")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/tint2")
+
+;; janky super as prefix
+;; (run-shell-command "xmodmap -e 'clear mod4'" t)
+;; (run-shell-command "xmodmap -e \'keycode 133 = F20\'" t)

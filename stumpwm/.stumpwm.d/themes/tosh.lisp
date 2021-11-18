@@ -38,7 +38,7 @@
 
 (load-module "battery-portable")
 (load-module "wifi")
-(load-module :ttf-fonts)
+;; (load-module :ttf-fonts)
 
 (run-shell-command "xsetroot -solid rgb:2F/38/41")
 (setf *message-window-gravity* :center)
