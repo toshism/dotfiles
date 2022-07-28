@@ -10,6 +10,7 @@
 /emacs/.emacs.d/*
 !/emacs/.emacs.d/init.el
 !/emacs/.emacs.d/personal
+/emacs/.emacs.d/personal/org-mode/org-mode.el
 
 /mutt/.mutt/temp
 /stumpwm/.stumpwm.d/group-dumps
@@ -18,4 +19,11 @@
 /qutebrowser/.config/qutebrowser/bookmarks/
 /qutebrowser/.config/qutebrowser/autoconfig.yml
 /qutebrowser/.config/qutebrowser/qsettings/
-/emacs/.emacs.d/personal/org-mode/org-mode.el
+
+
+/emacs.straight/.emacs.d/**/*
+!/emacs.straight/.emacs.d/early-init.el
+!/emacs.straight/.emacs.d/init.el
+!/emacs.straight/.emacs.d/straight/
+!/emacs.straight/.emacs.d/straight/versions/
+!/emacs.straight/.emacs.d/straight/versions/*
