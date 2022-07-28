@@ -87,6 +87,8 @@
 ;;;;;;;;;;;;;;
 (global-set-key (kbd "C-z") 'zap-up-to-char)
 
+;; shift plus arrow to switch window by direction
+(windmove-default-keybindings)
 
 ;;;;;;;;;;;;;;
 ;; functions
@@ -109,7 +111,7 @@ Position the cursor at it's beginning, according to the current mode."
   (indent-according-to-mode))
 (global-set-key [(control shift return)] 'tl/smart-open-line-above)
 
-(defun remove-newlines-in-region ()
+(defun tl/remove-newlines-in-region ()
   "Remove all newlines in the region."
   (interactive)
   (save-restriction
@@ -117,7 +119,7 @@ Position the cursor at it's beginning, according to the current mode."
     (goto-char (point-min))
     (while (search-forward "\n" nil t) (replace-match "" nil t))))
 
-(defun just-one-space-in-region (beg end)
+(defun tl/just-one-space-in-region (beg end)
   "Replace all whitespace in the region (BEG -> END) with single spaces."
   (interactive "r")
   (save-excursion
@@ -203,6 +205,40 @@ Position the cursor at it's beginning, according to the current mode."
 (use-package origami)
 
 (use-package dockerfile-mode)
+
+(use-package plantuml-mode
+  :config
+  (setq plantuml-jar-path "/home/tosh.lyons/plantuml.jar")
+  (setq plantuml-default-exec-mode 'jar)
+  (add-hook 'org-babel-after-execute-hook
+          (lambda ()
+            (when org-inline-image-overlays
+              (org-redisplay-inline-images)))))
+
+(use-package vterm
+  :ensure t)
+;; (use-package posframe
+;;   :config)
+;; (use-package helm-posframe
+;;   :config
+;;   (setq helm-posframe-poshandler 'posframe-poshandler-frame-center
+;; 	;; helm-posframe-height 10
+;; 	helm-posframe-border-width 2
+;; 	helm-posframe-width (round (* (frame-width) 0.99))
+;; 	helm-posframe-parameters '((internal-border-width . 5)
+;; 				   (internal-border-color . "#bf616a")
+;; 				   (background-color . "#65737E")
+;; 				   (respect-modeline . t)))
+
+;;   (helm-posframe-enable))
+
+;; (helm-posframe-enable)
+
+;; (use-package cider)
+;; (use-package cider-nrepl)
+
+;; elixir
+(use-package elixir-mode)
 
 (provide 'misc-init)
 

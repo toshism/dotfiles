@@ -63,6 +63,30 @@
 
 (setq css-indent-offset 2)
 
+(use-package typescript-mode)
+
+;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :after typescript
+  :bind (:map typescript-mode-map
+	      ("C-c x" . lsp-ui-imenu))
+  :config
+  (setq lsp-ui-doc-use-webkit nil
+	lsp-ui-flycheck-enable t
+	lsp-ui-doc-enable nil
+	lsp-ui-doc-position 'top
+	lsp-ui-doc-use-childframe t
+	lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25
+	lsp-ui-sideline-enable t)
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+  (add-hook 'python-mode-hook 'flycheck-mode))
+
+
+
 (provide 'js-init)
 
 ;;; js-init.el ends here

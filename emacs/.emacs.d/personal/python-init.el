@@ -51,6 +51,8 @@
 ;;                           (require 'lsp-pyright)
 ;;                           (lsp))))  ; or lsp-deferred
 
+
+;; https://emacs-lsp.github.io/lsp-mode/tutorials/how-to-turn-off/
 (use-package lsp-ui
   :commands lsp-ui-mode
   :after python

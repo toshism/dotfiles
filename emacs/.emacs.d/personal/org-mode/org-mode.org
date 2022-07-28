@@ -1,4 +1,5 @@
 #+TITLE: My org-mode config
+#+PROPERTY: header-args      :tangle yes
 
 I use org-mode a lot so there is quite a bit here. This includes all org related packages, not just org-mode itself. I like to group by related functionality instead of by mode.
 
@@ -10,33 +11,36 @@ https://orgmode.org/manual/Noweb-Reference-Syntax.html#Noweb-Reference-Syntax
 Basic use-package setup for org-mode configuration. Most things are split out into separate blocks.
 
 #+begin_src emacs-lisp :noweb yes
-(use-package org
-  :ensure org-plus-contrib
-  :init
-  (require 'cl)
-  (require 'org-habit)
-  (require 'ol-notmuch)
-  (require 'org-id)
-  (require 'org-protocol)
-  (require 'org-checklist)
-  (require 'ox-md)
-  :defer t
-  :after helm
-  <<hooks>>
-  :config
-  <<variables>>
-  <<babel>>
-  <<capture>>
-  <<functions>>
-  :bind
-  <<keybindings>>)
+  (use-package org
+    :ensure org-plus-contrib
+    :init
+    (require 'cl)
+    (require 'org-habit)
+    (require 'ol-notmuch)
+    (require 'org-id)
+    (require 'org-protocol)
+    (require 'org-checklist)
+    (require 'ox-md)
+    (defun my-org-capture-newlines-at-end ()
+      (goto-char (point-max))
+      (insert "\n\n"))
+    (add-hook 'org-capture-prepare-finalize 'my-org-capture-newlines-at-end)
+    :defer t
+    :after helm
+    :config
+    <<variables>>
+    <<babel>>
+;;<<capture>>
+<<doct-templates>>
+    <<functions>>
+    :bind
+    <<keybindings>>)
 #+end_src
 
 ** Hooks
 
 #+NAME: hooks
-#+begin_src emacs-lisp :tangle no :noweb yes
-:hook
+#+begin_src emacs-lisp :tangle no
 (org-capture-prepare-finalize . my-org-capture-newlines-at-end)
 #+end_src
 
@@ -49,16 +53,23 @@ Just random org settings and such. I should proably split this up somehow to doc
   (setq org-agenda-files '("~/dev/notes/")
 	org-agenda-window-setup 'only-window
 	org-indent-mode nil
+	org-adapt-indentation nil
+	org-startup-folded t
+	org-reverse-note-order t ;; testing this out
 	org-blank-before-new-entry '((heading . t) (plain-list-item . auto))
 	org-cycle-separator-lines 1
 	org-hide-leading-stars t
 	org-refile-use-outline-path t
-	org-outline-path-complete-in-steps nil ;; helm is quite annoying without this
+	org-outline-path-complete-in-steps t ;; helm is quite annoying without this
 	org-refile-targets '(("~/dev/notes/scoutbee.org" :maxlevel . 3)
+			     ("~/dev/notes/scoutbee_em.org" :maxlevel . 3)
 			     ("~/dev/notes/bookmarks.org" :maxlevel . 3)
 			     ("~/dev/notes/todo.org" :maxlevel . 3)
 			     ("~/dev/notes/stuff.org" :maxlevel . 5))
 	org-confirm-babel-evaluate nil
+	org-edit-src-content-indentation 0
+	org-src-tab-acts-natively t
+	org-src-preserve-indentation t
 	org-drawers (quote ("PROPERTIES" "LOGBOOK"))
 	org-log-into-drawer t
 	truncate-lines nil
@@ -68,7 +79,7 @@ Just random org settings and such. I should proably split this up somehow to doc
 	org-clock-in-switch-to-state 'bh/clock-in-to-started
 	org-src-window-setup 'same-window
 	org-directory "~/dev/notes/"
-	org-plantuml-jar-path "/usr/share/plantuml/plantuml.jar"
+	org-plantuml-jar-path "/home/tosh.lyons/plantuml.jar"
 	org-ditaa-jar-path "/usr/share/ditaa/ditaa.jar"
 	org-tag-alist '(("important" . ?i)
 			("urgent"    . ?u))
@@ -88,7 +99,8 @@ Just random org settings and such. I should proably split this up somehow to doc
 	  ("2" "PLAN" tags-todo "+important-urgent")
 	  ("3" "DELEGATE" tags-todo "-important+urgent")
 	  ("4" "ELIMINATE" tags-todo "-important-urgent")
-	  ("w" "Work Dialy"
+	  ("5" "MATRIX" todo "" ((org-agenda-files '("~/dev/notes/scoutbee.org"))))
+	  ("w" "Work Daily"
 	   agenda ""
 	   (			  ;(org-agenda-start-day "2017-01-09")
 	    (org-agenda-span 1)
@@ -106,59 +118,55 @@ Just random org settings and such. I should proably split this up somehow to doc
 I rely heavily on capture templates for my daily workflow. Almost everything goes into org through a capture template.
 
 #+NAME: capture
-#+begin_src emacs-lisp :tangle no :noweb yes
+#+begin_src emacs-lisp :noweb yes :tangle no
   (setq org-capture-templates
+	<<doct-templates>>
 	(quote (
 		("w" "work todo" entry (file+headline "~/dev/notes/scoutbee.org" "Tasks")
 		 "* TODO %?
-    :PROPERTIES:
-    :CREATED: %U
-    :END:
+:PROPERTIES:
+:CREATED: %U
+:END:
 
-    %(if (not (string= \"%i\" \"\"))
-       \"#+begin_src %^{language|python|js|sql}\n%i\n#+end_src\")
+%(if (not (string= \"%i\" \"\"))
+\"#+begin_src %^{language|python|js|sql}\n%i\n#+end_src\")
 
-    %(if (string= \"%:link\" \"\")
-       \"[[%F]]\")
-    %(if (not (string= \"%:link\" \"\"))
-       \"%:link\")
-
-    " :empty-lines 1)
+ " :empty-lines 1)
 
 		("n" "work note" entry (file+headline "~/dev/notes/scoutbee.org" "Tech notes")
 		 "* %?
-    :PROPERTIES:
-    :CREATED: %U
-    :END:
+:PROPERTIES:
+:CREATED: %U
+:END:
 
 
 
-    " :empty-lines 1)
+" :empty-lines 1)
 
 		("t" "todo" entry (file+headline "~/dev/notes/todo.org" "Refile")
 		 "* TODO %?
-    :PROPERTIES:
-    :CREATED: %U
-    :END:
-    " :empty-lines 1)
+:PROPERTIES:
+:CREATED: %U
+:END:
+" :empty-lines 1)
 
 		("p" "note" entry (file+headline "~/dev/notes/stuff.org" "Refile")
 		 "* %? %^g
-    :PROPERTIES:
-    :CREATED: %U
-    :END:
+:PROPERTIES:
+:CREATED: %U
+:END:
 
-    %a
+%a
 
-    " :empty-lines 1)
+" :empty-lines 1)
 
 		("m" "meeting" entry (file+headline "~/dev/notes/scoutbee.org" "Meetings")
 		 "* TODO %? :meeting:
-    SCHEDULED: %^{Scheduled to begin}T
-    :PROPERTIES:
-    :CREATED: %U
-    :PEOPLE: %^{PEOPLE}
-    :END:
+SCHEDULED: %^{Scheduled to begin}T
+:PROPERTIES:
+:CREATED: %U
+:PEOPLE: %^{PEOPLE}
+:END:
 
 
 
@@ -167,33 +175,33 @@ I rely heavily on capture templates for my daily workflow. Almost everything goe
 		;; these are for anything that interupts my current task
 		("z" "interruption" entry (file+headline "~/dev/notes/scoutbee.org" "Interuptions")
 		 "* IN_PROGRESS %^{who|florian|timo|carolina|martin|KH|julian} :interruption:
-    :PROPERTIES:
-    :CREATED: %U
-    :PEOPLE: %\\1
-    :END:
-    :LOGBOOK:
-    :END:
+:PROPERTIES:
+:CREATED: %U
+:PEOPLE: %\\1
+:END:
+:LOGBOOK:
+:END:
 
-    %?
+%?
 
-    interupted: %K
-    " :clock-in t :clock-resume t :empty-lines 1)
+interupted: %K
+" :clock-in t :clock-resume t :empty-lines 1)
 
 		("b" "Link from browser" entry (file+headline "~/dev/notes/bookmarks.org" "Refile")
 		 "* TODO %:description %^g
-    :PROPERTIES:
-    :CREATED: %U
-    :SOURCE: %:link
-    :END:
+:PROPERTIES:
+:CREATED: %U
+:SOURCE: %:link
+:END:
 
-    %:link
+%:link
 
-    %?
+%?
 
-    %(if (not (string= \"%:initial\" \"\"))
-       \"#+begin_quote\n%:initial\n#+end_quote\")
+%(if (not (string= \"%:initial\" \"\"))
+   \"#+begin_quote\n%:initial\n#+end_quote\")
 
-    " :empty-lines 1)
+" :empty-lines 1)
 
 
 
@@ -207,17 +215,146 @@ I rely heavily on capture templates for my daily workflow. Almost everything goe
 
 		("j" "Journal" entry (file+datetree "~/dev/notes/work-journal.org")
 		 "* %U %?
-  :PROPERTIES:
-  :CREATED: %U
-  :END:
+:PROPERTIES:
+:CREATED: %U
+:END:
 
-  %i")
+%i")
 
-		<<crossteam-standup-template>>
-		<<interview-template>>
-		<<test-template>>
-		)))
+<<crossteam-standup-template>>
+<<interview-template>>
+<<test-template>>
 
+)))
+
+#+end_src
+
+*** Doct capture templates
+
+try out converting capture templates to [[https://github.com/progfolio/doct][doct]]
+#+NAME: doct-templates
+#+begin_src emacs-lisp :tangle no
+(setq org-capture-templates
+      (doct '(("Work"
+	       :keys "w"
+	       :file "~/dev/notes/scoutbee.org"
+	       :prepend t
+	       :empty-lines 1
+	       :template ("* %{todo-state} %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+")
+	       :children (("Work Todo"
+			   :keys "w"
+			   :id "6a252ed5-0b7e-4816-b1b1-cbce12f35ca4"
+			   :todo-state "TODO")
+			  ("Work Note"
+			   :keys "n"
+			   :todo-state "%{nil}"
+			   :id "60faf3f1-3eba-4734-aa58-72f7db4688da")
+			  ("Meeting"
+			   :keys "m"
+			   :todo-state "TODO"
+			   :id "fbd487a3-313f-4193-ab13-a173282ed83d"
+			   :template ("* TODO %? :meeting:
+SCHEDULED: %^{Scheduled to begin}T
+:PROPERTIES:
+:CREATED: %U
+:PEOPLE: %^{PEOPLE}
+:END:
+
+"))
+			  ("Interview"
+			   :keys "i"
+			   :todo-state "TODO"
+			   :id "fbd487a3-313f-4193-ab13-a173282ed83d"
+			   :template ("* TODO Interview %(progn (setq-local who (read-string \"Who? \")) who) :interview:%(subst-char-in-string ?  ?_ who):
+SCHEDULED: %^{Scheduled to begin}T
+:PROPERTIES:
+:CREATED: %U
+:PEOPLE: %(tl/scoutbee-people-source 'tl/concat-helm-candidates) %(subst-char-in-string ?  ?_ who)
+:END:
+
+%?
+
+"))
+			  ("Manager capture"
+			   :keys "c"
+			   :id "75cd8929-8b1f-45b9-b631-070a12a426ca"
+			   :template ("* %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+
+				      "))
+
+			  ("Journal"
+			   :keys "j"
+			   :todo-state ""
+			   :file "~/dev/notes/work-journal.org"
+			   :datetree t
+			   :template ("* %U %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+%i
+
+"))))
+	      ("Personal"
+	       :keys "p"
+	       :empty-lines 1
+	       :children (("Todo"
+			   :keys "t"
+			   :id "5601eb94-60d3-45d3-a53a-4276d30f0075"
+			   :template ("* TODO %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+"))
+			  ("Note"
+			   :keys "n"
+			   :id "3162f77b-750a-437d-8445-547d8a79cad1"
+			   :template ("* %? %^g
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+%a
+
+"))))
+	      ("Bookmark"
+	       :keys "b"
+	       :empty-lines 1
+	       :id "12fbf25a-311e-48ce-a078-dc04376911fc"
+	       :template ("* %:description %^g
+:PROPERTIES:
+:CREATED: %U
+:SOURCE: %:link
+:END:
+
+%:link
+
+%?
+
+%(if (not (string= \"%:initial\" \"\"))
+   \"#+begin_quote\n%:initial\n#+end_quote\")
+
+"))
+	      ("Test"
+	       :keys "t"
+	       :empty-lines 1
+	       :file "~/junk/test.org"
+	       :template ("* %?
+:PROPERTIES:
+:CREATED: %U
+:END:
+
+")))))
 #+end_src
 
 *** Cross team standup
@@ -274,7 +411,7 @@ Just for testing stuff related to templates.
   ("g" "test things" entry (file+headline "~/junk/test.org" "Tasks")
    "* TODO %?
 
-  " :empty-lines 1)
+" :empty-lines 1)
 #+end_src
 
 
@@ -302,9 +439,6 @@ Various custom functions I use. This really needs to be cleaned up and split up.
 
 #+NAME: functions
 #+begin_src emacs-lisp :tangle no
-  (defun my-org-capture-newlines-at-end ()
-    (goto-char (point-max))
-    (insert "\n\n"))
 
   (defun tl/scoutbee-people ()
     "Return a list of scoutbee people.
@@ -365,22 +499,35 @@ Various custom functions I use. This really needs to be cleaned up and split up.
     (interactive)
     (call-interactively (org-time-stamp-inactive '(16))))
 
-  (defun tl/helm-bookmark-ql ()
-    (interactive)
-    "Setup the helm-org-ql search interface."
-    (add-to-list 'helm-org-ql-actions '("tl-temp-bookmark" . tl/open-link) nil)
-    ;; (let ((helm-full-frame t))
-    (helm-org-ql "~/dev/notes/bookmarks.org");)
-    (pop helm-org-ql-actions))
+(defun tl/helm-bookmark-ql ()
+  (interactive)
+  "Setup the helm-org-ql search interface."
+  (add-to-list 'helm-org-ql-actions '("tl-yank-bookmark" . tl/yank-link) nil)
+  (add-to-list 'helm-org-ql-actions '("tl-temp-bookmark" . tl/open-link) nil)
+  ;; (let ((helm-full-frame t))
+  (helm-org-ql "~/dev/notes/bookmarks.org") ;)
+  (pop helm-org-ql-actions)
+  (pop helm-org-ql-actions))
 
-  (defun tl/open-link (marker)
-    (interactive)
+(defun tl/yank-link (marker)
+  (interactive)
+  (with-current-buffer (marker-buffer marker)
     (save-excursion
-      (switch-to-buffer (marker-buffer marker))
       (goto-char marker)
-      (org-open-link-from-string (org-entry-get (point) "SOURCE")))
-    (if (equal "tl-bookmarks-load" (frame-parameter nil 'name))
-	(delete-frame)))
+      (kill-new
+       (org-entry-get (point) "SOURCE"))))
+  (if (equal "tl-bookmarks-load" (frame-parameter nil 'name))
+      (delete-frame)))
+
+(defun tl/open-link (marker)
+  (interactive)
+  (with-current-buffer (marker-buffer marker)
+    (save-excursion
+      (goto-char marker)
+      ;; (org-open-link-from-string (org-entry-get (point) "SOURCE"))
+      (org-link-open-from-string (org-entry-get (point) "SOURCE"))))
+  (if (equal "tl-bookmarks-load" (frame-parameter nil 'name))
+      (delete-frame)))
 
 #+end_src
 
@@ -389,49 +536,127 @@ Various custom functions I use. This really needs to be cleaned up and split up.
 
 #+NAME: keybindings
 #+begin_src emacs-lisp :tangle no
-  (("C-c i" . org-clock-in)
-   ("C-c o" . org-clock-out)
+  (;; ("C-c i" . org-clock-in)
+   ;; ("C-c o" . org-clock-out)
    ("C-c a" . org-agenda)
    ;; ("C-c s" . tl/clock-standup)
    ;; ("C-c l" . org-store-link)
    ("C-c c" . org-capture)
-   ("C-c t" . tl/current-time-stamp-inactive))
+   ("C-c t" . tl/current-time-stamp-inactive)
+   ;; org-clock
+   ("C-c o c g" . org-clock-goto)
+   ("C-c o c i" . org-clock-in)
+   ("C-c o c o" . org-clock-out)
+   ;; org-search
+   ("C-c o s p" . tl/people-search)
+   ;; org-links
+   ("C-c o l l" . org-capture-goto-last-stored))
+#+end_src
+
+* Doct
+#+begin_src emacs-lisp
+(use-package doct
+  :ensure t
+  :commands (doct))
 #+end_src
 
 * Org Super Links
+** after rename to org-super-links-
+#+begin_src emacs-lisp :tangle yes
+(use-package org-super-links
+  ;; :quelpa (org-super-links
+  ;; 	   :fetcher file
+  ;; 	   :path "~/dev/projects/org-super-links/"
+  ;; 	   :upgrade t)
+  :load-path "~/dev/projects/org-super-links"
+  :bind (("C-c s s" . org-super-links-link)
+	 ("C-c s l" . org-super-links-store-link)
+	 ("C-c s C-l" . org-super-links-insert-link)
+	 ("C-c s d" . org-super-links-quick-insert-drawer-link)
+	 ("C-c s i" . org-super-links-quick-insert-inline-link)
+	 ("C-c s c" . org-super-links-related-to-last-capture)
+	 ("C-c s C-c" . org-super-links-create-new-target))
+  :init
+  (defun org-super-links-create-new-target ()
+    (interactive)
+    (add-hook 'org-capture-after-finalize-hook 'org-super-links-related-to-last-capture)
+    (org-capture))
 
-#+begin_src emacs-lisp
-  (use-package org-super-links
-    :quelpa (org-super-links
-	     :fetcher file
-	     :path "~/dev/projects/org-super-links/"
-	     :upgrade t)
-    :bind (("C-c s s" . sl-link)
-	   ("C-c s l" . sl-store-link)
-	   ("C-c s C-l" . sl-insert-link)
-	   ("C-c s d" . sl-quick-insert-drawer-link)
-	   ("C-c s i" . sl-quick-insert-inline-link)
-	   ("C-c s c" . sl-related-to-last-capture))
-    :init
-    (defun sl-related-to-last-capture ()
-      (interactive)
-      (sl--insert-link org-capture-last-stored-marker))
-      ;;(remove-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture))
-    :config
-    (setq sl-related-into-drawer t
-	  sl-link-prefix 'sl-link-prefix-timestamp))
+  (defun org-super-links-related-to-last-capture ()
+    (interactive)
+    (org-super-links--insert-link org-capture-last-stored-marker)
+    (remove-hook 'org-capture-after-finalize-hook 'org-super-links-related-to-last-capture))
+
+  ;;(remove-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture))
+  :config
+  (setq org-super-links-search-function "helm-org-ql"
+	org-super-links-related-into-drawer "RELATED"
+	org-super-links-backlink-into-drawer "RELATED"
+	org-super-links-link-prefix 'org-super-links-link-prefix-timestamp))
 #+end_src
 
+** before rename
+#+begin_src emacs-lisp :tangle no
+(use-package org-super-links
+  :quelpa (org-super-links
+	   :fetcher file
+	   :path "~/dev/projects/org-super-links/"
+	   :upgrade t)
+  :bind (("C-c s s" . sl-link)
+	 ("C-c s l" . sl-store-link)
+	 ("C-c s C-l" . sl-insert-link)
+	 ("C-c s d" . sl-quick-insert-drawer-link)
+	 ("C-c s i" . sl-quick-insert-inline-link)
+	 ("C-c s c" . sl-related-to-last-capture)
+	 ("C-c s C-c" . sl-create-new-target))
+  :init
+  (defun sl-create-new-target ()
+    (interactive)
+    (add-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture)
+    (org-capture))
+
+  (defun sl-related-to-last-capture ()
+    (interactive)
+    (sl--insert-link org-capture-last-stored-marker)
+    (remove-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture))
+
+  ;;(remove-hook 'org-capture-after-finalize-hook 'sl-related-to-last-capture))
+  :config
+  (setq sl-related-into-drawer "RELATED"
+	sl-backlink-into-drawer "RELATED"
+	sl-link-prefix 'sl-link-prefix-timestamp))
+#+end_src
+
+** org-super-links-peek
+
+#+begin_src emacs-lisp :tangle yes
+(use-package quick-peek)
+
+(use-package org-super-links-peek
+  :load-path "~/dev/projects/org-super-links-peek"
+  :bind (("C-c s p" . org-super-links-peek-link)))
+
+#+end_src
+
+* org-linker-edna
+
+#+begin_src emacs-lisp :tangle yes
+(use-package org-linker
+  :load-path "~/dev/projects/org-linker")
+
+(use-package org-linker-edna
+  :load-path "~/dev/projects/org-linker-edna")
+#+end_src
 
 * Gojira
 
 Gojira requires =org-jira=
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-jira)
 #+end_src
 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package gojira
   :quelpa (gojira :fetcher file :path "~/dev/projects/gojira/gojira.el")
   :after org-jira
@@ -445,39 +670,49 @@ Gojira requires =org-jira=
 
 * helm-org-rifle
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package helm-org-rifle)
 #+end_src
 
 * helm-org
 
-#+begin_src emacs-lisp
-(use-package helm-org)
+#+begin_src emacs-lisp :tangle yes
+(use-package helm-org
+  :ensure t)
 #+end_src
 
 * org-ql
 
 This is unbelievably useful for so many org-things, just make sure =helm-org= is installed first
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-ql
-  :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql" :upgrade t)
   :after helm-org
   :config
-  (require 'helm-org-ql)
-  (require 'helm-org))
+  (require 'helm-org)
+  (require 'helm-org-ql))
+
+;; (use-package org-ql
+;;   :quelpa (org-ql :fetcher github :repo "alphapapa/org-ql" :commit "0.5")
+;;   :after helm-org
+;;   :config
+;;   (require 'helm-org))
+
+(use-package helm-org-ql
+  :after org-ql
+  :ensure t)
 #+end_src
 
 * org-sidebar
 
 just trying this out. still don't really have it integrated into my workflow or anything
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-sidebar
   :quelpa (org-sidebar :fetcher github :repo "alphapapa/org-sidebar"))
 #+end_src
 
 * org-super-agenda
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (use-package org-super-agenda
     :config
     (setq org-super-agenda-groups
@@ -491,20 +726,20 @@ just trying this out. still don't really have it integrated into my workflow or 
 		   :and (:tag "urgent"
 			      :not (:tag "important")))
 
-	    (:name "Overdue"
-		   :and (:todo ("TODO" "IN_PROGRESS") :deadline past)
-		   :and (:todo ("TODO" "IN_PROGRESS") :scheduled past))
-	    (:name "Today"
-		   :time-grid t
-		   :and (:scheduled today :todo ("TODO" "IN_PROGRESS" "SOMEDAY")))
-	    (:name "Important"
-		   :priority "A")
-	    (:name "Follow Up"
-		   :todo ("WAITING" "TESTING" "PR_CREATED"))
-	    (:name "Due Soon"
-		   :and (:deadline future :todo ("TODO" "IN_PROGRESS" "WAITING" "PR_CREATED" "SOMEDAY")))
-	    (:name "Someday"
-		   :todo "SOMEDAY")
+	    ;; (:name "Overdue"
+	    ;; 	 :and (:todo ("TODO" "IN_PROGRESS") :deadline past)
+	    ;; 	 :and (:todo ("TODO" "IN_PROGRESS") :scheduled past))
+	    ;; (:name "Today"
+	    ;; 	 :time-grid t
+	    ;; 	 :and (:scheduled today :todo ("TODO" "IN_PROGRESS" "SOMEDAY")))
+	    ;; (:name "Important"
+	    ;; 	 :priority "A")
+	    ;; (:name "Follow Up"
+	    ;; 	 :todo ("WAITING" "TESTING" "PR_CREATED"))
+	    ;; (:name "Due Soon"
+	    ;; 	 :and (:deadline future :todo ("TODO" "IN_PROGRESS" "WAITING" "PR_CREATED" "SOMEDAY")))
+	    ;; (:name "Someday"
+	    ;; 	 :todo "SOMEDAY")
 	    (:name "ELIMINATE"
 		   :not (:tag "urgent" :tag "important"))
 	    ;; After the last group, the agenda will display items that didn't
@@ -512,10 +747,19 @@ just trying this out. still don't really have it integrated into my workflow or 
 	    )))
 #+end_src
 
+* org-agenda-property
+
+#+begin_src emacs-lisp
+(use-package org-agenda-property
+  :config
+  (setq org-agenda-property-list '("PEOPLE")
+	org-agenda-property-position 'next-line))
+#+end_src
+
 * org-drill
 
 I never use this, I should probably remove it.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-drill)
 #+end_src
 
@@ -529,7 +773,7 @@ I never use this, I should probably remove it.
 
 * restclient for org-mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package ob-restclient
   :after restclient)
 #+end_src
@@ -537,7 +781,7 @@ I never use this, I should probably remove it.
 
 * org-bullets
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (use-package org-bullets
   :hook (org-mode . org-bullets-mode))
 #+end_src
@@ -547,18 +791,23 @@ I never use this, I should probably remove it.
 This should probably not be in org stuff really, but it's the only place I really use it.
 
 Maybe I should use it more.
-#+begin_src emacs-lisp
-(use-package hydra
-  :init
-  (defun person-related ()
-    (let ((person (read-string "People: ")))
-      (message person)
-      (org-ql-search (current-buffer) '(and (property "PEOPLE") ,person))))
-  :config
-  ;; org
-  (defhydra hydra-org (global-map "C-c v")
-    "org stuff"
-    ("c" org-clock-goto "goto current clock")
-    ("p" (person-related) "related to person")
-  ))
+#+begin_src emacs-lisp :tangle yes
+  (use-package hydra
+    :init
+    (defun person-related ()
+      (let ((person (read-string "People: ")))
+	(message person)
+	(org-ql-search (current-buffer) '(and (property "PEOPLE") ,person))))
+    :config
+    ;; org
+    (defhydra hydra-org (global-map "C-c v")
+      "
+  Clock^^        ^Search^        ^Capture^
+  -------------------------------------------------
+  _c_urrent      _p_eople        _l_ast capture
+  "
+      ("c" org-clock-goto "goto current clock")
+      ("p" (tl/people-search) "related to person")
+      ("l" (org-capture-goto-last-stored) "go to last capture")
+      ))
 #+end_src

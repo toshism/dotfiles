@@ -44,11 +44,13 @@
 		       "org-mode"
 		       "lisp-init"
 		       "helm-init"
+		       ;; "org-super-links-test"
 		       "theme-init"
 		       "magit-init"
 		       "projectile-init"
 		       ;; "org-init"
 		       "js-init"
+		       "rust"
 		       "notmuch-init"
 		       "misc-init"))
 (ssconfig-init)
@@ -66,3 +68,4 @@
 ;; (require 'slack-init)
 
 ;; (require 'misc-init)
+(put 'downcase-region 'disabled nil)
