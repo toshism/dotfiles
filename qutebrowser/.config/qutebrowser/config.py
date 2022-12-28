@@ -7,6 +7,8 @@ c.url.start_pages = "about:blank"
 c.input.insert_mode.auto_load = True
 c.input.insert_mode.auto_leave = False
 
+config.bind("<Ctrl-f>", "hint links spawn --detach mpv --force-window yes {hint-url}")
+
 # c.fonts.monospace = "Ubuntu Mono"
 # c.fonts.statusbar = c.fonts.monospace
 # c.fonts.tabs = c.fonts.monospace
@@ -21,6 +23,12 @@ c.hints.chars = "asdfjkl;"
 config.bind("sb", "spawn --userscript save-bookmark")
 config.bind("sj", "spawn --userscript load-bookmark")
 
+config.bind('<z><l>', 'spawn --userscript qute-pass -d rofi -dmenu')
+config.bind('<z><u><l>', 'spawn --userscript qute-pass --username-only')
+config.bind('<z><p><l>', 'spawn --userscript qute-pass --password-only')
+config.bind('<z><o><l>', 'spawn --userscript qute-pass --otp-only')
+
+
 # theme
 import dracula.draw
 
@@ -28,3 +36,5 @@ import dracula.draw
 config.load_autoconfig()
 
 dracula.draw.blood(c, {"spacing": {"vertical": 6, "horizontal": 8}})
+
+c.qt.workarounds.remove_service_workers = True
