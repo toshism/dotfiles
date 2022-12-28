@@ -10,7 +10,7 @@ function posix-source
 	            case "*"
 		    	 echo $i
 		         set -gx $arr[1] $arr[2]
-			 emacsclient -e "(setenv \"$arr[1]\" \"$arr[2]\")" > /dev/null
+			 #emacsclient -e "(setenv \"$arr[1]\" \"$arr[2]\")" > /dev/null
              end
 	 end
 end
