@@ -4,6 +4,7 @@ modi: "window,run";
 /*	lines: 15;*/
 /*	columns: 1;*/
 /*	font: "mono 12";*/
+font: "SF Mono 10 ";
 /*	bw: 1;*/
 /*	location: 0;*/
 /*	padding: 5;*/
@@ -51,7 +52,10 @@ hide-scrollbar: true;
 /*	click-to-exit: true;*/
 /*	show-match: true;*/
 /* theme: "base16-material";*/
-theme: "gray";
+
+/* theme: "gray";*/
+theme: "bespoke";
+
 /*	color-normal: ;*/
 /*	color-urgent: ;*/
 /*	color-active: ;*/
