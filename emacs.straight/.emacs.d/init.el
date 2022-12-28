@@ -111,10 +111,12 @@
   :init
   (require 'org-id)
   (require 'org-protocol)
+  (require 'org-inlinetask)
   :bind
   ("C-c c" . org-capture)
   :config
-  (setq org-agenda-files '("~/dev/notes/" "~/junk/test.org")
+  (setq org-agenda-files '("~/dev/notes/" ;; "~/junk/test.org"
+			   )
 	org-refile-targets '((org-agenda-files :maxlevel . 3))
 	org-refile-use-outline-path 'file
 	org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
@@ -123,11 +125,20 @@
 	org-src-preserve-indentation t
 	org-cycle-separator-lines -1
         org-startup-folded t
-	org-startup-with-inline-images t
+	org-startup-with-inline-images nil
 	org-image-actual-width nil
         org-reverse-note-order t
 	org-drawers (quote ("PROPERTIES" "LOGBOOK"))
         org-log-into-drawer t)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(
+     (emacs-lisp . t)
+     (python . t)
+     (shell . t)
+     (scheme . t)
+     (awk . t)))
 
   ;; capture templates
   (setq org-capture-templates
@@ -251,7 +262,80 @@
       (save-excursion
 	(goto-char marker)
 	(org-link-open-from-string (org-entry-get (point) "SOURCE")))))
-  (advice-add 'tl/open-link :after 'tl/kill-bookmarks-frame))
+  (advice-add 'tl/open-link :after 'tl/kill-bookmarks-frame)
+
+  ;; fix for org-protocol-capture
+  (defun org-protocol-capture (info)
+    "Process an org-protocol://capture style url with INFO.
+
+The sub-protocol used to reach this function is set in
+`org-protocol-protocol-alist'.
+
+This function detects an URL, title and optional text, separated
+by `/'.  The location for a browser's bookmark looks like this:
+
+  javascript:location.href = \\='org-protocol://capture?\\=' +
+        new URLSearchParams({
+              url: location.href,
+              title: document.title,
+              body: window.getSelection()})
+
+or to keep compatibility with Org versions from 9.0 to 9.4:
+
+  javascript:location.href = \\='org-protocol://capture?url=\\='+ \\
+        encodeURIComponent(location.href) + \\='&title=\\=' + \\
+        encodeURIComponent(document.title) + \\='&body=\\=' + \\
+        encodeURIComponent(window.getSelection())
+
+By default, it uses the character `org-protocol-default-template-key',
+which should be associated with a template in `org-capture-templates'.
+You may specify the template with a template= query parameter, like this:
+
+  javascript:location.href = \\='org-protocol://capture?template=b\\='+ ...
+
+Now template ?b will be used."
+    (let* ((parts (org-protocol-parse-parameters info t)
+		  ;; (pcase (org-protocol-parse-parameters info)
+		  ;;   ;; New style links are parsed as a plist.
+		  ;;   ((let `(,(pred keywordp) . ,_) info) info)
+		  ;;   ;; Old style links, with or without template key, are
+		  ;;   ;; parsed as a list of strings.
+		  ;;   (p
+		  ;;    (let ((k (if (= 1 (length (car p)))
+		  ;;       	  '(:template :url :title :body)
+		  ;;       	'(:url :title :body))))
+		  ;;      (org-protocol-assign-parameters p k))))
+		  )
+	   (template (or (plist-get parts :template)
+			 org-protocol-default-template-key))
+	   (url (and (plist-get parts :url)
+		     (org-protocol-sanitize-uri (plist-get parts :url))))
+	   (type (and url
+		      (string-match "^\\([a-z]+\\):" url)
+		      (match-string 1 url)))
+	   (title (or (plist-get parts :title) ""))
+	   (region (or (plist-get parts :body) ""))
+	   (orglink
+	    (if (null url) title
+	      (org-link-make-string url (or (org-string-nw-p title) url))))
+	   ;; Avoid call to `org-store-link'.
+	   (org-capture-link-is-already-stored t))
+      ;; (message "parts: - %s" parts)
+      ;; (message "template: %s" template)
+      ;; Only store link if there's a URL to insert later on.
+      (when url (push (list url title) org-stored-links))
+      (org-link-store-props :type type
+			    :link url
+			    :description title
+			    :annotation orglink
+			    :initial region
+			    :query parts)
+      (raise-frame)
+      (org-capture nil template)
+      (message "Item captured.")
+      ;; Make sure we do not return a string, as `server-visit-files',
+      ;; through `server-edit', would interpret it as a file name.
+      nil)))
 
 (use-package org-contrib
   :straight (org-contrib :type git :repo "https://git.sr.ht/~bzg/org-contrib"))
@@ -271,7 +355,14 @@
   (defun org-super-links-create-new-target ()
     (interactive)
     (add-hook 'org-capture-after-finalize-hook 'org-super-links-related-to-last-capture)
-    (org-capture))
+    (org-capture)
+    (remove-hook 'org-capture-after-finalize-hook 'org-super-links-related-to-last-capture))
+
+  (defun org-super-links-create-new-target-inline ()
+    (interactive)
+    (let ((org-super-links-related-into-drawer nil)
+	  (org-super-links-link-prefix nil))
+      (org-super-links-create-new-target)))
 
   ;; (defun org-super-links-related-to-last-capture (arg)
   ;;   (interactive "P")
@@ -300,10 +391,18 @@
         org-super-links-backlink-into-drawer "RELATED"
         org-super-links-link-prefix 'org-super-links-link-prefix-timestamp))
 
+(use-package org-linker
+  :straight '(org-linker :type git :host github :repo "toshism/org-linker" :branch "master"))
+
 (use-package org-super-links-peek
   :straight '(org-super-links-peek :type git :host github :repo "toshism/org-super-links-peek" :branch "master")
   ;; :load-path "~/dev/projects/org-super-links-peek"
   :bind (("C-c s p" . org-super-links-peek-link)))
+
+(use-package org-journal
+  :config
+  (setq org-journal-dir "~/dev/notes/journal/"
+	org-journal-file-type 'yearly))
 
 (use-package netz
   :straight '(netz :type git :host github :repo "toshism/netz" :branch "main"))
@@ -415,7 +514,7 @@
   ;; 		  (delete-window window))
   ;; 		(kill-buffer buffer))))
   :config
-  (setq vterm-shell "/usr/bin/zsh")
+  (setq vterm-shell "/usr/bin/fish")
   :bind
   ("C-c t" . 'vterm-copy-mode))
 
@@ -429,35 +528,35 @@
 
 ;; taken from:
 ;; https://robert.kra.hn/posts/2021-02-07_rust-with-emacs/
-(use-package lsp-mode)
-(use-package rustic
-  :ensure
-  :bind (:map rustic-mode-map
-              ("M-j" . lsp-ui-imenu)
-              ("M-?" . lsp-find-references)
-              ("C-c C-c l" . flycheck-list-errors)
-              ("C-c C-c a" . lsp-execute-code-action)
-              ("C-c C-c r" . lsp-rename)
-              ("C-c C-c q" . lsp-workspace-restart)
-              ("C-c C-c Q" . lsp-workspace-shutdown)
-              ("C-c C-c s" . lsp-rust-analyzer-status))
-  :config
-  ;; uncomment for less flashiness
-  ;; (setq lsp-eldoc-hook nil)
-  ;; (setq lsp-enable-symbol-highlighting nil)
-  ;; (setq lsp-signature-auto-activate nil)
+;; (use-package lsp-mode)
+;; (use-package rustic
+;;   :ensure
+;;   :bind (:map rustic-mode-map
+;;               ("M-j" . lsp-ui-imenu)
+;;               ("M-?" . lsp-find-references)
+;;               ("C-c C-c l" . flycheck-list-errors)
+;;               ("C-c C-c a" . lsp-execute-code-action)
+;;               ("C-c C-c r" . lsp-rename)
+;;               ("C-c C-c q" . lsp-workspace-restart)
+;;               ("C-c C-c Q" . lsp-workspace-shutdown)
+;;               ("C-c C-c s" . lsp-rust-analyzer-status))
+;;   :config
+;;   ;; uncomment for less flashiness
+;;   ;; (setq lsp-eldoc-hook nil)
+;;   ;; (setq lsp-enable-symbol-highlighting nil)
+;;   ;; (setq lsp-signature-auto-activate nil)
 
-  ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save t)
-  (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
+;;   ;; comment to disable rustfmt on save
+;;   (setq rustic-format-on-save t)
+;;   (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook))
 
-(defun rk/rustic-mode-hook ()
-  ;; so that run C-c C-c C-r works without having to confirm, but don't try to
-  ;; save rust buffers that are not file visiting. Once
-  ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
-  ;; no longer be necessary.
-  (when buffer-file-name
-    (setq-local buffer-save-without-query t)))
+;; (defun rk/rustic-mode-hook ()
+;;   ;; so that run C-c C-c C-r works without having to confirm, but don't try to
+;;   ;; save rust buffers that are not file visiting. Once
+;;   ;; https://github.com/brotzeit/rustic/issues/253 has been resolved this should
+;;   ;; no longer be necessary.
+;;   (when buffer-file-name
+;;     (setq-local buffer-save-without-query t)))
 
 (use-package dired-single)
 (use-package dired
@@ -527,7 +626,8 @@
   (setf sly-lisp-implementations
 	`((roswell ("ros" "-Q" "run"))
 	  (sbcl    ("sbcl"))))
-  (setf slime-default-lisp 'roswell))
+  (setf sly-default-lisp 'roswell)
+  (setq sly-contribs '(sly-fancy)))
 
 
 (use-package websocket)
@@ -620,7 +720,9 @@
 
 (use-package lispy
   :config
-  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1))))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+  (add-hook 'lisp-mode-hook (lambda () (lispy-mode 1)))
+  (add-hook 'scheme-mode-hook (lambda () (lispy-mode 1))))
 
 (use-package paredit)
 
@@ -661,24 +763,44 @@
 ;;;;;;;;;;;;;;
 ;; lsp
 ;;;;;;;;;;;;;;
-(use-package lsp-mode :straight t
-  :commands lsp
-  :custom
-  (lsp-rust-analyzer-cargo-watch-command "clippy")
-  (lsp-eldoc-render-all nil)
-  (lsp-idle-delay 0.6)
-  (lsp-rust-analyzer-server-display-inlay-hints nil)
+;; (use-package lsp-mode :straight t
+;;   :commands lsp
+;;   :custom
+;;   (lsp-rust-analyzer-cargo-watch-command "clippy")
+;;   (lsp-eldoc-render-all nil)
+;;   (lsp-idle-delay 0.6)
+;;   (lsp-rust-analyzer-server-display-inlay-hints nil)
+;;   :config
+;;   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+;; (use-package lsp-ui :straight t
+;;   :commands lsp-ui-mode
+;;   :custom
+;;   (lsp-ui-peek-always-show nil)
+;;   (lsp-ui-sideline-show-hover nil)
+;;   (lsp-ui-doc-enable nil)
+;;   (lsp-ui-sideline-enable nil)
+;;   (lsp-signature-render-documentation t)
+;;   (lsp-lens-enable t))
+
+;;;;;;;;;;;;;;
+;; rando
+;;;;;;;;;;;;;;
+(use-package terraform-mode)
+
+(use-package lxd-tramp)
+
+(use-package yasnippet
   :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-(use-package lsp-ui :straight t
-  :commands lsp-ui-mode
-  :custom
-  (lsp-ui-peek-always-show nil)
-  (lsp-ui-sideline-show-hover nil)
-  (lsp-ui-doc-enable nil)
-  (lsp-ui-sideline-enable nil)
-  (lsp-signature-render-documentation t)
-  (lsp-lens-enable t))
+  (yas-global-mode 1))
+
+(use-package dockerfile-mode)
+
+(use-package ob-cypher
+  :ensure t
+  :config
+  (add-to-list 'org-babel-load-languages '(cypher . t))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+  (add-to-list 'org-babel-tangle-lang-exts '("cypher" . "cypher")))
 
 ;;;;;;;;;;;;;;
 ;; theme

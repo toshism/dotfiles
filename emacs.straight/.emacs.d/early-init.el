@@ -6,7 +6,7 @@
           (lambda ()
             (setq gc-cons-threshold (expt 2 23))))
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(menu-bar-mode t)
 (scroll-bar-mode -1)
 (setq inhibit-startup-screen t)
 (setq package-enable-at-startup nil)
