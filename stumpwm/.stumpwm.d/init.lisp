@@ -10,6 +10,7 @@
 (run-shell-command "xsetroot -cursor_name left_ptr")
 ;; (run-shell-command "~/bin/kbd_udev")
 ;;(run-shell-command "~/.screenlayout/work3.sh")
+(setf *float-window-modifier* :meta)
 
 (setf (getenv "GDK_CORE_DEVICE_EVENTS") "1")
 
@@ -17,10 +18,11 @@
 (add-to-load-path "~/quicklisp")
 ;; (ql:quickload :cl-fad)
 ;; (ql:quickload :cl-json)
-(ql:quickload :dexador)
+;; (ql:quickload :dexador)
 ;; (ql:quickload :truetype-clx)
 (ql:quickload :alexandria)
 (ql:quickload :anaphora)
+(load-module "globalwindows")
 
 (defvar *confdir* "~/.stumpwm.d")
 (defun load-conf-file (filename)
@@ -30,22 +32,6 @@
   "Split group into 3 vertical frames"
   (restore-from-file (concat *group-dump-dir* "/three")))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; "theme"
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (load-module :stumpwm-base16)
-;; (stumpwm-base16:load-theme "material" "materialtheme")
-
-;(load-module :pass)
-					;
-;(load-module :swm-emacs)
-;
-;; (load-module :ttf-fonts)
-
-
-;; (load-module :stumptray)
-
-(load-conf-file "themes/tosh.lisp")
 
 (load-module "scratchpad")
 
@@ -69,7 +55,7 @@
   (run-or-raise "spotify" '(:title "spotify")))
 
 ;; music keymap
-(defvar *tosh-music-bindings*
+(defparameter *tosh-music-bindings*
   (let ((m (make-sparse-keymap)))
     (define-key m (kbd "s") "spotify")
     (define-key m (kbd "p") "play-pause")
@@ -98,7 +84,7 @@
 (defcommand lock () ()
   "lock screen"
   (run-shell-command "i3lock"))
-(define-key *root-map* (kbd "l") "lock")
+;; (define-key *root-map* (kbd "l") "lock")
 
 ;; run an `urxvt' terminal (instead of `xterm')
 ;; TODO Install `rxvt-unicode'
@@ -120,8 +106,13 @@
   "Start terminator"
   (run-shell-command "terminator"))
 
+(defcommand vterm () ()
+  "Start vterm"
+  (run-shell-command "emacsclient -c -F '(quote (name . \"vterm-kill\"))' -e '(multi-vterm)'"))
+
 ;; start terminal
-(define-key *root-map* (kbd "RET") "alacritty")
+(define-key *root-map* (kbd "RET") "vterm")
+;; (define-key *root-map* (kbd "RET") "urxvt")
 
 (defcommand rofi () ()
   "Start rofi"
@@ -138,7 +129,8 @@
 (defcommand emacs-capture () ()
   "Open emacs client in capture templates"
   (run-shell-command "emacsclient -c -F '(quote (name . \"org-protocol-capture\"))' -e '(org-capture)'"))
-(define-key *root-map* (kbd "o") "emacs-capture")
+;; see scratchpad-capture
+;; (define-key *root-map* (kbd "o") "emacs-capture")
 
 (defcommand emacs-work-agenda () ()
   "Show work agenda"
@@ -154,6 +146,12 @@
 (defcommand firefox () ()
   "Start Firefox or switch to it, if it is already running."
   (run-or-raise "firefox" '(:class "Firefox")))
+(defcommand firefox-personal () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "firefox -P default" '(:class "Firefox")))
+(defcommand firefox-work () ()
+  "Start Firefox or switch to it, if it is already running."
+  (run-or-raise "firefox -P Scoutbee" '(:class "Firefox")))
 (defcommand chrome () ()
   "Start Chromium or switch to it, if it is already running."
   (run-or-raise "chromium-browser" '(:class "Chromium")))
@@ -165,11 +163,13 @@
   (run-shell-command "qutebrowser"))
 ;(define-key *root-map* (kbd "b") "qutebrowser")
 
-(defvar *tosh-browser-bindings*
+(defparameter *tosh-browser-bindings*
   (let ((B (make-sparse-keymap)))
     (define-key B (kbd "q") "qutebrowser")
     (define-key B (kbd "f") "firefox")
     (define-key B (kbd "g") "google-chrome")
+    (define-key B (kbd "p") "firefox-personal")
+    (define-key B (kbd "w") "firefox-work")
     B))
 (define-key *root-map* (kbd "\C-b") '*tosh-browser-bindings*)
 
@@ -192,12 +192,15 @@
                 '(:instance "12s.slack.com")))
 (define-key *root-map* (kbd "\C-c") "slack")
 
+(defcommand logseq () ()
+  (run-or-raise "logseq.AppImage" '(:title "Logseq")))
+
 (defcommand paste () ()
   "paste, simple enough eh?"
   (window-send-string (get-x-selection)))
 (define-key *root-map* (kbd "\C-p") "paste")
 
-;;(define-key *top-map* (kbd "M-w") "windowlist")
+(define-key *root-map* (kbd "'") "global-windowlist")
 
 ;; Web browsing commands
 ;; Get the X selection and order the GUI browser to open it. Presumably it
@@ -257,6 +260,13 @@
   (mode-line)
   (mode-line))
 
+(defcommand monitor-lap-lower-left () ()
+  "lower left alignment"
+  (run-shell-command "~/.screenlayout/lap-lower-left.sh")
+  (sleep 1)
+  (mode-line)
+  (mode-line))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; window/frame stuff
@@ -267,6 +277,15 @@
 (define-key *root-map* (kbd "n") "next-in-frame")
 (define-key *root-map* (kbd "p") "prev-in-frame")
 
+;; (defvar *exchange-window-bindings*
+;;   (let ((x (make-sparse-keymap)))
+;;     (define-key x (kbd "h") "exchange-direction left")
+;;     (define-key x (kbd "j") "exchange-direction down")
+;;     (define-key x (kbd "k") "exchange-direction up")
+;;     (define-key x (kbd "l") "exchange-direction right")
+;;     x))
+;; (define-key *root-map* (kbd "x") '*exchange-window-bindings*)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; "windows and groups"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -274,9 +293,10 @@
 (grename "Emacs")
 (gnew "Web")
 (gnew "Comm")
-(gnew "Extra")
+(gnew "Web2")
 (gnew "Music")
 (gnew "Emacs 2")
+(gnew "junk")
 
 ;; short cuts for group switching
 (loop for i from 1 to 9 do
@@ -447,7 +467,7 @@ it."
 
 
 (defcommand scratchpad-term () ()
-  (scratchpad:toggle-floating-scratchpad "term" "gnome-terminal"
+  (scratchpad:toggle-floating-scratchpad "term" "emacsclient -c -F '(quote (name . \"vterm-scratch-*kill*\"))' -e '(multi-vterm)'"
                                          :initial-gravity :top))
                                          ;; :initial-width 800
                                          ;; :initial-height 600))
@@ -463,7 +483,7 @@ it."
 
 (defcommand scratchpad-bookmarks () ()
   (scratchpad:toggle-floating-scratchpad "bookmarks" "bookmarks"
-                                         :initial-gravity :center
+                                         :initial-gravity :top
                                          ;; :initial-width 1000
                                          :initial-height 600))
 (defcommand bookmark-popup () ()
@@ -471,6 +491,20 @@ it."
 
 (define-key *root-map* (kbd "b") "scratchpad-bookmarks")
 
+;; scratchpad version of capture
+(defcommand scratchpad-capture () ()
+  (scratchpad:toggle-floating-scratchpad "capture" "emacsclient -c -F '(quote (name . \"org-protocol-capture\"))' -e '(org-capture)'"
+                                         :initial-gravity :top
+                                         :initial-width 800
+                                         :initial-height 800))
+(define-key *root-map* (kbd "o") "scratchpad-capture")
+
+(defcommand scratchpad-emacs () ()
+  (scratchpad:toggle-floating-scratchpad "capture" "emacsclient -c -F '(quote (name . \"scratchpad-emacs\"))'"
+                                         :initial-gravity :right
+                                         :initial-width 600
+                                         :initial-height 800))
+(define-key *root-map* (kbd "C-o") "scratchpad-emacs")
 
 ;; always float mpv
 (setf *float-window-names* '("mpv"))
@@ -537,6 +571,54 @@ it."
 ;; 	 (y (/ (- (head-height (current-head)) height) 2)))
 ;;   (float-window cwin (current-group))
 ;;   (float-window-move-resize cwin :x x :y y :width width :height height)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; remap keys
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define-remapped-keys
+    `((,(lambda (win)
+	  (let ((class (window-class win)))
+	    (or
+             (search "Google-chrome" class)
+	     (search "firefox" class)
+	     (search "Firefox" class)
+	     (search "Brave" class))))
+	("C-n" . "Down")
+	("C-p" . "Up")
+	("C-f" . "Right")
+	("C-b" . "Left")
+	("C-v" . "Next")
+	("M-v" . "Prior")
+	("C-h" . "C-[")
+	("C-s" . "C-f")
+	("M-w" . "C-c")
+	("C-w" . "C-x")
+	("C-y" . "C-v")
+	("M-<" . "Home")
+	("M->" . "End")
+	("C-M-b" . "M-Left")
+	("C-M-f" . "M-Right")
+	("C-k" . ("C-w")))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; "theme"
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; (load-module :stumpwm-base16)
+;; (stumpwm-base16:load-theme "material" "materialtheme")
+
+					;(load-module :pass)
+					;
+					;(load-module :swm-emacs)
+					;
+;; (load-module :ttf-fonts)
+
+
+;; (load-module :stumptray)
+
+(load-conf-file "themes/bespoke.lisp")
+
+
 (run-shell-command "/usr/bin/dropbox start")
 (run-shell-command "/usr/bin/blueman-applet")
 (run-shell-command "/usr/bin/tint2")
