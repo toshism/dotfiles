@@ -13,23 +13,43 @@ sent_tag = sent
 
 [Filter.1]
 message = "Sentry"
-query = from:"sentry@sentry02.ams1.uniregistrar.net"
-tags = +sentry;-new;-unread
+query = from:"sentry@sentry.scoutbee.com"
+tags = +sentry;
 
 [Filter.2]
 message = "Jira"
-query = from:"jira@uniregistry.com"
+query = from:"jira@scoutbee.atlassian.net"
 tags = +jira;
 
 [Filter.3]
-message = "Confluence"
-query = from:"confluence@uniregistry.com"
-tags = +confluence;-new;-unread
+message = "Greenhouse interview"
+query = 'from:"no-reply@greenhouse.io" and subject:interview'
+tags = +greenhouse;
 
 [Filter.4]
-message = "Stash"
-query = from:"no-reply@stash.sna1.uniregistry.net"
-tags = +stash;
+message = "Zoom notifications"
+query = 'from:"no-reply@zoom.us"'
+tags = -new;-unread;+zoom
+
+[Filter.5]
+message = "Greenhouse other"
+query = 'from:"no-reply@greenhouse.io" and not subject:interview'
+tags = -new;-unread;+greenhouse;
+
+[Filter.6]
+message = "SB er pipeline"
+query = 'tag:lists/sb_er_pipeline'
+tags = -new;-unread;
+
+# [Filter.3]
+# message = "Confluence"
+# query = from:"confluence@uniregistry.com"
+# tags = +confluence;-new;-unread
+
+# [Filter.4]
+# message = "Stash"
+# query = from:"no-reply@stash.sna1.uniregistry.net"
+# tags = +stash;
 
 # Filters above this NotifyFilter that remove the 'new' tag will not trigger
 # notification.
@@ -40,4 +60,3 @@ tags = +stash;
 # [Filter.3]
 # message = "Mark unread, remove new"
 # tags = +unread;-new
-
