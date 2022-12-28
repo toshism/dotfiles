@@ -8,10 +8,10 @@ windows:
   - client:
       layout: cc6f,199x50,0,0{97x50,0,0,0,101x50,98,0[101x24,98,0,1,101x25,98,25,2]}
       panes:
-        - cd react-components; and nvm use default; and yarn start
-        - cd client; and nvm use default; and source envsets/env_streamline.tosh; and yarn start
+        - cd react-components && nvm use 12 && yarn start
+        - cd client && nvm use 12 && source envsets/env_streamline.tosh && yarn start
   - chat:
       layout: even-horizontal
       panes:
-        - cd sockjs-server; and source env/bin/activate.fish; and posix-source .env; and make run_dev
-        - cd chat; and source env/bin/activate.fish; and posix-source .env; and make run_dev
+        - cd sockjs-server && source env/bin/activate && source .env && make run_dev
+        - cd chat && source env/bin/activate && source .env && make run_dev
