@@ -1,3 +1,5 @@
+! do not for get to run
+! xrdb -merge ~/.Xresources
 
 Xft.dpi: 96
 !Xft.dpi: 192
@@ -19,7 +21,7 @@ xterm*termName: xterm-256color
 XTerm*locale: true
 xterm*boldMode: false
 xterm*colorBDMode: true
-xterm*colorBD: rgb:fc/fc/fc
+!xterm*colorBD: rgb:fc/fc/fc
 ! xterm*cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
 ! xterm*font: xft:monospace:size=12
 ! xterm*italicFont: xft:monospace:size=12
@@ -35,7 +37,9 @@ URxvt.loginShell: true
 URxvt.saveLines: 10000
 !URxvt.cutchars: "`\"'&()*,:;<=>?[\\]^{|}$"
 ! URxvt.font: xft:monospace:size=12
-URxvt.font: xft:Source\ Code\ Pro:Regular:size=11
+!URxvt.font: xft:Source\ Code\ Pro:Regular:size=11
+URxvt.font: xft:SF Mono:Regular:size=10
+URxvt.letterSpace: -1
 !URxvt.italicFont: xft:monospace:size=12
 URxvt.scrollBar: false
 URxvt.visualBell: true
@@ -48,11 +52,37 @@ URxvt.visualBell: true
 !XTerm*faceName: Fixed
 !XTerm*faceSize: 11
 
-*background:   #2F3841
-*foreground:   #B2CCD6
+! tosh grey
+! *background:   #2F3841
+! *foreground:   #B2CCD6
 
-*color0:       #263238
-*color1:       #2F3841
+! *color0:       #263238
+! *color1:       #FF5370
+! ! #2F3841
+! *color2:       #414d5a
+! *color3:       #546E7A
+! *color4:       #B2CCD6
+! *color5:      #EEFFFF
+! *color6:       #EEFFFF
+! *color7:      #FFFFFF
+! *color8:       #F07178
+! *color9:      #F78C6C
+! *color10:       #ffcb6b
+! *color11:      #C3E88D
+! *color12:       #89DDFF
+! *color13:      #82AAFF
+! *color14:       #C792EA
+! *color15:      #FF5370
+
+
+! bespoke
+! *background:   #282b35
+*background:   #3c4353
+*foreground:   #eceff1
+
+*color0:       #333a47
+*color1:       #FF5370
+! #2F3841
 *color2:       #414d5a
 *color3:       #546E7A
 *color4:       #B2CCD6
@@ -61,12 +91,13 @@ URxvt.visualBell: true
 *color7:      #FFFFFF
 *color8:       #F07178
 *color9:      #F78C6C
-*color10:       #ffcb6b
+*color10:       #e9b85d
 *color11:      #C3E88D
-*color12:       #89DDFF
-*color13:      #82AAFF
-*color14:       #C792EA
+*color12:       #81a1c1
+*color13:      #d08770
+*color14:       #bc85cf
 *color15:      #FF5370
+
 
 
 ! "#263238" ;; 0
